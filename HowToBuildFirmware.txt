@@ -1,0 +1,32 @@
+#
+#How to build Sercomm Firmware?
+#
+
+1)Background
+Please make sure base on ubuntu 10.04 to setup environment. And already finished "HowToBuildToolchain.txt"
+
+1-1)Install Software
+	libtool (apt-get install libtool)
+	flex (apt-get install flex)
+	automake (apt-get install automake)
+	bison (apt-get install bison)
+	libssl-dev (apt-get install libssl-dev)
+	libxml2-dev (apt-get install libxml2-dev)
+	gengetopt (apt-get install gengetopt)
+	build-essential (apt-get install build-essential)
+	liblzo2-dev (apt-get install liblzo2-dev)
+	uuid-dev (apt-get install uuid-dev)
+
+1-2)Do not use root to build
+    Make sure /bin/sh is link to bash not dash(ln -sf /bin/bash /bin/sh)
+    (Note: it is different from toolchain build)
+    (PS: build user has to be logout and login since sometimes i found system "export" is unexpected)
+    
+2)Compile Firmware image
+2-1)How to compile Firmware? 
+	run script ./build_F1.script
+	please make sure the command of "fakeroot" can be used by current account
+
+2-2)Where to get firmware image file?
+    if you built firmware successfully, get the image here: Result/090128.x.x.xxx.x.img 
+    (x.x.xxx.x such as 2.0.001.0, not a static value).

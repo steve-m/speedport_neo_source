@@ -1,0 +1,158 @@
+.TH dynipadmin 1 "DynIP(sm) Internet Name Administration" "June 15, 1998" \" -*- nroff -*-
+.SH NAME
+dynipadmin \- DynIP Client(tm) Internet Name Administration Program
+.SH SYNOPSIS
+\fBdynipadmin\fP [\fB\-d\fP|\fB\-p\fP] |
+[\fB\-r\fP <\fIfirstname\fP> <\fIlastname\fP>
+<\fIemail address\fP> <\fIhostname\fP> [<\fIdomain id\fP>]
+[<\fIip address\fP>]] |
+[\fB\-s\fP <\fIregistration key\fP>]
+.SH DESCRIPTION
+.IR DynIP(sm) 
+is a Dynamic IP Management System which allows Internet hosts
+with dynamic IP addresses -such as dial-up users- to have a permanent
+and static Internet Name.
+.B dynipadmin
+allows you to manipulate your Internet Name registration information. Initially,
+you will use the
+.B dynipadmin
+program to register your desired Internet Name for your computer. Later, 
+you can use this program to delete or update your registration information. The
+.B dynipadmin
+program operates in conjunction with the 
+.I DynIP
+server and
+allows you to register a Internet Name that always refers
+to your current dynamic IP address. Once you have registered your personal
+Internet Name, your machine is known to the Internet by a static
+domain name of the form
+.B <your chosen 
+.BR hostname>.dynip.com . 
+.SH OPTIONS
+.TP
+.B "\-p"
+Reload your Internet Name registration information. 
+This option allows you to synchronize your registration information
+in the 
+.I dynip.cfg 
+configuration file with the information stored on the DynIP server.
+This is necessary in case you have made modifications 
+to your registration information using our website
+(\fBhttp://www.dynip.com\fP)
+.TP
+.B "\-d"
+Delete your Internet Name registration information. This is necessary if
+you wish to register a new Internet Name or you no longer wish to make use
+of the services offered by DynIP.
+.TP
+.B "\-r <firstname> <lastname> <email> <hostname> [domain id] [ip address]"
+Register a new Internet Name. You 
+.I must 
+supply a valid email 
+address. The DynIP server will e-mail you important registration 
+information once your Internet Name has been successfully registered. You
+can only have one active Internet Name registration at a time. If you wish to
+change your Internet Name, you can just submit a new Internet name registration (using the
+.B -r 
+option) and your existing Internet Name registration will be overwritten.
+
+The ``domain id''
+parameter is an optional parameter that
+allows you to associate the specified hostname with another
+second-level domain. Generally, hostnames are associated with
+the second-level domain
+.BR dynip.com , 
+but if you have made arrangements to have DynIP host your own private
+second-level domain, DynIP will issue you a 10-digit password (the
+``domain id'') that allows you to associate your  hostname with
+your own second-level domain. For more information about using your
+own private domain, please contact 
+.BR support@dynip.com .
+There are a number of affinity second-level domain names that you
+can also associate your hostname with. These are listed in the
+.B dynip.dom
+domain ID database file. You can either specify the second-level domain name as
+the ``domain id'' parameter, or the numerical number assigned to the 
+second-level domain. See the 
+.B examples
+section below for details.
+
+The ``ip address'' parameter is an optional
+parameter that allows you to specify the static IP address that is to
+be associated with the registered Internet Name. This is useful if you
+have a (semi)static IP address (long lease DHCP cable-modem users, for example) 
+but have a cryptic hostname. The ``ip address'' parameter does not have to refer to the IP
+address  of the host that you are registering the domain on, so you could
+essentially ``rename'' any existing host on the Internet.
+.TP
+.B "\-s <new registration key>"
+This option allows you to set the registration key that the
+.B dynipadmin
+and
+.B dynipclient
+program will use to identify itself to the DynIP server. This option is
+only useful when you already have an active Internet Name registration
+and are installing an updated version of the DynIP client distribution, or
+are re-installing the DynIP client on another computer or operating 
+system. This option merely updates the values in the
+.I dynip.cfg
+configuration file. The registration key must be two numbers
+separated by a dash (``-'').
+ 
+.SH EXAMPLES
+.TP
+dynipadmin -r Joe Bar joebar@myisp.com foobar
+.PP
+This requests a new Internet Name registration with a hostname of 'foobar'. When 
+the registration is completed successfully, your computer is known to the Internet
+by foobar.dynip.com.
+To activate your Internet Name, you will need to run the
+.B dynipclient
+program every time that you connect to the Internet and for the
+duration of your connection. 
+.TP
+dynipadmin -r Joe Bar joebar@myisp.ca barfoo 123.113.64.9
+.PP
+This requests a new Internet Name registration with a hostname of 'barfoo'. When
+the registration is completed successfully, the machine with IP address 123.113.64.9
+is known to the Internet by an alternate name, barfoo.dynip.com.
+You do not need to run the 
+.B dynipclient
+program, because the new Internet Name is pointing to a static IP address.
+.TP
+dynipadmin -r Joe Bar joebar@myisp.com mysite dynip.com
+.PP
+This requests a new Internet Name registration for mysite.dynip.com. The
+``domain ID'' specifies dynip.com, which could have been omitted because
+it is the default domain.
+.TP
+dynipadmin -r Joe Bar joebar@myisp.com mysite ipname.com
+.PP
+This requests a new Internet Name registration for mysite.ipname.com. The
+``domain ID'' specifies an affinity domain which appears in the domain ID
+database file,
+.BR dynip.dom . Hostnames can be associated with any of the listed affinity
+domains in the domain ID database file.
+.SH NOTES
+Some hostnames are reserved and the 
+.B dynipadmin
+program will inform you when you have selected a reserved  
+hostname, or when you have selected a hostname that is already in
+use by another user. There are no reserved names for hostname
+registrations under your own second-level domain (i.e., when specifying 
+the ``domain id'' parameter).
+.PP
+The DynIP server issues a unique registration key the first time
+that you register an Internet Name. This registration key is your
+``password'' and can be used with the DynIP client across platforms
+to enable your Internet Name. For example, if you have both
+a Windows NT machine and a FreeBSD or Linux machine, both can have
+the same registration key so that your Internet Name can be
+used to access either machine (but not simultaneously).
+.SH FILES
+ dynip.cfg	The DynIP configuration file
+ dynip.dom	The Domain ID database file
+.SH SEE ALSO
+dynipclient(1)
+.br
+DynIP, a division of CanWeb Internet Services Ltd.

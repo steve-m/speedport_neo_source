@@ -1,0 +1,20 @@
+#! /bin/sh
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+WL_LIST=/tmp/wl_list
+FON_LIST=/tmp/fon_dhcp_list
+
+wlctl -i wl0.1 assoclist | awk '{print $2}' | tr -d ":" >  $WL_LIST
+wlctl -i wl1.1 assoclist | awk '{print $2}' | tr -d ":" >> $WL_LIST
+
+cat $FON_LIST | awk '{print $1}' | tr -d "-" > $FON_LIST
+cat $FON_LIST | grep -v -f $WL_LIST > $FON_LIST
+
+if [ ! -s $FON_LIST ]; then
+   rm -rf $FON_LIST
+fi
+
+rm -rf $WL_LIST
+
+exit 0

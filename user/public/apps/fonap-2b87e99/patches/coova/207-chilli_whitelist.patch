@@ -1,0 +1,82 @@
+diff -uprN -X /tmp/dontdiff chillispot-1.0-coova.4/src/dhcp.c chillispot-1.0-coova.4-whitelist/src/dhcp.c
+--- chillispot-1.0-coova.4/src/dhcp.c	2007-06-26 16:49:44.000000000 +0200
++++ chillispot-1.0-coova.4-whitelist/src/dhcp.c	2007-06-26 16:47:03.000000000 +0200
+@@ -1222,6 +1222,35 @@ dhcp_timeleft(struct dhcp_t *this, struc
+   return tvp;
+ }
+ 
++int in_dynamic_whitelist(struct dhcp_ippacket_t *pack, unsigned int dnat)
++{
++  struct in_addr inp; 
++  FILE *fp; 
++  struct stat st;
++
++  if (stat(WHITELIST_FILE, &st) < 0)
++	return 0;
++
++  if ((fp = fopen(WHITELIST_FILE, "r")) == NULL) {
++    log(LOG_NOTICE, "error openning %s", WHITELIST_FILE);
++    return 0;
++  }
++
++  while (fread(&inp, sizeof(inp), 1, fp) != 0)
++    if (inp.s_addr == (dnat ? pack->iph.daddr : pack->iph.saddr)) 
++      if (pack->iph.protocol == DHCP_IP_TCP || pack->iph.protocol == DHCP_IP_UDP) {
++        if (options.debug)
++          log(LOG_NOTICE, "DYNAMIC WHITELIST: %s\n", inet_ntoa(inp));
++          fclose(fp);
++          return 1;
++      }    
++
++  fclose(fp);
++  if (options.debug)
++    log(LOG_NOTICE, "NO WHITELIST: %s\n", inet_ntoa(inp));
++
++  return 0;
++}
+ 
+ /**
+  * dhcp_doDNAT()
+@@ -1278,6 +1309,10 @@ int dhcp_doDNAT(struct dhcp_conn_t *conn
+ 	    (pack->iph.protocol == DHCP_IP_UDP && udph->dst == htons(pt->port)))
+ 	  return 0;
+   }
++
++  /* dynamic list pass-through entry? */
++    if (in_dynamic_whitelist(pack, 1))
++      return 0;
+   
+   /* Was it a http request for another server? */
+   /* We are changing dest IP and dest port to local UAM server */
+@@ -1446,6 +1483,9 @@ int dhcp_undoDNAT(struct dhcp_conn_t *co
+ 	  return 0;
+   }
+ 
++    if (in_dynamic_whitelist(pack, 0))
++      return 0;
++
+   return -1; /* Something else */
+ }
+ 
+diff -uprN -X /tmp/dontdiff chillispot-1.0-coova.4/src/options.h chillispot-1.0-coova.4-whitelist/src/options.h
+--- chillispot-1.0-coova.4/src/options.h	2007-01-31 14:52:53.000000000 +0100
++++ chillispot-1.0-coova.4-whitelist/src/options.h	2007-06-20 10:32:54.000000000 +0200
+@@ -25,6 +25,8 @@
+ 
+ #define UAMSERVER_MAX 8
+ 
++#define WHITELIST_FILE "/tmp/whitelist.cache"
++
+ typedef struct pass_through_t {
+   struct in_addr host;              /* IP or Network */
+   struct in_addr mask;              /* Netmask */
+@@ -156,6 +160,9 @@ struct options_t {
+ 
+   /* Command-Socket */
+   char *cmdsocket;
++
++  /* whitelist flag */
++  int have_whitelist;
+ };
+ 
+ extern struct options_t options;

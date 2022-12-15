@@ -1,0 +1,5 @@
+{
+	"testme": null,
+	"not_null": "foo",
+	"array": [ "a", "b", {}, {"c":"d"} ]
+}

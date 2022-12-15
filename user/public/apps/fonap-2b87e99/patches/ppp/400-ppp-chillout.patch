@@ -1,0 +1,858 @@
+diff -ru pppd.old/pppd/auth.c pppd/pppd/auth.c
+--- pppd.old/pppd/auth.c	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/auth.c	2010-10-25 11:52:53.000000000 +0200
+@@ -68,7 +68,7 @@
+  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ 
+-#define RCSID	"$Id: auth.c,v 1.112 2006/06/18 11:26:00 paulus Exp $"
++#define RCSID	"$Id: auth.c 64 2007-11-23 15:25:13Z pablo.martin $"
+ 
+ #include <stdio.h>
+ #include <stddef.h>
+@@ -116,8 +116,10 @@
+ #include "cbcp.h"
+ #endif
+ #include "pathnames.h"
++#include "chillout.h"
+ 
+ static const char rcsid[] = RCSID;
++extern chillout_t chillout;
+ 
+ /* Bits in scan_authfile return value */
+ #define NONWILD_SERVER	1
+@@ -913,6 +915,7 @@
+      * Authentication failure: take the link down
+      */
+     status = EXIT_PEER_AUTH_FAILED;
++    notice("%s: are we failing autentication yet?", __FUNCTION__);
+     lcp_close(unit, "Authentication failed");
+ }
+ 
+@@ -967,6 +970,7 @@
+     /* Save the authentication method for later. */
+     auth_done[unit] |= bit;
+ 
++    notice("%s: are we authenticated yet?", __FUNCTION__);
+     /*
+      * If there is no more authentication still to be done,
+      * proceed to the network (or callback) phase.
+@@ -991,6 +995,16 @@
+      * authentication secrets.
+      */
+     status = EXIT_AUTH_TOPEER_FAILED;
++    notice("chillout: register fail %s %s %d", our_name, ifname, getpid());
++    if (chillout != NULL) {
++    	if (chillout_mac[0] == '\0') {
++		notice("specify chilloutmac");
++	} else {
++            chillout_write(chillout, CHILLOUT_WRITE_SOCK, "register fail %s %s %d %s", our_name, ifname, getpid(), chillout_mac);
++	}
++    } else {
++    	notice("chillout is NULL");
++    }
+     lcp_close(unit, "Failed to authenticate ourselves to peer");
+ }
+ 
+@@ -1037,6 +1051,16 @@
+ 	bit = 0;
+     }
+ 
++    notice("chillout: register success %s %s %d", our_name, ifname, getpid());
++    if (chillout != NULL) {
++    	if (chillout_mac[0] == '\0') {
++		notice("specify chilloutmac");
++	} else {
++	        chillout_write(chillout, CHILLOUT_WRITE_SOCK, "register success %s %s %d %s", our_name, ifname, getpid(), chillout_mac);
++	}
++    } else {
++    	notice("chillout is NULL");
++    }
+     notice("%s authentication succeeded", prot);
+ 
+     /* Save the authentication method for later. */
+diff -ru pppd.old/pppd/ipcp.c pppd/pppd/ipcp.c
+--- pppd.old/pppd/ipcp.c	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/ipcp.c	2010-10-25 11:52:53.000000000 +0200
+@@ -1,3 +1,4 @@
++/* vim: set ai tabstop=4 expandtab: */
+ /*
+  * ipcp.c - PPP IP Control Protocol.
+  *
+@@ -60,6 +61,9 @@
+ #include "fsm.h"
+ #include "ipcp.h"
+ #include "pathnames.h"
++#include "chillout.h"
++
++extern chillout_t chillout;
+ 
+ static const char rcsid[] = RCSID;
+ 
+@@ -197,6 +201,14 @@
+       "disable defaultroute option", OPT_ALIAS | OPT_A2CLR,
+       &ipcp_wantoptions[0].default_route },
+ 
++    { "replacedefaultroute", o_bool,
++				&ipcp_wantoptions[0].replace_default_route,
++      "Replace default route", 1
++    },
++    { "noreplacedefaultroute", o_bool,
++				&ipcp_allowoptions[0].replace_default_route,
++      "Never replace default route", OPT_A2COPY,
++				&ipcp_wantoptions[0].replace_default_route },
+     { "proxyarp", o_bool, &ipcp_wantoptions[0].proxy_arp,
+       "Add proxy ARP entry", OPT_ENABLE|1, &ipcp_allowoptions[0].proxy_arp },
+     { "noproxyarp", o_bool, &ipcp_allowoptions[0].proxy_arp,
+@@ -263,7 +275,7 @@
+     ip_active_pkt
+ };
+ 
+-static void ipcp_clear_addrs __P((int, u_int32_t, u_int32_t));
++static void ipcp_clear_addrs __P((int, u_int32_t, u_int32_t, bool));
+ static void ipcp_script __P((char *, int));	/* Run an up/down script */
+ static void ipcp_script_done __P((void *));
+ 
+@@ -1660,7 +1672,8 @@
+     if (!sifnpmode(u, PPP_IP, NPMODE_QUEUE))
+ 	return 0;
+     if (wo->default_route)
+-	if (sifdefaultroute(u, wo->ouraddr, wo->hisaddr))
++	if (sifdefaultroute(u, wo->ouraddr, wo->hisaddr,
++		wo->replace_default_route))
+ 	    default_route_set[u] = 1;
+     if (wo->proxy_arp)
+ 	if (sifproxyarp(u, wo->hisaddr))
+@@ -1742,7 +1755,8 @@
+      */
+     if (demand) {
+ 	if (go->ouraddr != wo->ouraddr || ho->hisaddr != wo->hisaddr) {
+-	    ipcp_clear_addrs(f->unit, wo->ouraddr, wo->hisaddr);
++	    ipcp_clear_addrs(f->unit, wo->ouraddr, wo->hisaddr,
++				      wo->replace_default_route);
+ 	    if (go->ouraddr != wo->ouraddr) {
+ 		warn("Local IP address changed to %I", go->ouraddr);
+ 		script_setenv("OLDIPLOCAL", ip_ntoa(wo->ouraddr), 0);
+@@ -1767,7 +1781,8 @@
+ 
+ 	    /* assign a default route through the interface if required */
+ 	    if (ipcp_wantoptions[f->unit].default_route) 
+-		if (sifdefaultroute(f->unit, go->ouraddr, ho->hisaddr))
++		if (sifdefaultroute(f->unit, go->ouraddr, ho->hisaddr,
++			wo->replace_default_route))
+ 		    default_route_set[f->unit] = 1;
+ 
+ 	    /* Make a proxy ARP entry if requested. */
+@@ -1776,7 +1791,7 @@
+ 		    proxy_arp_set[f->unit] = 1;
+ 
+ 	}
+-	demand_rexmit(PPP_IP);
++	demand_rexmit(PPP_IP,go->ouraddr);
+ 	sifnpmode(f->unit, PPP_IP, NPMODE_PASS);
+ 
+     } else {
+@@ -1817,7 +1832,8 @@
+ 
+ 	/* assign a default route through the interface if required */
+ 	if (ipcp_wantoptions[f->unit].default_route) 
+-	    if (sifdefaultroute(f->unit, go->ouraddr, ho->hisaddr))
++	    if (sifdefaultroute(f->unit, go->ouraddr, ho->hisaddr,
++		    wo->replace_default_route))
+ 		default_route_set[f->unit] = 1;
+ 
+ 	/* Make a proxy ARP entry if requested. */
+@@ -1837,12 +1853,15 @@
+ 
+     reset_link_stats(f->unit);
+ 
+-    np_up(f->unit, PPP_IP);
+-    ipcp_is_up = 1;
+-
+-    notify(ip_up_notifier, 0);
+-    if (ip_up_hook)
+-	ip_up_hook();
++        np_up(f->unit, PPP_IP);
++        ipcp_is_up = 1;
++        warn("%s: before calling notify (is link up yet?)", __FUNCTION__);
++        /* Chilloutd has kept track of our data from the last
++         * "ppp register" call */
++        chillout_write(chillout, CHILLOUT_WRITE_SOCK, "network up");
++        notify(ip_up_notifier, 0);
++        if (ip_up_hook)
++	    ip_up_hook();
+ 
+     /*
+      * Execute the ip-up script, like this:
+@@ -1850,7 +1869,7 @@
+      */
+     if (ipcp_script_state == s_down && ipcp_script_pid == 0) {
+ 	ipcp_script_state = s_up;
+-	ipcp_script(_PATH_IPUP, 0);
++	ipcp_script(path_ipup, 0);
+     }
+ }
+ 
+@@ -1872,8 +1891,10 @@
+      * at least for the radius plugin */
+     update_link_stats(f->unit);
+     notify(ip_down_notifier, 0);
+-    if (ip_down_hook)
+-	ip_down_hook();
++    chillout_write(chillout, CHILLOUT_WRITE_SOCK, "network down");
++    if (ip_down_hook) {
++    	ip_down_hook();
++    }
+     if (ipcp_is_up) {
+ 	ipcp_is_up = 0;
+ 	np_down(f->unit, PPP_IP);
+@@ -1894,13 +1915,13 @@
+ 	sifnpmode(f->unit, PPP_IP, NPMODE_DROP);
+ 	sifdown(f->unit);
+ 	ipcp_clear_addrs(f->unit, ipcp_gotoptions[f->unit].ouraddr,
+-			 ipcp_hisoptions[f->unit].hisaddr);
++			 ipcp_hisoptions[f->unit].hisaddr, 0);
+     }
+ 
+     /* Execute the ip-down script */
+     if (ipcp_script_state == s_up && ipcp_script_pid == 0) {
+ 	ipcp_script_state = s_down;
+-	ipcp_script(_PATH_IPDOWN, 0);
++	ipcp_script(path_ipdown, 0);
+     }
+ }
+ 
+@@ -1910,16 +1931,25 @@
+  * proxy arp entries, etc.
+  */
+ static void
+-ipcp_clear_addrs(unit, ouraddr, hisaddr)
++ipcp_clear_addrs(unit, ouraddr, hisaddr, replacedefaultroute)
+     int unit;
+     u_int32_t ouraddr;  /* local address */
+     u_int32_t hisaddr;  /* remote address */
++    bool replacedefaultroute;
+ {
+     if (proxy_arp_set[unit]) {
+ 	cifproxyarp(unit, hisaddr);
+ 	proxy_arp_set[unit] = 0;
+     }
+-    if (default_route_set[unit]) {
++    /* If replacedefaultroute, sifdefaultroute will be called soon
++     * with replacedefaultroute set and that will overwrite the current
++     * default route. This is the case only when doing demand, otherwise
++     * during demand, this cifdefaultroute would restore the old default
++     * route which is not what we want in this case. In the non-demand
++     * case, we'll delete the default route and restore the old if there
++     * is one saved by an sifdefaultroute with replacedefaultroute.
++     */
++    if (!replacedefaultroute && default_route_set[unit]) {
+ 	cifdefaultroute(unit, ouraddr, hisaddr);
+ 	default_route_set[unit] = 0;
+     }
+@@ -1954,13 +1984,13 @@
+     case s_up:
+ 	if (ipcp_fsm[0].state != OPENED) {
+ 	    ipcp_script_state = s_down;
+-	    ipcp_script(_PATH_IPDOWN, 0);
++	    ipcp_script(path_ipdown, 0);
+ 	}
+ 	break;
+     case s_down:
+ 	if (ipcp_fsm[0].state == OPENED) {
+ 	    ipcp_script_state = s_up;
+-	    ipcp_script(_PATH_IPUP, 0);
++	    ipcp_script(path_ipup, 0);
+ 	}
+ 	break;
+     }
+diff -ru pppd.old/pppd/main.c pppd/pppd/main.c
+--- pppd.old/pppd/main.c	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/main.c	2010-10-25 11:52:53.000000000 +0200
+@@ -66,7 +66,7 @@
+  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ 
+-#define RCSID	"$Id: main.c,v 1.153 2006/06/04 03:52:50 paulus Exp $"
++#define RCSID	"$Id: main.c 29 2007-10-31 11:23:44Z pablo.martin $"
+ 
+ #include <stdio.h>
+ #include <ctype.h>
+@@ -90,6 +90,8 @@
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
++#include <sys/sysinfo.h>
++#include "chillout.h"
+ 
+ #include "pppd.h"
+ #include "magic.h"
+@@ -225,8 +227,22 @@
+ 
+ static struct subprocess *children;
+ 
++static int callback_default(chillout_t co, void *data, int argc, char **argv);
++
++static struct callback global_callbacks[] = {
++    { "ppp", "default", 0, callback_default },
++    { "", "", 0, NULL }
++};
++
++chillout_t chillout;
++
++void start_chillout(char *chilloutsocket);
++
++void stop_chillout(void);
++
+ /* Prototypes for procedures local to this file. */
+ 
++static void check_time(void);
+ static void setup_signals __P((void));
+ static void create_pidfile __P((int pid));
+ static void create_linkpidfile __P((int pid));
+@@ -315,6 +331,9 @@
+     struct protent *protp;
+     char numbuf[16];
+ 
++    strlcpy(path_ipup, _PATH_IPUP, sizeof(path_ipup));
++    strlcpy(path_ipdown, _PATH_IPDOWN, sizeof(path_ipdown));
++
+     link_stats_valid = 0;
+     new_phase(PHASE_INITIALIZE);
+ 
+@@ -492,6 +511,8 @@
+     }
+ 
+     do_callback = 0;
++    if (chillout_path[0] != '\0')
++	start_chillout(chillout_path);
+     for (;;) {
+ 
+ 	bundle_eof = 0;
+@@ -529,6 +550,7 @@
+ 	    info("Starting link");
+ 	}
+ 
++	check_time();
+ 	gettimeofday(&start_time, NULL);
+ 	script_unsetenv("CONNECT_TIME");
+ 	script_unsetenv("BYTES_SENT");
+@@ -595,10 +617,40 @@
+ 	}
+     }
+ 
++    if (chillout_path[0] != '\0')
++	stop_chillout();
+     die(status);
+     return 0;
+ }
+ 
++void start_chillout(char *chilloutsocket)
++{
++    if ((chillout = chillout_init(chilloutsocket, "ppp", NULL)) == NULL) {
++	error("Couldnt start chillout");
++	die(1);
++    } else {
++        char buffer[256];
++
++        chillout_write(chillout, CHILLOUT_WRITE_SOCK, "show version");
++        chillout->callbacks = global_callbacks;
++        if (chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer)) {
++            error("error reading from chillout");
++        }
++        if (buffer[strlen(buffer) - 1] == '\n') {
++            buffer[strlen(buffer) - 1] = '\0';
++        }
++        info("Chillout subsystem loaded. Server version %s\n", buffer);
++        chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer);
++    }
++    chillout->callbacks = global_callbacks;
++}
++
++void stop_chillout(void)
++{
++    chillout_finish(chillout);
++    chillout = NULL;
++}
++
+ /*
+  * handle_events - wait for something to happen and respond to it.
+  */
+@@ -769,8 +821,7 @@
+ 	/* update pid files if they have been written already */
+ 	if (pidfilename[0])
+ 	    create_pidfile(pid);
+-	if (linkpidfile[0])
+-	    create_linkpidfile(pid);
++	create_linkpidfile(pid);
+ 	exit(0);		/* parent dies */
+     }
+     setsid();
+@@ -1262,6 +1313,36 @@
+ 
+ static struct callout *callout = NULL;	/* Callout list */
+ static struct timeval timenow;		/* Current time */
++static long uptime_diff = 0;
++static int uptime_diff_set = 0;
++
++static void check_time(void)
++{
++	long new_diff;
++	struct timeval t;
++	struct sysinfo i;
++    struct callout *p;
++	
++	gettimeofday(&t, NULL);
++	sysinfo(&i);
++	new_diff = t.tv_sec - i.uptime;
++	
++	if (!uptime_diff_set) {
++		uptime_diff = new_diff;
++		uptime_diff_set = 1;
++		return;
++	}
++
++	if ((new_diff - 5 > uptime_diff) || (new_diff + 5 < uptime_diff)) {
++		/* system time has changed, update counters and timeouts */
++		info("System time change detected.");
++		start_time.tv_sec += new_diff - uptime_diff;
++		
++    	for (p = callout; p != NULL; p = p->c_next)
++			p->c_time.tv_sec += new_diff - uptime_diff;
++	}
++	uptime_diff = new_diff;
++}
+ 
+ /*
+  * timeout - Schedule a timeout.
+@@ -1332,6 +1413,8 @@
+ {
+     struct callout *p;
+ 
++	check_time();
++	
+     while (callout != NULL) {
+ 	p = callout;
+ 
+@@ -1359,6 +1442,8 @@
+ {
+     if (callout == NULL)
+ 	return NULL;
++	
++	check_time();
+ 
+     gettimeofday(&timenow, NULL);
+     tvp->tv_sec = callout->c_time.tv_sec - timenow.tv_sec;
+@@ -1567,6 +1652,8 @@
+ 	if (errfd == 0 || errfd == 1)
+ 		errfd = dup(errfd);
+ 
++	closelog();
++
+ 	/* dup the in, out, err fds to 0, 1, 2 */
+ 	if (infd != 0)
+ 		dup2(infd, 0);
+@@ -1575,7 +1662,6 @@
+ 	if (errfd != 2)
+ 		dup2(errfd, 2);
+ 
+-	closelog();
+ 	if (log_to_fd > 2)
+ 		close(log_to_fd);
+ 	if (the_channel->close)
+@@ -1939,9 +2025,11 @@
+ 		free(p-1);
+ 		script_env[i] = newstring;
+ #ifdef USE_TDB
+-		if (iskey && pppdb != NULL)
+-		    add_db_key(newstring);
+-		update_db_entry();
++		if (pppdb != NULL) {
++		    if (iskey)
++			add_db_key(newstring);
++		    update_db_entry();
++		}
+ #endif
+ 		return;
+ 	    }
+@@ -2129,3 +2217,10 @@
+ 	    delete_db_key(p);
+ }
+ #endif /* USE_TDB */
++/* callback_default */
++static int callback_default(chillout_t co, void *data, int argc, char **argv)
++{
++    chillout_write(co, 0, "error unknown token %s", argv[0]); 
++    return 1;
++}
++
+diff -ru pppd.old/pppd/Makefile.linux pppd/pppd/Makefile.linux
+--- pppd.old/pppd/Makefile.linux	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/Makefile.linux	2010-10-25 11:52:53.000000000 +0200
+@@ -1,6 +1,6 @@
+ #
+ # pppd makefile for Linux
+-# $Id: Makefile.linux,v 1.69 2006/06/04 05:07:46 paulus Exp $
++# $Id: Makefile.linux 38 2007-11-06 16:21:49Z pablo.martin $
+ #
+ 
+ # Default installation locations
+@@ -13,16 +13,16 @@
+ 
+ PPPDSRCS = main.c magic.c fsm.c lcp.c ipcp.c upap.c chap-new.c md5.c ccp.c \
+ 	   ecp.c ipxcp.c auth.c options.c sys-linux.c md4.c chap_ms.c \
+-	   demand.c utils.c tty.c eap.c chap-md5.c
++	   demand.c utils.c tty.c eap.c chap-md5.c chillout.c log.c
+ 
+ HEADERS = ccp.h chap-new.h ecp.h fsm.h ipcp.h \
+ 	ipxcp.h lcp.h magic.h md5.h patchlevel.h pathnames.h pppd.h \
+-	upap.h eap.h
++	upap.h eap.h chillout.h
+ 
+ MANPAGES = pppd.8
+ PPPDOBJS = main.o magic.o fsm.o lcp.o ipcp.o upap.o chap-new.o md5.o ccp.o \
+ 	   ecp.o auth.o options.o demand.o utils.o sys-linux.o ipxcp.o tty.o \
+-	   eap.o chap-md5.o
++	   eap.o chap-md5.o chillout.o log.o
+ 
+ #
+ # include dependencies if present
+@@ -32,7 +32,7 @@
+ 
+ # CC = gcc
+ #
+-COPTS = -O2 -pipe -Wall -g
++COPTS = -O2 -pipe -Wall
+ LIBS =
+ 
+ # Uncomment the next 2 lines to include support for Microsoft's
+@@ -48,21 +48,24 @@
+ # Uncomment the next line to include support for PPP packet filtering.
+ # This requires that the libpcap library and headers be installed
+ # and that the kernel driver support PPP packet filtering.
+-FILTER=y
++#FILTER=y
++
++# Support for precompiled filters
++PRECOMPILED_FILTER=y
+ 
+ # Uncomment the next line to enable multilink PPP (enabled by default)
+ # Linux distributions: Please leave multilink ENABLED in your builds
+ # of pppd!
+-HAVE_MULTILINK=y
++#HAVE_MULTILINK=y
+ 
+ # Uncomment the next line to enable the TDB database (enabled by default.)
+ # If you enable multilink, then TDB is automatically enabled also.
+ # Linux distributions: Please leave TDB ENABLED in your builds.
+-USE_TDB=y
++#USE_TDB=y
+ 
+-HAS_SHADOW=y
++#HAS_SHADOW=y
+ #USE_PAM=y
+-#HAVE_INET6=y
++HAVE_INET6=y
+ 
+ # Enable plugins
+ PLUGIN=y
+@@ -77,9 +80,9 @@
+ 
+ INCLUDE_DIRS= -I../include
+ 
+-COMPILE_FLAGS= -DHAVE_PATHS_H -DIPX_CHANGE -DHAVE_MMAP
++COMPILE_FLAGS= -DHAVE_PATHS_H -DHAVE_MMAP
+ 
+-CFLAGS= $(COPTS) $(COMPILE_FLAGS) $(INCLUDE_DIRS) '-DDESTDIR="@DESTDIR@"'
++CFLAGS= $(COPTS) $(COMPILE_FLAGS) $(INCLUDE_DIRS) '-DDESTDIR="/home/pablo/src/chillout/trunk/build"'
+ 
+ ifdef CHAPMS
+ CFLAGS   += -DCHAPMS=1
+@@ -99,7 +102,7 @@
+ CFLAGS	+= -DUSE_SRP -DOPENSSL -I/usr/local/ssl/include
+ LIBS	+= -lsrp -L/usr/local/ssl/lib -lcrypto
+ TARGETS	+= srp-entry
+-EXTRAINSTALL = $(INSTALL) -s -c -m 555 srp-entry $(BINDIR)/srp-entry
++EXTRAINSTALL = $(INSTALL) -c -m 555 srp-entry $(BINDIR)/srp-entry
+ MANPAGES += srp-entry.8
+ EXTRACLEAN += srp-entry.o
+ NEEDDES=y
+@@ -117,10 +120,10 @@
+ #LIBS     += -lshadow $(LIBS)
+ endif
+ 
+-ifneq ($(wildcard /usr/include/crypt.h),)
++#ifneq ($(wildcard /usr/include/crypt.h),)
+ CFLAGS  += -DHAVE_CRYPT_H=1
+ LIBS	+= -lcrypt
+-endif
++#endif
+ 
+ ifdef NEEDDES
+ ifndef USE_CRYPT
+@@ -170,11 +173,19 @@
+ 
+ ifdef FILTER
+ ifneq ($(wildcard /usr/include/pcap-bpf.h),)
+-LIBS    += -lpcap
+-CFLAGS  += -DPPP_FILTER
++LIBS    += -lpcap -L$(STAGING_DIR)/usr/lib
++CFLAGS  += -DPPP_FILTER -I$(STAGING_DIR)/usr/include
+ endif
+ endif
+ 
++ifdef PRECOMPILED_FILTER
++PPPDSRCS += pcap_pcc.c
++HEADERS  += pcap_pcc.h
++PPPDOBJS += pcap_pcc.o
++LIBS	+= $(STAGING_DIR)/usr/lib/libpcap.a
++CFLAGS	+= -DPPP_FILTER -DPPP_PRECOMPILED_FILTER -I$(STAGING_DIR)/usr/include
++endif
++
+ ifdef HAVE_INET6
+      PPPDSRCS += ipv6cp.c eui64.c
+      HEADERS  += ipv6cp.h eui64.h
+@@ -200,7 +211,7 @@
+ install: pppd
+ 	mkdir -p $(BINDIR) $(MANDIR)
+ 	$(EXTRAINSTALL)
+-	$(INSTALL) -s -c -m 555 pppd $(BINDIR)/pppd
++	$(INSTALL) -c -m 555 pppd $(BINDIR)/pppd
+ 	if chgrp pppusers $(BINDIR)/pppd 2>/dev/null; then \
+ 	  chmod o-rx,u+s $(BINDIR)/pppd; fi
+ 	$(INSTALL) -c -m 444 pppd.8 $(MANDIR)
+diff -ru pppd.old/pppd/options.c pppd/pppd/options.c
+--- pppd.old/pppd/options.c	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/options.c	2010-10-25 11:52:53.000000000 +0200
+@@ -40,7 +40,7 @@
+  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ 
+-#define RCSID	"$Id: options.c,v 1.100 2006/06/18 11:26:00 paulus Exp $"
++#define RCSID	"$Id: options.c 63 2007-11-22 18:42:47Z pablo.martin $"
+ 
+ #include <ctype.h>
+ #include <stdio.h>
+@@ -57,19 +57,7 @@
+ 
+ #ifdef PPP_FILTER
+ #include <pcap.h>
+-/*
+- * There have been 3 or 4 different names for this in libpcap CVS, but
+- * this seems to be what they have settled on...
+- * For older versions of libpcap, use DLT_PPP - but that means
+- * we lose the inbound and outbound qualifiers.
+- */
+-#ifndef DLT_PPP_PPPD
+-#ifdef DLT_PPP_WITHDIRECTION
+-#define DLT_PPP_PPPD	DLT_PPP_WITHDIRECTION
+-#else
+-#define DLT_PPP_PPPD	DLT_PPP
+-#endif
+-#endif
++#include <pcap-bpf.h>
+ #endif /* PPP_FILTER */
+ 
+ #include "pppd.h"
+@@ -113,12 +101,17 @@
+ bool	tune_kernel;		/* may alter kernel settings */
+ int	connect_delay = 1000;	/* wait this many ms after connect script */
+ int	req_unit = -1;		/* requested interface unit */
++char	path_ipup[MAXPATHLEN];	/* pathname of ip-up script */
++char	path_ipdown[MAXPATHLEN];/* pathname of ip-down script */
+ bool	multilink = 0;		/* Enable multilink operation */
+ char	*bundle_name = NULL;	/* bundle name for multilink */
+ bool	dump_options;		/* print out option values */
+ bool	dryrun;			/* print out option values and exit */
+ char	*domain;		/* domain name set by domain option */
+ int	child_wait = 5;		/* # seconds to wait for children at exit */
++char	chillout_path[MAXPATHLEN]; /* chillout socket path, if any */
++char	chillout_mac[MAXPATHLEN]; /* mac associated to this connection, to send it
++				     back once authenticated */
+ 
+ #ifdef MAXOCTETS
+ unsigned int  maxoctets = 0;    /* default - no limit */
+@@ -158,6 +151,13 @@
+ static int loadplugin __P((char **));
+ #endif
+ 
++#ifdef PPP_PRECOMPILED_FILTER
++#include "pcap_pcc.h"
++static int setprecompiledpassfilter __P((char **));
++static int setprecompiledactivefilter __P((char **));
++#undef PPP_FILTER
++#endif
++
+ #ifdef PPP_FILTER
+ static int setpassfilter __P((char **));
+ static int setactivefilter __P((char **));
+@@ -255,6 +255,14 @@
+       "Set logical name for link",
+       OPT_PRIO | OPT_PRIV | OPT_STATIC, NULL, MAXPATHLEN },
+ 
++    { "chillout", o_string, chillout_path,
++      "Set chillout socket path",
++      OPT_PRIO | OPT_PRIV | OPT_STATIC, NULL, MAXPATHLEN },
++
++    { "chilloutmac", o_string, chillout_mac,
++      "Set mac address of the client that will be sent to chilloutd",
++      OPT_PRIO | OPT_PRIV | OPT_STATIC, NULL, MAXPATHLEN },
++
+     { "maxfail", o_int, &maxfail,
+       "Maximum number of unsuccessful connection attempts to allow",
+       OPT_PRIO },
+@@ -281,6 +289,13 @@
+       "Number of seconds to wait for child processes at exit",
+       OPT_PRIO },
+ 
++    { "ip-up-script", o_string, path_ipup,
++      "Set pathname of ip-up script",
++      OPT_PRIV|OPT_STATIC, NULL, MAXPATHLEN },
++    { "ip-down-script", o_string, path_ipdown,
++      "Set pathname of ip-down script",
++      OPT_PRIV|OPT_STATIC, NULL, MAXPATHLEN },
++
+ #ifdef HAVE_MULTILINK
+     { "multilink", o_bool, &multilink,
+       "Enable multilink operation", OPT_PRIO | 1 },
+@@ -308,6 +323,14 @@
+       "set filter for active pkts", OPT_PRIO },
+ #endif
+ 
++#ifdef PPP_PRECOMPILED_FILTER
++    { "precompiled-pass-filter", 1, setprecompiledpassfilter,
++      "set precompiled filter for packets to pass", OPT_PRIO },
++
++    { "precompiled-active-filter", 1, setprecompiledactivefilter,
++      "set precompiled filter for active pkts", OPT_PRIO },
++#endif
++
+ #ifdef MAXOCTETS
+     { "maxoctets", o_int, &maxoctets,
+       "Set connection traffic limit",
+@@ -1447,6 +1470,29 @@
+     return ok;
+ }
+ 
++#ifdef PPP_PRECOMPILED_FILTER
++/*
++ * setprecompiledpassfilter - Set the pass filter for packets using a
++ * precompiled expression
++ */
++static int
++setprecompiledpassfilter(argv)
++    char **argv;
++{
++    return pcap_pre_compiled (*argv, &pass_filter);
++}
++
++/*
++ * setactivefilter - Set the active filter for packets
++ */
++static int
++setprecompiledactivefilter(argv)
++    char **argv;
++{
++    return pcap_pre_compiled (*argv, &active_filter);
++}
++#endif
++
+ #ifdef PPP_FILTER
+ /*
+  * setpassfilter - Set the pass filter for packets
+diff -ru pppd.old/pppd/pppd.h pppd/pppd/pppd.h
+--- pppd.old/pppd/pppd.h	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/pppd.h	2010-10-25 11:52:53.000000000 +0200
+@@ -39,7 +39,7 @@
+  * AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  *
+- * $Id: pppd.h,v 1.91 2005/08/25 23:59:34 paulus Exp $
++ * $Id: pppd.h 63 2007-11-22 18:42:47Z pablo.martin $
+  */
+ 
+ /*
+@@ -312,6 +312,8 @@
+ extern int	connect_delay;	/* Time to delay after connect script */
+ extern int	max_data_rate;	/* max bytes/sec through charshunt */
+ extern int	req_unit;	/* interface unit number to use */
++extern char	path_ipup[MAXPATHLEN]; /* pathname of ip-up script */
++extern char	path_ipdown[MAXPATHLEN]; /* pathname of ip-down script */
+ extern bool	multilink;	/* enable multilink operation */
+ extern bool	noendpoint;	/* don't send or accept endpt. discrim. */
+ extern char	*bundle_name;	/* bundle name for multilink */
+@@ -319,6 +321,8 @@
+ extern bool	dryrun;		/* check everything, print options, exit */
+ extern int	child_wait;	/* # seconds to wait for children at end */
+ 
++extern char	chillout_path[MAXPATHLEN]; /* path to chillout socket */
++extern char     chillout_mac[MAXPATHLEN];  /* mac to associate to the lease */
+ #ifdef MAXOCTETS
+ extern unsigned int maxoctets;	     /* Maximum octetes per session (in bytes) */
+ extern int       maxoctets_dir;      /* Direction :
+@@ -563,7 +567,7 @@
+ void demand_block __P((void));	/* set all NPs to queue up packets */
+ void demand_unblock __P((void)); /* set all NPs to pass packets */
+ void demand_discard __P((void)); /* set all NPs to discard packets */
+-void demand_rexmit __P((int));	/* retransmit saved frames for an NP */
++void demand_rexmit __P((int, u_int32_t)); /* retransmit saved frames for an NP*/
+ int  loop_chars __P((unsigned char *, int)); /* process chars from loopback */
+ int  loop_frame __P((unsigned char *, int)); /* should we bring link up? */
+ 
+@@ -642,7 +646,7 @@
+ int  cif6addr __P((int, eui64_t, eui64_t));
+ 				/* Remove an IPv6 address from i/f */
+ #endif
+-int  sifdefaultroute __P((int, u_int32_t, u_int32_t));
++int  sifdefaultroute __P((int, u_int32_t, u_int32_t, bool replace_default_rt));
+ 				/* Create default route through i/f */
+ int  cifdefaultroute __P((int, u_int32_t, u_int32_t));
+ 				/* Delete default route through i/f */
+diff -ru pppd.old/pppd/upap.c pppd/pppd/upap.c
+--- pppd.old/pppd/upap.c	2010-10-27 17:03:27.000000000 +0200
++++ pppd/pppd/upap.c	2010-10-25 11:52:53.000000000 +0200
+@@ -1,3 +1,4 @@
++/* vim: set ai tabstop=4 expandtab: */
+ /*
+  * upap.c - User/Password Authentication Protocol.
+  *
+@@ -52,7 +53,10 @@
+ #include "pppd.h"
+ #include "upap.h"
+ 
++#include "chillout.h"
++
+ static const char rcsid[] = RCSID;
++extern chillout_t chillout;
+ 
+ static bool hide_password = 1;
+ 
+@@ -492,7 +496,7 @@
+ 		return;
+ 	    }
+ 	    msg = (char *) inp;
+-	    PRINTMSG(msg, msglen);
++        PRINTMSG(msg, msglen);
+ 	}
+     }
+ 
+@@ -532,6 +536,19 @@
+ 		return;
+ 	    }
+ 	    msg = (char *) inp;
++	    {
++		    char buffer[256];
++		    if (len > 255) {
++			    notice("chillout: msg too long");
++		    } else {
++                memcpy(buffer, msg, len);
++                buffer[len] = '\0';
++                notice("chillout: failure reason %s", buffer);
++                if ((chillout != NULL) && (chillout_mac[0] != '\0')) {
++                    chillout_write(chillout, CHILLOUT_WRITE_SOCK, "failure reason %s", buffer);
++                }
++            }
++        }
+ 	    PRINTMSG(msg, msglen);
+ 	}
+     }

@@ -1,0 +1,1083 @@
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/chilli.c chillispot-1.0-coova.4.new/src/chilli.c
+--- chillispot-1.0-coova.4.orig/src/chilli.c	2010-10-25 12:44:46.000000000 +0200
++++ chillispot-1.0-coova.4.new/src/chilli.c	2010-10-25 11:52:53.000000000 +0200
+@@ -1,3 +1,4 @@
++/* vim: set ai tabstop=2 expandtab: */
+ /* 
+  *
+  * chilli - ChilliSpot.org. A Wireless LAN Access Point Controller.
+@@ -25,6 +26,7 @@
+ #include "chilli.h"
+ #include "options.h"
+ #include "cmdsock.h"
++#include "chillout.h"
+ 
+ struct tun_t *tun;                /* TUN instance            */
+ struct ippool_t *ippool;          /* Pool of IP addresses */
+@@ -32,6 +34,7 @@
+ struct dhcp_t *dhcp = NULL;       /* DHCP instance */
+ struct redir_t *redir = NULL;     /* Redir instance */
+ 
++chillout_t chillout = NULL;       /* chillout */
+ int connections=0;
+ struct app_conn_t *firstfreeconn=0; /* First free in linked list */
+ struct app_conn_t *lastfreeconn=0;  /* Last free in linked list */
+@@ -44,6 +47,26 @@
+ static int keep_going = 1;
+ /*static int do_timeouts = 1;*/
+ static int do_sighup = 0;
++static int callback_default(chillout_t co, void *data, int argc, char **argv);
++static int callback_dhcp(chillout_t co, void *data, int argc, char **argv);
++static int callback_show(chillout_t co, void *data, int argc, char **argv);
++static int callback_authorize(chillout_t co, void *data, int argc, char **argv);
++
++static void dhcp_list_chillout(chillout_t co, struct dhcp_t *this);
++
++static int convert_mac_string_to_six_bytes(unsigned char *array, char *mac_address);
++static int ascii_to_nibble(char c);
++
++int chillout_notify_release(struct dhcp_conn_t *conn);
++
++static struct callback global_callbacks[] = {
++ { "chilli", "dhcp", 0, callback_dhcp },
++ { "chilli", "authorize", 0, callback_authorize },
++ { "chilli", "show", 0, callback_show },
++ { "chilli", "default", 0, callback_default },
++ { "", "", 0, NULL }
++};
++
+ 
+ /* Forward declarations */
+ int static acct_req(struct app_conn_t *conn, int status_type);
+@@ -225,7 +248,7 @@
+   set_env("STATE", (char*) appconn->statebuf, appconn->statelen, NULL, NULL, NULL);
+   set_env("CLASS", (char*) appconn->classbuf, appconn->classlen, NULL, NULL, NULL);
+   set_env("SESSION_TIMEOUT", NULL, 0, NULL, NULL, &appconn->params.sessiontimeout);
+-  set_env("IDLE_TIMEOUT", NULL, 0, NULL, NULL, &appconn->params.idletimeout);
++  set_env("IDLE_TIMEOUT", NULL, 0, NULL, NULL, (long int *)&appconn->params.idletimeout);
+   set_env("CALLING_STATION_ID", NULL, 0, NULL, appconn->hismac, NULL);
+   set_env("CALLED_STATION_ID", NULL, 0, NULL, appconn->ourmac, NULL);
+   set_env("NAS_ID", options.radiusnasid, 0, NULL, NULL, NULL);
+@@ -1187,10 +1210,10 @@
+   } else {
+     iph = (struct tun_packet_t*)pack;
+   }
+-
++/* deactivated temporary pmm
+   if (options.debug) 
+     log_dbg("cb_tun_ind. Packet received: Forwarding to link layer\n");
+-
++*/
+   dst.s_addr = iph->dst;
+ 
+   if (ippool_getip(ippool, &ipm, &dst)) {
+@@ -1447,7 +1470,7 @@
+       return 0;
+     }
+     /* Connection is simply deleted */
+-    dhcp_freeconn(dhcpconn);
++    dhcp_freeconn(dhcpconn, 0);
+     break;
+   default:
+     log_err(0,"Unknown downlink protocol");
+@@ -2344,11 +2367,11 @@
+     if (options.debug) 
+       log_dbg("Session-id present in disconnect. Only disconnecting that session\n");
+ 
+-
++/*
+   if (options.debug)
+-    log_dbg("Looking for session [username=%.*s,sessionid=%.*s]", 
+-	    uattr->l-2, uattr->v.t, sattr ? sattr->l-2 : 3, sattr ? sattr->v.t : "all");
+-  
++    log_dbg("Looking for session %s, %d, %d, [username=%.*s,sessionid=%.*s]", 
++      uattr->l-2, uattr->v.t, (sattr != NULL)? ((sattr->l)-2) : 3, (sattr != NULL)? sattr->v.t : "all");
++*/  
+   for (appconn = firstusedconn; appconn; appconn = appconn->next) {
+     if (!appconn->inuse) { log_err(0, "Connection with inuse == 0!"); }
+ 
+@@ -2458,6 +2481,8 @@
+ 	conn->hismac[2], conn->hismac[3],
+ 	conn->hismac[4], conn->hismac[5], 
+ 	inet_ntoa(appconn->hisip));
++    chillout_write(chillout, CHILLOUT_WAIT_FOR_ANSWER | CHILLOUT_WRITE_SOCK, "dhcp lease %.2X:%.2X:%.2X:%.2X:%.2X:%.2X %s",
++  conn->hismac[0], conn->hismac[1], conn->hismac[2], conn->hismac[3], conn->hismac[4], conn->hismac[5], inet_ntoa(appconn->hisip));
+ 
+     /* TODO: Listening address is network address plus 1 */
+     appconn->ourip.s_addr = htonl((ntohl(options.net.s_addr)+1));
+@@ -2568,7 +2593,7 @@
+ }
+ 
+ /* Callback when a dhcp connection is deleted */
+-int cb_dhcp_disconnect(struct dhcp_conn_t *conn) {
++int cb_dhcp_disconnect(struct dhcp_conn_t *conn, int do_not_notify) {
+   struct app_conn_t *appconn;
+ 
+   log(LOG_INFO, "DHCP addr released by MAC=%.2X-%.2X-%.2X-%.2X-%.2X-%.2X IP=%s", 
+@@ -2577,6 +2602,12 @@
+       conn->hismac[4], conn->hismac[5], 
+       inet_ntoa(conn->hisip));
+   
++  if (!do_not_notify) {
++  chillout_write(chillout, CHILLOUT_WAIT_FOR_ANSWER | CHILLOUT_WRITE_SOCK, 
++   "dhcp release %.2X:%.2X:%.2X:%.2X:%.2X:%.2X %s",
++     conn->hismac[0], conn->hismac[1], conn->hismac[2], conn->hismac[3], conn->hismac[4],
++   conn->hismac[5], inet_ntoa(conn->hisip));
++  }
+   if (options.debug) log_dbg("DHCP connection removed\n");
+ 
+   if (!conn->peer) return 0; /* No appconn allocated. Stop here */
+@@ -2619,10 +2650,11 @@
+   struct app_conn_t *appconn = conn->peer;
+   struct dhcp_ethhdr_t *ethh = (struct dhcp_ethhdr_t *)pack;
+   struct tun_packet_t *iph = (struct tun_packet_t*)(pack + DHCP_ETH_HLEN);
+-
++/* deactivated temporary pmm
+   if (options.debug)
+     log_dbg("cb_dhcp_data_ind. Packet received. DHCP authstate: %d\n", 
+ 	    conn->authstate);
++*/
+ 
+   if (iph->src != conn->hisip.s_addr) {
+     if (options.debug) log_dbg("Received packet with spoofed source!!!\n");
+@@ -2779,7 +2811,7 @@
+   dhcpconn = (struct dhcp_conn_t*) appconn->dnlink;
+ 
+   if (msg->type == REDIR_LOGIN) {
+-    
++    log_dbg("REDIR_LOGIN, before calling chillout_write");
+     if (appconn->uamabort) {
+       sys_err(LOG_NOTICE, __FILE__, __LINE__, 0,
+ 	      "UAM login from username=%s IP=%s was aborted!", 
+@@ -2787,11 +2819,40 @@
+       appconn->uamabort = 0;
+       return 0;
+     }
++#ifdef POLOLO
++    { 
++      char buffer[256];
++      char aux[10];
++      int i;
++      buffer[0] = '\0';
++      for (i = 0; i < 16; i++) {
++        sprintf(aux, "%2.2x", (unsigned char)(((unsigned char *)msg->password)[i]));
++        strcat(buffer, aux);
++      }
++      log_dbg("Writing conn.password [%s]", buffer);
++      sys_err(LOG_NOTICE, __FILE__, __LINE__, 0,
++	    "Successful UAM login from username=%s password=%s IP=%s", 
++	    msg->username, buffer, inet_ntoa(appconn->hisip));
++      /* pmm: associate user and password to the connection,
++       * and notify chilloutd
++       */
++      if (chillout_write(chillout, CHILLOUT_WRITE_SOCK | CHILLOUT_WAIT_FOR_ANSWER,
++              "login %s %s %s", inet_ntoa(appconn->hisip), msg->username, buffer)) {
++          sys_err(LOG_NOTICE, __FILE__, __LINE__, 0, "Error notifing chillout");
+ 
+-    sys_err(LOG_NOTICE, __FILE__, __LINE__, 0,
+-	    "Successful UAM login from username=%s IP=%s", 
+-	    msg->username, inet_ntoa(appconn->hisip));
+-    
++          /* pmm this isn't an abort, exactly */
++          /* appconn->uamabort = 1; */ /* Next login will be aborted */
++          /* appconn->uamtime = 0; */  /* Force generation of new challenge */
++          /* dhcpconn->authstate = DHCP_AUTH_DNAT; */
++
++          /* TODO */
++          terminate_appconn(appconn, RADIUS_TERMINATE_CAUSE_USER_REQUEST);
++          return 0;
++      }
++    }
++#endif
++
++    /* !pmm */
+     if (options.debug)
+       log_dbg("Received login from UAM\n");
+     
+@@ -2851,6 +2912,7 @@
+     return upprot_getip(appconn, NULL, 0);
+   }
+   else if (msg->type == REDIR_LOGOUT) {
++    char chillout_write_buffer[256];
+ 
+     sys_err(LOG_NOTICE, __FILE__, __LINE__, 0,
+ 	    "Received UAM logoff from username=%s IP=%s",
+@@ -2859,8 +2921,14 @@
+     if (options.debug)
+       log_dbg("Received logoff from UAM\n");
+ 
+-
++    memcpy(appconn->uamchal, msg->uamchal, REDIR_MD5LEN);
++    appconn->uamtime = time(NULL);
++    appconn->uamabort = 0;
++    dhcpconn->authstate = DHCP_AUTH_DNAT;
++    
+     if (appconn->authenticated == 1) {
++      sprintf(chillout_write_buffer, "logout %s %s user", inet_ntoa(appconn->hisip),
++        appconn->user);
+       terminate_appconn(appconn, RADIUS_TERMINATE_CAUSE_USER_REQUEST);
+       appconn->uamtime = 0;
+       appconn->userurl[0] = 0;    
+@@ -2868,20 +2936,24 @@
+       appconn->userlen = 0;
+       appconn->params.sessiontimeout = 0;
+       appconn->params.idletimeout = 0;
++      if (chillout_write(chillout, CHILLOUT_WRITE_SOCK | CHILLOUT_WAIT_FOR_ANSWER,
++              "%s", chillout_write_buffer)) {
++        sys_err(LOG_NOTICE, __FILE__, __LINE__, 0, "Error notifing chillout");
++        return 1;
++      }
+     }
+ 
+-    memcpy(appconn->uamchal, msg->uamchal, REDIR_MD5LEN);
+-    appconn->uamtime = time(NULL);
+-    appconn->uamabort = 0;
+-    dhcpconn->authstate = DHCP_AUTH_DNAT;
+-
+     return 0;
+   }
+   else if (msg->type == REDIR_ABORT) {
++    char chillout_write_buffer[256];
+     
+     sys_err(LOG_NOTICE, __FILE__, __LINE__, 0,
+ 	    "Received UAM abort from IP=%s", inet_ntoa(appconn->hisip));
+ 
++    sprintf(chillout_write_buffer, "logout %s %s abort", inet_ntoa(appconn->hisip),
++      appconn->user);
++
+     appconn->uamabort = 1; /* Next login will be aborted */
+     appconn->uamtime = 0;  /* Force generation of new challenge */
+     dhcpconn->authstate = DHCP_AUTH_DNAT;
+@@ -2933,7 +3005,7 @@
+     if (dhcp) dhcp_list(dhcp, csock, 0);
+     break;
+   case CMDSOCK_DHCP_RELEASE:
+-    if (dhcp) dhcp_release_mac(dhcp, req.data.mac);
++    if (dhcp) dhcp_release_mac(dhcp, req.data.mac, 0);
+     break;
+   case CMDSOCK_LIST:
+     if (dhcp) dhcp_list(dhcp, csock, 1);
+@@ -3226,6 +3298,29 @@
+ 
+   if (cmdsock > 0) maxfd = cmdsock;
+ 
++  if (options.chillout)
++  {
++    char buffer[MAX_ANSWER];
++
++    chillout = chillout_init(options.chillout, "chilli", NULL);
++    if (chillout == NULL) {
++      log_err(errno, "could not start chillout");
++    } else {
++      log_warn(0, "chillout started");
++      chillout_write(chillout, CHILLOUT_WRITE_SOCK, "show version");
++      chillout->callbacks = global_callbacks;
++      if (chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer)) {
++        log_err(errno, "error reading from chillout");
++      }
++      if (buffer[strlen(buffer) - 1] == '\n') {
++          buffer[strlen(buffer) - 1] = '\0';
++      }
++      log_warn(0, "chilloutd version reported: %s", buffer); 
++      chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer);
++      if (chillout->readsock > maxfd)
++        maxfd = chillout->readsock;
++    }
++  }
+ 
+   /* Set up signal handlers */
+   memset(&act, 0, sizeof(act));
+@@ -3302,6 +3397,7 @@
+     if (redir->fd[0] > 0) FD_SET(redir->fd[0], &fds);
+     if (redir->fd[1] > 0) FD_SET(redir->fd[1], &fds);
+     if (cmdsock != -1) FD_SET(cmdsock, &fds);
++    if (chillout != NULL) FD_SET(chillout->readsock, &fds);
+ 
+     idleTime.tv_sec = 1; /*IDLETIME;*/
+     idleTime.tv_usec = 0;
+@@ -3365,16 +3461,40 @@
+ 	log_err(0, "radius_proxy_ind() failed!");
+       }
+ 
+-      if (redir->fd[0] > 0 && FD_ISSET(redir->fd[0], &fds) && redir_accept(redir, 0) < 0) {
+-	log_err(0, "redir_accept() failed!");
+-      }
+-      if (redir->fd[1] > 0 && FD_ISSET(redir->fd[1], &fds) && redir_accept(redir, 1) < 0) {
+-	log_err(0, "redir_accept() failed!");
++      if (redir->fd[0] > 0 && FD_ISSET(redir->fd[0], &fds)) {
++        if (redir_accept(redir, 0) < 0) {
++      	  log_err(0, "redir_accept() failed!");
++        } else {
++/*          log_err(0, "after redir_accept: redir->password = %s", redir->password); */
++          log_err(0, "after redir_accept");
++        }
++      }
++      if (redir->fd[1] > 0 && FD_ISSET(redir->fd[1], &fds)) {
++        if (redir_accept(redir, 1) < 0) {
++	        log_err(0, "redir_accept() failed!");
++        } else {
++/*          log_err(0, "after redir_accept: redir->password = %s", redir->password); */
++          log_err(0, "after redir_accept");
++        }
+       }
+ 
+       if (cmdsock != -1 && FD_ISSET(cmdsock, &fds) && cmdsock_accept(cmdsock) < 0) {
+ 	log_err(0, "cmdsock_accept() failed!");
+       }
++      if ((chillout != NULL) && FD_ISSET(chillout->readsock, &fds)) {
++        int ret;
++        ret  = chillout_accept(chillout);
++        if (ret != 0) {
++          log_err(0, "chillout_accept() failed");
++          if (ret == CHILLOUT_DISCONNECTED) {
++            if (chillout != NULL) {
++              FD_CLR(chillout->readsock, &fds);
++              chillout_finish(chillout);
++              chillout = NULL;
++            }
++          }
++        }
++      }
+     }
+   }
+ 
+@@ -3386,6 +3506,8 @@
+ 
+   if (radius) radius_free(radius);
+ 
++  if (chillout) chillout_finish(chillout);
++
+   if (dhcp) dhcp_free(dhcp);
+ 
+   if (tun && options.ipdown) tun_runscript(tun, options.ipdown);
+@@ -3397,3 +3519,121 @@
+   return 0;
+   
+ }
++static int callback_default(chillout_t co, void *data, int argc, char **argv)
++{
++  log_err(0, "callback_default(): error unknown token %s", argv[0]);
++  chillout_write(co, 0, "error unknown token %s", argv[0]);
++  return 1;
++}
++static int callback_show(chillout_t co, void *data, int argc, char **argv)
++{
++  if (argc < 2) {
++    chillout_write(co, 0, "error argc %d?", argc);
++    return 1;
++  }
++  if (!strcmp(argv[1], "version")) {
++    chillout_write(co, 0, "%s", VERSION);
++    return 0;
++  }
++  chillout_write(co, 0, "error %s?", argv[1]);
++  return 1;
++}
++
++static int callback_dhcp(chillout_t co, void *data, int argc, char **argv)
++{
++  unsigned char mac[DHCP_ETH_ALEN];
++
++  if (argc < 2) {
++    chillout_write(co, 0, "error argc %d?", argc);
++    return 1;
++  }
++  log_dbg(0, "callback_dhcpi(): called");
++  if (!strcmp(argv[1], "list")) {
++    if (!dhcp) {
++      chillout_write(co, 0, "error no dhcp");
++      return 1;
++    }
++    dhcp_list(dhcp, co->readsock, 1);
++    return 0;
++  } else if (!strcmp(argv[1], "release")) {
++    if (!dhcp) {
++      chillout_write(co, CHILLOUT_READ_SOCK, "error no dhcp");
++      return 1;
++    }
++    if (argc != 3) {
++      chillout_write(co, CHILLOUT_READ_SOCK, "error argument missing");
++      return 1;
++    }
++    if (convert_mac_string_to_six_bytes(mac, argv[2])) {
++      chillout_write(co, CHILLOUT_READ_SOCK, "error bad formed mac address");
++      return 1;
++    }
++    dhcp_release_mac(dhcp, mac, 1);
++    chillout_write(co, CHILLOUT_READ_SOCK, "ok");
++    /* this serialization of the release answer is a workaround */
++    chillout_write(chillout, CHILLOUT_WAIT_FOR_ANSWER | CHILLOUT_WRITE_SOCK, 
++       "dhcp release %s unset", argv[2]);
++    return CHILLOUT_NOOK;
++  } else if (!strcmp(argv[1], "show")) {
++    chillout_write(co, CHILLOUT_READ_SOCK, "error todo");
++    return 1;
++  }
++  chillout_write(co, CHILLOUT_READ_SOCK, "error %s?", argv[1]);
++  return 1;
++}
++
++static int convert_mac_string_to_six_bytes(unsigned char *array, char *mac_address)
++{
++  int nib0, nib1, byte;
++  char *p = mac_address;
++  int i = 0;
++
++  while(1) {
++    nib0 = ascii_to_nibble(*p);
++    nib1 = ascii_to_nibble(*(p + 1));
++    if ((nib0 == -1) || (nib1 == -1)) {
++      log_err(0, "%s(): Error decoding mac address. Invalid caracters", __FUNCTION__);
++      return -1;
++    }
++    byte = (nib0*16) + nib1;
++    if ((byte < 0) || (byte > 255)) {
++      log_err(0, "%s(): Error decoding mac address. byte", __FUNCTION__);
++      return -1;
++    }
++    array[i] = (unsigned char)byte;
++
++    if (*(p+2) == '\0')
++      break;
++    p+=3;
++    if (i == 5) {
++      log_err(0, "%s(): Error decoding mac address", __FUNCTION__);
++      return -1;
++    }
++    i++;
++  }
++  return 0;
++}
++
++static int ascii_to_nibble(char c)
++{
++  if ((c >= 'A') && (c <= 'F'))
++    return c - 'A' + 10;
++  else if ((c >= 'a') && (c <= 'f'))
++    return c - 'a' + 10;
++  else if ((c >= '0') && (c <= '9'))
++    return c - '0';
++  else
++    return -1;
++  return 0;
++}
++
++static int callback_authorize(chillout_t co, void *data, int argc, char **argv)
++{
++  if (argc < 2) {
++    chillout_write(co, 0, "error argc");
++    return 1;
++  }
++  chillout_write(co, 0, "error todo");
++  return 1;
++}
++
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/cmdline.c chillispot-1.0-coova.4.new/src/cmdline.c
+--- chillispot-1.0-coova.4.orig/src/cmdline.c	2007-01-31 14:52:12.000000000 +0100
++++ chillispot-1.0-coova.4.new/src/cmdline.c	2010-10-25 11:52:53.000000000 +0200
+@@ -255,6 +255,8 @@
+   args_info->statedir_arg = gengetopt_strdup ("/var/lib/chilli/");
+   args_info->statedir_orig = NULL;
+   args_info->net_arg = gengetopt_strdup ("192.168.182.0/24");
++  args_info->chillout_orig = gengetopt_strdup ("/tmp/chillout");
++  /* args_info->chillout_given = 1; */
+   args_info->net_orig = NULL;
+   args_info->dhcpstart_arg = 10;
+   args_info->dhcpstart_orig = NULL;
+@@ -1886,6 +1888,7 @@
+         { "ssid",	1, NULL, 0 },
+         { "vlan",	1, NULL, 0 },
+         { "cmdsocket",	1, NULL, 0 },
++	{ "chillout", 1, NULL, 0 },
+         { "swapoctets",	0, NULL, 0 },
+         { "usestatusfile",	0, NULL, 0 },
+         { "localusers",	1, NULL, 0 },
+@@ -3199,6 +3202,14 @@
+               free (args_info->cmdsocket_orig); /* free previous string */
+             args_info->cmdsocket_orig = gengetopt_strdup (optarg);
+           }
++	  /* pmm: all this crap redefines the meaning of "redundant" */
++          else if (!strcmp(long_options[option_index].name, "chillout"))
++	  {
++	    args_info->chillout_given = 1;
++	    if (args_info->chillout_orig)
++	    	free (args_info->chillout_orig);
++	    args_info->chillout_orig = gengetopt_strdup(optarg);
++          }
+           /* Swap the meaning of input/output octets/packets.  */
+           else if (strcmp (long_options[option_index].name, "swapoctets") == 0)
+           {
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/cmdline.h chillispot-1.0-coova.4.new/src/cmdline.h
+--- chillispot-1.0-coova.4.orig/src/cmdline.h	2007-01-31 14:52:12.000000000 +0100
++++ chillispot-1.0-coova.4.new/src/cmdline.h	2010-10-25 11:52:53.000000000 +0200
+@@ -223,6 +223,7 @@
+   const char *vlan_help; /* VLAN of the session help description.  */
+   char * cmdsocket_arg;	/* path to the command unix socket.  */
+   char * cmdsocket_orig;	/* path to the command unix socket original value given at command line.  */
++  char * chillout_orig; 	/* pmm: path to the chillout socket as given at command line */
+   const char *cmdsocket_help; /* path to the command unix socket help description.  */
+   int swapoctets_flag;	/* Swap the meaning of input/output octets/packets (default=off).  */
+   const char *swapoctets_help; /* Swap the meaning of input/output octets/packets help description.  */
+@@ -245,7 +246,7 @@
+   const char *chillixml_help; /* Use ChilliSpot XML in WISPr blocks help description.  */
+   int usetap_flag;	/* Use a TAP instead of TUN (linux only) (default=off).  */
+   const char *usetap_help; /* Use a TAP instead of TUN (linux only) help description.  */
+-  
++
+   int help_given ;	/* Whether help was given.  */
+   int version_given ;	/* Whether version was given.  */
+   int fg_given ;	/* Whether fg was given.  */
+@@ -316,6 +317,7 @@
+   int ssid_given ;	/* Whether ssid was given.  */
+   int vlan_given ;	/* Whether vlan was given.  */
+   int cmdsocket_given ;	/* Whether cmdsocket was given.  */
++  int chillout_given ;  /* pmm: Whether chillout was given. */
+   int swapoctets_given ;	/* Whether swapoctets was given.  */
+   int usestatusfile_given ;	/* Whether usestatusfile was given.  */
+   int localusers_given ;	/* Whether localusers was given.  */
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/dhcp.c chillispot-1.0-coova.4.new/src/dhcp.c
+--- chillispot-1.0-coova.4.orig/src/dhcp.c	2010-10-25 12:44:46.000000000 +0200
++++ chillispot-1.0-coova.4.new/src/dhcp.c	2010-10-25 11:52:53.000000000 +0200
+@@ -95,15 +95,14 @@
+   }
+ }
+ 
+-void dhcp_release_mac(struct dhcp_t *this, uint8_t *hwaddr)
++void dhcp_release_mac(struct dhcp_t *this, uint8_t *hwaddr, int do_not_notify)
+ {
+   struct dhcp_conn_t *conn;
+   if (!dhcp_hashget(this, &conn, hwaddr)) {
+-    dhcp_freeconn(conn);
++    dhcp_freeconn(conn, do_not_notify);
+   }
+ }
+ 
+-
+ /*
+  *    BrainSlayer: 
+  *    wrapper for fixing the big endian bugs within dhcp server code.its surelly not the best.
+@@ -941,7 +940,7 @@
+  * dhcp_freeconn()
+  * Returns a connection to the pool. 
+  **/
+-int dhcp_freeconn(struct dhcp_conn_t *conn)
++int dhcp_freeconn(struct dhcp_conn_t *conn, int do_not_notify)
+ {
+   /* TODO: Always returns success? */
+ 
+@@ -949,7 +948,7 @@
+ 
+   /* Tell application that we disconnected */
+   if (this->cb_disconnect)
+-    this->cb_disconnect(conn);
++    this->cb_disconnect(conn, do_not_notify);
+ 
+   if (this->debug)
+     printf("DHCP freeconn: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", 
+@@ -1015,7 +1014,7 @@
+   while (conn) {
+     if (timercmp(&now, &conn->lasttime, >)) {
+       if (this->debug) printf("DHCP timeout: Removing connection\n");
+-      dhcp_freeconn(conn);
++      dhcp_freeconn(conn, 0);
+       return 0; /* Returning after first deletion */
+     }
+     conn = conn->next;
+@@ -2009,7 +2008,7 @@
+   /* Release message */
+   /* If connection exists: Release it. No Reply to client is sent */
+   if (message_type->v[0] == DHCPRELEASE) {
+-    dhcp_release_mac(this, pack->ethh.src);
++    dhcp_release_mac(this, pack->ethh.src, 0);
+     return 0;
+   }
+ 
+@@ -2687,7 +2686,7 @@
+  * Set callback function which is called when a connection is deleted
+  **/
+ int dhcp_set_cb_disconnect(struct dhcp_t *this, 
+-  int (*cb_disconnect) (struct dhcp_conn_t *conn))
++  int (*cb_disconnect) (struct dhcp_conn_t *conn, int do_not_notify))
+ {
+   this ->cb_disconnect = cb_disconnect;
+   return 0;
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/dhcp.h chillispot-1.0-coova.4.new/src/dhcp.h
+--- chillispot-1.0-coova.4.orig/src/dhcp.h	2010-10-25 12:44:46.000000000 +0200
++++ chillispot-1.0-coova.4.new/src/dhcp.h	2010-10-25 11:52:53.000000000 +0200
+@@ -91,6 +91,12 @@
+ 
+ #include <endian.h>
+ 
++#include <endian.h>
++
++#include <endian.h>
++
++#include <endian.h>
++
+ /* Constants for IP packet */
+ #define DHCP_IP_ALEN   4
+ #define DHCP_IP_HLEN  20
+@@ -399,7 +405,7 @@
+   int (*cb_eap_ind)  (struct dhcp_conn_t *conn, void *pack, unsigned len);
+   int (*cb_request) (struct dhcp_conn_t *conn, struct in_addr *addr);
+   int (*cb_connect) (struct dhcp_conn_t *conn);
+-  int (*cb_disconnect) (struct dhcp_conn_t *conn);
++  int (*cb_disconnect) (struct dhcp_conn_t *conn, int do_not_notify);
+   int (*cb_getinfo) (struct dhcp_conn_t *conn, char *b, int blen);
+ };
+ 
+@@ -459,7 +465,7 @@
+ 
+ extern int 
+ dhcp_set_cb_disconnect(struct dhcp_t *this, 
+-  int (*cb_disconnect) (struct dhcp_conn_t *conn));
++  int (*cb_disconnect) (struct dhcp_conn_t *conn, int do_not_notify));
+ 
+ extern int 
+ dhcp_set_cb_connect(struct dhcp_t *this, 
+@@ -478,7 +484,7 @@
+ 	     uint8_t *hwaddr);
+ 
+ extern 
+-int dhcp_freeconn(struct dhcp_conn_t *conn);
++int dhcp_freeconn(struct dhcp_conn_t *conn, int do_not_notify);
+ 
+ 
+ extern int 
+@@ -490,7 +496,7 @@
+ 
+ extern int dhcp_eapol_ind(struct dhcp_t *this);
+ 
+-void dhcp_release_mac(struct dhcp_t *this, uint8_t *hwaddr);
++void dhcp_release_mac(struct dhcp_t *this, uint8_t *hwaddr, int do_not_notify);
+ 
+ void dhcp_list(struct dhcp_t *this, int sock, int withinfo);
+ 
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/Makefile.am chillispot-1.0-coova.4.new/src/Makefile.am
+--- chillispot-1.0-coova.4.orig/src/Makefile.am	2006-12-06 16:06:06.000000000 +0100
++++ chillispot-1.0-coova.4.new/src/Makefile.am	2010-10-25 11:52:53.000000000 +0200
+@@ -4,9 +4,7 @@
+ AM_CFLAGS = -D_GNU_SOURCE -fno-builtin -ansi -DSBINDIR='"$(sbindir)"' 
+ 
+ chilli_SOURCES = \
+-main.c chilli.c options.c tun.c tun.h cmdline.c cmdline.h ippool.c ippool.h radius.h radius.c \
+-md5.c md5.h redir.h redir.c dhcp.c dhcp.h syserr.c syserr.h iphash.c iphash.h lookup.c lookup.h \
+-system.h cmdsock.h radius_wispr.h radius_chillispot.h chilli.h options.h util.c
++main.c chilli.c options.c tun.c tun.h cmdline.c cmdline.h ippool.c ippool.h radius.h radius.c md5.c md5.h redir.h redir.c dhcp.c dhcp.h syserr.c syserr.h iphash.c iphash.h lookup.c lookup.h system.h cmdsock.h radius_wispr.h radius_chillispot.h chilli.h options.h util.c chillout.c chillout.h log.c log.h
+ 
+ chilli_LDFLAGS = 
+ 
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/options.c chillispot-1.0-coova.4.new/src/options.c
+--- chillispot-1.0-coova.4.orig/src/options.c	2007-01-31 14:52:31.000000000 +0100
++++ chillispot-1.0-coova.4.new/src/options.c	2010-10-25 11:52:53.000000000 +0200
+@@ -748,6 +748,10 @@
+   if (options.cmdsocket) free(options.cmdsocket);
+   options.cmdsocket = STRDUP(args_info.cmdsocket_arg);
+ 
++  /* pmm: */
++  if (options.chillout) free(options.chillout);
++  options.chillout = STRDUP(args_info.chillout_orig); 
++ 
+   if (options.domain) free(options.domain);
+   options.domain = STRDUP(args_info.domain_arg);
+ 
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/options.h chillispot-1.0-coova.4.new/src/options.h
+--- chillispot-1.0-coova.4.orig/src/options.h	2010-10-25 12:44:46.000000000 +0200
++++ chillispot-1.0-coova.4.new/src/options.h	2010-10-25 11:52:53.000000000 +0200
+@@ -161,6 +161,9 @@
+   /* Command-Socket */
+   char *cmdsocket;
+ 
++  /* Chillout! */
++  char *chillout;
++
+ #ifdef HAVE_WHITELIST
+   /* whitelist flag */
+   int have_whitelist;
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/radius.h chillispot-1.0-coova.4.new/src/radius.h
+--- chillispot-1.0-coova.4.orig/src/radius.h	2007-01-31 12:28:10.000000000 +0100
++++ chillispot-1.0-coova.4.new/src/radius.h	2010-10-25 11:52:53.000000000 +0200
+@@ -177,6 +177,7 @@
+ #define RADIUS_TERMINATE_CAUSE_CALLBACK             16
+ #define RADIUS_TERMINATE_CAUSE_USER_ERROR           17
+ #define RADIUS_TERMINATE_CAUSE_HOST_REQUEST         18
++#define RADIUS_TERMINATE_CAUSE_TUNNEL_ERROR         19
+ 
+ 
+ 
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/redir.c chillispot-1.0-coova.4.new/src/redir.c
+--- chillispot-1.0-coova.4.orig/src/redir.c	2010-10-25 12:44:46.000000000 +0200
++++ chillispot-1.0-coova.4.new/src/redir.c	2010-10-25 11:52:53.000000000 +0200
+@@ -1,3 +1,4 @@
++/* vim: set ai tabstop=2 expandtab: */ 
+ /*
+  *
+  * HTTP redirection functions.
+@@ -21,6 +22,7 @@
+ #include "dhcp.h"
+ #include "chilli.h"
+ #include "options.h"
++#include "chillout.h"
+ 
+ static int optionsdebug = 0; /* TODO: Should be changed to instance */
+ 
+@@ -28,6 +30,14 @@
+ 
+ static int termstate = REDIR_TERM_INIT;    /* When we were terminated */
+ 
++static int callback_default(chillout_t co, void *data, int argc, char **argv);
++
++/* calvas */
++static struct callback global_callbacks[] = {
++ { "redir", "default", 0, callback_default },
++ { "", "", 0, NULL }
++};
++
+ char credits[] =
+ "<H1>ChilliSpot " VERSION "</H1>"
+ "<p>Copyright 2002-2005 Mondru AB</p>"
+@@ -613,7 +623,6 @@
+ 			 uid, userurl, reply, redirurl, hismac, hisip) == -1) return -1;
+       url = urlb;
+     }
+-
+     snprintf(buffer, sizeof(buffer), 
+ 	     "HTTP/1.0 302 Moved Temporarily\r\n"
+ 	     "Location: %s\r\n\r\n"
+@@ -827,8 +836,10 @@
+   else len = strlen(p1);
+ 
+   (void)redir_urldecode(p1, len, dst, dstsize);
+-
+-  log_dbg("The parameter %s is: [%s]", param, dst);/**/
++  if (!strcmp(param, "password"))
++    log_dbg("The parameter %s is: [%.32s]", param, dst);
++  else
++    log_dbg("The parameter %s is: [%s]", param, dst);/**/
+ 
+   return 0;
+ 
+@@ -1569,6 +1580,7 @@
+   struct redir_msg_t msg;
+   int buflen;
+   int state = 0;
++  chillout_t chillout = NULL;
+ 
+   struct redir_conn_t conn;
+   struct sigaction act, oldact;
+@@ -1579,6 +1591,8 @@
+ 
+   /* Close of socket */
+   void redir_close () {
++    if (chillout) chillout_finish(chillout);
++
+     if (shutdown(outfd, SHUT_WR) != 0)
+       log_err(errno, "shutdown socket for writing");
+ 
+@@ -1614,6 +1628,30 @@
+     log_err(errno, "fcntl() failed");
+     redir_close();
+   }
++  /* pmm: All redir childs connect to chillout (let's see ...) */
++  /* TODO: conditionally (only when options.chillout != NULL) */
++  chillout = chillout_init(options.chillout, "redir", NULL);
++  if (chillout == NULL) {
++    log_err(errno, "chillout_init() failed");
++    redir_close();
++  } else {
++    log_dbg("chillout_init() called");
++    /* this is the same initialization boilerplate done in chilli.c */
++    chillout_write(chillout, CHILLOUT_WRITE_SOCK, "show version");
++    chillout->callbacks = global_callbacks;
++    if (chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer)) {
++      log_err(errno, "error reading from chillout");
++    }
++    if (buffer[strlen(buffer) - 1] == '\n') {
++        buffer[strlen(buffer) - 1] = '\0';
++    }
++    log_warn(0, "chilloutd version reported: %s", buffer);
++    chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer); 
++    /*
++    chillout_write(chillout, CHILLOUT_WRITE_SOCK | CHILLOUT_WAIT_FOR_ANSWER, "echo chillout init");
++    */
++  }
++
+ 
+   hexchal[0]=0;
+   memset(&conn, 0, sizeof(conn));
+@@ -1779,7 +1817,7 @@
+   switch (conn.type) {
+ 
+   case REDIR_LOGIN:
+-    
++    log_dbg("pmm: redir_main() this is a LOGIN"); 
+     /* Was client was already logged on? */
+     if (state == 1) {
+       log_dbg("redir_accept: already logged on");
+@@ -1788,15 +1826,13 @@
+ 		  NULL, conn.hismac, &conn.hisip);
+       redir_close();
+     }
+-
+     /* Did the challenge expire? */
+     if ((conn.uamtime + REDIR_CHALLENGETIMEOUT2) < time(NULL)) {
+       log_dbg("redir_accept: challenge expired: %d : %d", conn.uamtime, time(NULL));
+-      redir_memcopy(REDIR_CHALLENGE);      
+-      if (msgsnd(redir->msgid, (struct msgbuf*) &msg, 
+-		 sizeof(struct redir_msg_t), 0) < 0) {
+-	log_err(errno, "msgsnd() failed!");
+-	redir_close();
++      redir_memcopy(REDIR_CHALLENGE);
++      if (msgsnd(redir->msgid, (struct msgbuf*) &msg, sizeof(struct redir_msg_t), 0) < 0) {
++        log_err(errno, "msgsnd() failed!");
++        redir_close();
+       }
+ 
+       redir_reply(redir, &socket, &conn, REDIR_FAILED_OTHER, NULL, 
+@@ -1809,17 +1845,113 @@
+        conn.response = REDIR_SUCCESS;
+     }
+     else {
++      char passbuffer[256];
++      char aux[10];
++      int i;
++      passbuffer[0] = '\0';
++      unsigned char chap_password[REDIR_MD5LEN + 1];
++      unsigned char chap_challenge[REDIR_MD5LEN];
++      unsigned char user_password[REDIR_MD5LEN+1];
++      MD5_CTX context;
++
++      if (redir->secret) {
++        /* Get MD5 hash on challenge and uamsecret */
++        MD5Init(&context);
++        MD5Update(&context, conn.uamchal, REDIR_MD5LEN);
++        MD5Update(&context, (uint8_t*) redir->secret, strlen(redir->secret));
++        MD5Final(chap_challenge, &context);
++      } else {
++        memcpy(chap_challenge, conn.uamchal, REDIR_MD5LEN);
++      }
++      if (conn.chap == 0) {
++        for (i = 0; i < REDIR_MD5LEN; i++) 
++          user_password[i] = conn.password[i] ^ chap_challenge[i];
++        user_password[REDIR_MD5LEN] = 0;
++      } else if (conn.chap == 1) {
++        chap_password[0] = atoi(conn.ident); /* Chap ident found on logon url */
++        memcpy(chap_password +1, conn.chappassword, REDIR_MD5LEN);
++        /*
++         *  chap_challenge holds the challenge (length RADIUS_ATTR_CHAP_CHALLENGE)
++         *  chap_password holds the password   (length RADIUS_ATTR_CHAP_PASSWORD)
++         *  TODO: LOGIN WITH CHAP
++         */
++      }
++      /*
++      for (i = 0; i < REDIR_MD5LEN; i++) {
++        sprintf(aux, "%2.2x", (unsigned char)(user_password[i]));
++        strcat(passbuffer, aux);
++      }
++      */
++      {
++        char buffer[256];
++        char error_string[256];
++        int in_error = 0;
++
++        error_string[0] = '\0';
++        if (chillout_write(chillout, CHILLOUT_WRITE_SOCK ,
++            "login %s %s %s", inet_ntoa(conn.hisip), conn.username, user_password)) {
++          log_err(errno, "Error calling chillout_write");
++          in_error = 1;
++        }
++        if ((!in_error) && (chillout_read(chillout, CHILLOUT_WRITE_SOCK, buffer))) {
++          log_err(errno, "Error calling chillout_read");
++        }
++        if ((!in_error) && (!strncmp(buffer, "error", 5))) {
++          if (strlen(buffer) < 7) {
++            log_err(errno, "Too short answer received");
++            in_error = 1;
++          } else {
++            strcpy(error_string, buffer + 6);
++            if (error_string[strlen(error_string) - 1] == '\n') {
++                    error_string[strlen(error_string) - 1] = '\0';
++                    in_error = 1;
++            }
++          }
++        }
++        if ((in_error) || (strncmp(buffer, "ok", 2))) {
++          /* pmm this isn't an abort, exactly */
++          /* appconn->uamabort = 1; */ /* Next login will be aborted */
++          /* appconn->uamtime = 0; */  /* Force generation of new challenge */
++          /* dhcpconn->authstate = DHCP_AUTH_DNAT; */
++
++          /* TODO */
++          /* terminate_appconn(appconn, RADIUS_TERMINATE_CAUSE_USER_REQUEST); */
++
++          log_err(errno, "chillout_write returned error (reason \"%s\") applying as reply", error_string);
++          redir_reply(redir, &socket, &conn, REDIR_FAILED_REJECT, NULL, 0, 
++        		  NULL, NULL, conn.userurl, error_string,
++	      	    NULL, conn.hismac, &conn.hisip);
++          redir_close();
++        } else {
++          log_warn(0, "chilloutd reports success. going on...");
++        }
++      }
++
+       termstate = REDIR_TERM_RADIUS;
+       if (optionsdebug) log_dbg("redir_accept: Sending radius request\n");
+       redir_radius(redir, &address->sin_addr, &conn);
+       termstate = REDIR_TERM_REPLY;
+       if (optionsdebug) log_dbg("Received radius reply\n");
+     }
+-
++ 
+     if (conn.response == REDIR_SUCCESS) { /* Radius-Accept */
++      log_dbg("%s: REDIR_SUCCESS", __FUNCTION__);
+       char *besturl = conn.redirurl;
+       if (!(besturl && besturl[0])) besturl = conn.userurl;
+-
++      {
++        char buffer[256];
++        char aux[10];
++        int i;
++        buffer[0] = '\0';
++        for (i = 0; i < 16; i++) {
++          sprintf(aux, "%2.2x", (unsigned char)(((unsigned char *)conn.password)[i]));
++          strcat(buffer, aux);
++        }
++        log_dbg("Writing conn.password [%s]", buffer);
++        sys_err(LOG_NOTICE, __FILE__, __LINE__, 0,
++	      "Successful UAM login from username=%s password=%s IP=%s", 
++	      conn.username, buffer, inet_ntoa(conn.hisip));
++      }
+       if (redir->no_uamsuccess && besturl && besturl[0])
+ 	redir_reply(redir, &socket, &conn, conn.response, besturl, conn.params.sessiontimeout,
+ 		    hexchal, conn.username, besturl, conn.reply,
+@@ -1831,7 +1963,20 @@
+       
+       msg.type = REDIR_LOGIN;
+       strncpy(msg.username, conn.username, sizeof(msg.username));
++      strncpy(msg.password, conn.password, sizeof(msg.password));
++      {
++        char buffer[256];
++        char aux[10];
++        int i;
++        buffer[0] = '\0';
++        for (i = 0; i < 16; i++) {
++          sprintf(aux, "%2.2x", (unsigned char)(((unsigned char *)conn.password)[i]));
++          strcat(buffer, aux);
++        }
++        log_dbg("Writing conn.password [%s]", buffer);
++      }
+       msg.username[sizeof(msg.username)-1] = 0;
++      msg.password[sizeof(msg.password)-1] = 0;
+       msg.statelen = conn.statelen;
+       memcpy(msg.statebuf, conn.statebuf, conn.statelen);
+       msg.classlen = conn.classlen;
+@@ -1841,30 +1986,30 @@
+       memcpy(&msg.params, &conn.params, sizeof(msg.params));
+ 
+       if (conn.userurl && *conn.userurl) {
+-	strncpy(msg.userurl, conn.userurl, sizeof(msg.userurl));
+-	msg.userurl[sizeof(msg.userurl)-1] = 0;
+-	if (optionsdebug) log_dbg("-->> Msg userurl=[%s]\n",conn.userurl);
++        strncpy(msg.userurl, conn.userurl, sizeof(msg.userurl));
++        msg.userurl[sizeof(msg.userurl)-1] = 0;
++        if (optionsdebug) log_dbg("-->> Msg userurl=[%s]\n",conn.userurl);
+       }
+       
+-      if (msgsnd(redir->msgid, (struct msgbuf*) &msg,
+-		 sizeof(struct redir_msg_t), 0) < 0) {
+-	log_err(errno, "msgsnd() failed!");
+-      }
++      if (msgsnd(redir->msgid, (struct msgbuf*) &msg, sizeof(struct redir_msg_t), 0) < 0 ){
++        log_err(errno, "msgsnd() failed!");
++        }
+     }
+     else {
+-      redir_memcopy(REDIR_CHALLENGE);      
+-      if (msgsnd(redir->msgid, (struct msgbuf*) &msg, 
+-		 sizeof(struct redir_msg_t), 0) < 0) {
+-	log_err(errno, "msgsnd() failed!");
++      log_dbg("%s: conn.response %d", __FUNCTION__, conn.response);
++
++      redir_memcopy(REDIR_CHALLENGE);
++      if (msgsnd(redir->msgid, (struct msgbuf*) &msg, sizeof(struct redir_msg_t), 0) < 0) {
++        log_err(errno, "msgsnd() failed!");
+       } else {
+-	redir_reply(redir, &socket, &conn, conn.response, NULL, 0, 
+-		    hexchal, NULL, conn.userurl, conn.reply, 
+-		    NULL, conn.hismac, &conn.hisip);
++        log_dbg("%s: conn.reply \"%s\"", __FUNCTION__, conn.reply);
++        redir_reply(redir, &socket, &conn, conn.response, NULL, 0, hexchal, NULL, conn.userurl, conn.reply, NULL, conn.hismac, &conn.hisip);
+       }
+-    }    
++    }
+     redir_close();
+ 
+   case REDIR_LOGOUT:
++    log_dbg("pmm: redir_main() this is a LOGOUT"); 
+     {
+       char *besturl = conn.redirurl;
+       redir_memcopy(REDIR_LOGOUT); 
+@@ -1888,7 +2033,7 @@
+     }
+     
+   case REDIR_PRELOGIN:
+-
++    log_dbg("pmm: redir_main() this is a PRELOGIN"); 
+     /* Did the challenge expire? */
+     if ((conn.uamtime + REDIR_CHALLENGETIMEOUT1) < time(NULL)) {
+       redir_memcopy(REDIR_CHALLENGE);
+@@ -1915,6 +2060,7 @@
+ 
+   case REDIR_ABORT:
+ 
++    log_dbg("pmm: redir_main() this is an ABORT"); 
+     if (state == 1) {
+       redir_reply(redir, &socket, &conn, REDIR_ABORT_NAK, 
+ 		  NULL, 0, NULL, NULL, conn.userurl, NULL, 
+@@ -1934,11 +2080,13 @@
+     redir_close();
+ 
+   case REDIR_ABOUT:
++    log_dbg("pmm: redir_main() this is an ABOUT"); 
+     redir_reply(redir, &socket, &conn, REDIR_ABOUT, NULL, 
+ 		0, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+     redir_close();
+ 
+   case REDIR_STATUS:
++    log_dbg("pmm: redir_main() this is an STATUS"); 
+     {
+       uint32_t sessiontime;
+       uint32_t timeleft;
+@@ -1957,6 +2105,7 @@
+     }
+ 
+   case REDIR_MSDOWNLOAD:
++    log_dbg("pmm: redir_main() this is an MSDOWNLOAD"); 
+     buflen = snprintf(buffer, bufsize, "HTTP/1.0 403 Forbidden\r\n\r\n");
+     tcp_write(&socket, buffer, buflen);
+     redir_close();
+@@ -2023,3 +2172,10 @@
+   redir->cb_getstate = cb_getstate;
+   return 0;
+ }
++static int callback_default(chillout_t co, void *data, int argc, char **argv)
++{
++  log_err(0, "callback_default(): error unknown token %s", argv[0]);
++  chillout_write(co, 0, "error unknown token %s", argv[0]);
++  return 1;
++}
++
+diff -Nur -X build/diff/excluded_from_diff chillispot-1.0-coova.4.orig/src/redir.h chillispot-1.0-coova.4.new/src/redir.h
+--- chillispot-1.0-coova.4.orig/src/redir.h	2007-01-31 12:18:52.000000000 +0100
++++ chillispot-1.0-coova.4.new/src/redir.h	2010-10-25 11:52:53.000000000 +0200
+@@ -176,6 +176,10 @@
+   struct in_addr addr;
+   char username[REDIR_USERNAMESIZE];
+   char userurl[REDIR_USERURLSIZE];
++  uint8_t chappassword[REDIR_MAXCHAR];
++  uint8_t password[REDIR_MAXCHAR];
++  int chap; /* 0 if using normal password; 1 if using CHAP */
++
+   uint8_t uamchal[REDIR_MD5LEN];
+   uint8_t statebuf[RADIUS_ATTR_VLEN+1];
+   int statelen;

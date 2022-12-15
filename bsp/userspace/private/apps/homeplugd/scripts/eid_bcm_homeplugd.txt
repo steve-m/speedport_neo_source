@@ -1,0 +1,8 @@
+BEGIN
+  eid         = EID_HOMEPLUGD
+  name        = homeplugd
+# uncomment line below to set verbose debug
+# runArgs     = "-v 2"
+  flags       = EIF_MDM|EIF_LAUNCH_ON_BOOT|EIF_MESSAGING_CAPABLE
+END
+

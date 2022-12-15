@@ -1,0 +1,8 @@
+# SeRcOmM
+:F1_boot.bin				  	&00000000
+:rootfs128kb1.img				&00520000
+:rootfs128kb2.img				&03720000
+:bootflag1						&06920000
+:bootflag2						&06A60000
+%F1.pid                 		&00019FFF 
+$SIZE                      		&1c000

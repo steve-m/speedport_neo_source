@@ -1,0 +1,28 @@
+Template: fonap/no-dhcp-interface
+Type: string
+Default: wlan0
+Description: routing interface for fon ap
+ This is the routing interface for fon ap,
+ this interface doesn't need dhcp from fonap.
+
+Template: fonap/chilli-dhcp-interface
+Type: string
+Default: eth0
+Description: dhcp interface for fon ap
+ This is the dhcp interface for fon ap,
+ this interface gives dhcp addresses for fonap.
+
+Template: fonap/device-mac
+Type: string
+Default: AC-DE-48-00-00-03
+Description: The FON mac address identifier
+ This is the mac address string identifier
+ used by this fonap in radius configuration.
+ It's not the machine's own mac address, but
+ one provided by FON.
+
+Template: fonap/keyword
+Type: string
+Default: 6362684a753c65cd7b75e52da980728c97fcbd9b3751d9e3829268a107aea0b5
+Description: The FON provided keyword for this FON ap.
+ This is the FON keyword needed for comunicating with FON.

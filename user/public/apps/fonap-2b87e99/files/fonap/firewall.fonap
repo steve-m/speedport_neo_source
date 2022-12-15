@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+
+if [ -f /etc/default/chilli ] ; then
+   . /etc/default/chilli
+fi
+
+IPTABLES="/sbin/iptables"
+OUTIF=$DHCPIF # from chilli
+EXTIF=`grep '^no-dhcp-interface=' /etc/dnsmasq.conf | cut -d= -f2 | sed 's/"//g'`
+INTIF="tun0"
+
+# clean:
+$IPTABLES -F
+
+# default policies:
+$IPTABLES -P INPUT DROP
+$IPTABLES -P FORWARD DROP
+$IPTABLES -P OUTPUT ACCEPT
+
+#Allow related and established on all interfaces (input)
+$IPTABLES -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+#Allow 3990 (chilli) & 53 (dns)
+$IPTABLES -A INPUT -i $INTIF -p tcp -m tcp --dport 3990 --syn -j ACCEPT
+$IPTABLES -A INPUT -i $INTIF -p udp -m udp --dport 53 -j ACCEPT
+$IPTABLES -A INPUT -i $INTIF -j DROP
+
+#Allow everything on loopback interface.
+$IPTABLES -A INPUT -i lo -j ACCEPT
+
+# Drop everything to and from eth0 (forward)
+# This means that access points can only be managed from ChilliSpot
+$IPTABLES -A FORWARD -i $INTIF -j ACCEPT
+$IPTABLES -A FORWARD -o $INTIF -j ACCEPT
+
+#Enable NAT on output device
+$IPTABLES -t nat -A POSTROUTING -o $EXTIF -j MASQUERADE
+
+# LOG rules for debugging
+#$IPTABLES -A INPUT -i $EXTIF  -j LOG --log-level 4
+#$IPTABLES -A INPUT -i $OUTIF  -j LOG --log-level 4
+#$IPTABLES -A INPUT -i $INTIF  -j LOG --log-level 4
+#$IPTABLES -A FORWARD -j LOG --log-level 4

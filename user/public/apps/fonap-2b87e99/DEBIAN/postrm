@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+. /usr/share/debconf/confmodule
+
+if [ purge = "$1" ]; then
+   #update-rc.d -f dnsmasq remove >/dev/null
+   #update-rc.d -f chilli remove >/dev/null
+   #update-rc.d -f fonsmcd remove >/dev/null
+   update-rc.d -f fonap remove >/dev/null
+
+   if [ -x "$(command -v deluser)" ]; then
+       deluser --quiet --system dnsmasq > /dev/null || true
+   else
+       echo >&2 "not removing dnsmasq system account because deluser command was not found"
+   fi
+   rm -rf /etc/fon/ || true
+
+   db_unregister fonap/no-dhcp-interface || true
+   db_unregister fonap/chilli-dhcp-interface || true
+   db_unregister fonap/device-mac || true
+   db_unregister fonap/keyword || true
+fi

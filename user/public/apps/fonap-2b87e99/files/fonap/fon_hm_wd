@@ -1,0 +1,94 @@
+#!/bin/sh
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+DEBUG=0
+NAME=fon_hm_wd
+PIDFILE=/var/run/$NAME.pid
+
+#Configuration parameters
+CfgWatchdogTimer=300
+CfgWatchdogCounter=3
+
+if [ $DEBUG -eq 1 ]; then
+    echo "HM Watchdog Config: timer=$CfgWatchdogTimer Counter=$CfgWatchdogCounter\n"
+fi
+
+RETRY=0
+
+
+CheckHotspotRunning() {
+    /etc/fon/fon_hm checkrunning
+    return $?
+}
+HotspotPreConfigLoad() {
+    /etc/fon/fon_hm restoreconfig
+    return 0
+}
+HotspotStart() {
+    /etc/fon/fon_hm start
+    return 0
+}
+HotspotStop() {
+    /etc/fon/fon_hm stop
+    return 0
+}
+
+HotspotWatchdogDaemon() {
+
+    while [ $RETRY -ge 0 ]; do
+
+        CheckHotspotRunning
+        if [ ! $? -eq 1 ]; then
+
+            if [ $DEBUG -eq 1 ]; then
+                echo "Hotspot not running."
+            fi
+            if [ $RETRY -ge $CfgWatchdogCounter ]; then
+                break
+            fi
+            if [ $RETRY -eq 2 ]; then
+                HotspotPreConfigLoad    
+            fi
+            RETRY=`expr $RETRY + 1`
+            HotspotStop
+            HotspotStart
+            sleep 120
+        else
+            #wait watchdog timer
+            RETRY=0
+            sleep $CfgWatchdogTimer
+        fi
+
+    done
+
+    echo "HM Watchdog Trigger Offline."
+    HotspotStop
+
+    return 0
+}
+
+case "$1" in
+    start)
+        if [ ! -f $PIDFILE ]; then
+            echo "$(pidof $NAME)" > $PIDFILE
+            HotspotWatchdogDaemon
+            rm -f $PIDFILE
+        fi
+        ;;
+
+    stop)
+        if [ -f $PIDFILE ]; then
+#            HotspotStop
+            kill $(cat $PIDFILE) > /dev/null 2>&1
+            rm -f $PIDFILE
+        fi
+        ;;
+    *)
+        N=/etc/fon/$NAME
+        echo "Usage: $N {start|stop}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+

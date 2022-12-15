@@ -1,0 +1,99 @@
+#!/bin/sh
+
+#check env variable are set and exported by top level makefile
+if [ -z "$BR_VER" ] || [ -z "$UCLIBC_VER" ] || [ -z "$LINUX_VER" ] || [ -z "$GCC_VER" ] || [ -z "$BINUTILS_VER" ] || [ -z "$TOOLCHAIN_TOP" ] || [ -z "$ARCH" ]; then
+   echo "one or more variables are not set or exported by the top level makefile."
+   echo "BR_VER $BR_VER"
+   echo "UCLIBC_VER $UCLIBC_VER"
+   echo "LINUX_VER $LINUX_VER"
+   echo "GCC_VER $GCC_VER"
+   echo "BINUTILS_VER $BINUTILS_VER"
+   echo "TOOLCHAIN_TOP $TOOLCHAIN_TOP"
+   echo "ARCH $ARCH"
+   exit 1
+fi
+
+CHECK_ERR=
+
+#target dirtory validation functin 
+function validate_target_dir() {
+   if [ -d "$1" ] && [ "$(ls -A $1)" ]; then
+       echo "$1 already has a toolchain installed.  Please delete the old toolchain before continuing."
+       CHECK_ERR=y 
+   elif [ -d "$1" ] && [ ! -w "$1" ]; then
+       echo "$1 exist but are not writeable. Please fix."
+       CHECK_ERR=y
+   elif [ ! -d "$1" ]; then
+       mkdir "$1"
+       if [ $? -ne 0 ]; then
+           echo "$1 do not exists and can't be created, please make sure /opt/toolchains exists and it is writeable."
+           CHECK_ERR=y 
+       fi
+   fi
+}
+
+#build toolchain for a particular target
+function build_toolchain() {
+    echo "################### Build $1 toolchain #####################"
+    cd $buildhome
+    # get the config file
+    cat ../$1.buildroot.config > .config
+    cat ../$1.uClibc-$UCLIBC_VER.brcm.config > ./toolchain/uClibc/uClibc-$UCLIBC_VER.brcm.config
+    make clean
+    make 
+    if [ $? -eq 0 ];then
+       cd "$2"
+       ln -s ./usr/$3/sysroot/lib ./lib
+       if [ ! -d "./usr/$3/target_utils" ]; then
+           mkdir ./usr/$3/target_utils
+       fi
+       cp $buildhome/output/target/usr/bin/gdbserver ./usr/$3/target_utils
+       cp $buildhome/output/target/usr/bin/ldd ./usr/$3/target_utils
+       echo "$1 toolchain build succeeded!"
+    else
+       echo "$1 toolchain built failed"
+       exit 1 
+    fi
+}
+
+TARGET_MIPS=$TOOLCHAIN_TOP/crosstools-mips-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER
+TARGET_ARM=$TOOLCHAIN_TOP/crosstools-arm-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER-NPTL
+TARGET_MIPSEL=$TOOLCHAIN_TOP/crosstools-mipsel-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER
+
+#sanity check
+if [ "$ARCH" = "mips" ] || [ "$ARCH" = "all" ]; then
+    validate_target_dir "$TARGET_MIPS"
+fi
+
+if [ "$ARCH" = "arm" ] || [ "$ARCH" = "all" ]; then
+    validate_target_dir "$TARGET_ARM"
+fi
+
+if [ "$ARCH" = "mipsel" ] || [ "$ARCH" = "all" ]; then
+   validate_target_dir "$TARGET_MIPSEL"
+fi
+
+if [ $CHECK_ERR ]; then
+   exit 1
+fi
+
+cd ./buildroot-$BR_VER
+buildhome=`pwd`
+
+# build the mips toolcahin first 
+if [ "$ARCH" = "mips" ] || [ "$ARCH" = "all" ]; then
+    build_toolchain "mips" "$TARGET_MIPS" "mips-unknown-linux-uclibc"
+fi
+
+# build the arm toolcahin now
+if [ "$ARCH" = "arm" ] || [ "$ARCH" = "all" ]; then
+    build_toolchain "arm" "$TARGET_ARM" "arm-unknown-linux-uclibcgnueabi"
+fi
+
+if [ "$ARCH" = "mipsel" ] || [ "$ARCH" = "all" ]; then
+    build_toolchain "mipsel" "$TARGET_MIPSEL" "mipsel-unknown-linux-uclibc"
+fi
+
+cd $buildhome
+cd ..
+	

@@ -1,0 +1,58 @@
+./plugins/pppol2tp/pppol2tp.c:#include <linux/version.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/sockios.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/types.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/if_ether.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/ppp_defs.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/if_ppp.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/if_pppox.h>
+./plugins/pppol2tp/pppol2tp.c:#include <linux/if_pppol2tp.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/version.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/sockios.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/types.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/if_ether.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/ppp_defs.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/if_ppp.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/if_pppox.h>
+./plugins/pppol2tp/openl2tp.c:#include <linux/if_pppol2tp.h>
+./plugins/pppoatm/atmres.h:#include <linux/atm.h>
+./plugins/pppoatm/pppoatm.c:#include <linux/atmdev.h>
+./plugins/pppoatm/pppoatm.c:#include <linux/atmppp.h>
+./plugins/pppoatm/atmsap.h:#include <linux/atmsap.h>
+./plugins/pppoatm/atm.h:#include <linux/atm.h>
+./plugins/pppoe/pppoe.c.2.4.0:#include <linux/if_pppox.h>
+./plugins/pppoe/pppoe.h:#include <linux/if_packet.h>
+./plugins/pppoe/pppoe.h:#include <linux/if_ether.h>
+./plugins/pppoe/pppoe.h:#include <linux/if_pppox.h>
+./plugins/pppoe/pppoe.c:#include <linux/ppp_defs.h>
+./plugins/pppoe/pppoe.c:#include <linux/if_pppox.h>
+./plugins/pppoe/pppoe.c:#include <linux/if_ppp.h>
+./plugins/pppoe/pppoe.c.2.4.1:#include <linux/ppp_defs.h>
+./plugins/pppoe/pppoe.c.2.4.1:#include <linux/if_pppox.h>
+./plugins/pppoe/pppoe.c.2.4.1:#include <linux/if_ppp.h>
+./plugins/pppoe/pppoe.c.2.4.1.1:#include <linux/ppp_defs.h>
+./plugins/pppoe/pppoe.c.2.4.1.1:#include <linux/if_pppox.h>
+./plugins/pppoe/pppoe.c.2.4.1.1:#include <linux/if_ppp.h>
+./plugins/rp-pppoe/pppoe.h:#include <linux/if.h>
+./plugins/rp-pppoe/pppoe.h:#include <linux/if_ether.h>
+./plugins/rp-pppoe/if.c:#include <linux/if_packet.h>
+./plugins/rp-pppoe/pppoe-discovery.c:#include <linux/if_packet.h>
+./plugins/rp-pppoe/config.h:/* Define if you have the <linux/if_ether.h> header file.  */
+./plugins/rp-pppoe/config.h:/* Define if you have the <linux/if_packet.h> header file.  */
+./plugins/rp-pppoe/config.h:/* Define if you have the <linux/if_pppox.h> header file.  */
+./plugins/rp-pppoe/config.h:/* Define if you have the <linux/if.h> header file.  */
+./plugins/rp-pppoe/config.h:/* Define if you have the N_HDLC line discipline in linux/termios.h */
+./plugins/rp-pppoe/plugin.c:#include <linux/types.h>
+./plugins/rp-pppoe/plugin.c:#include <linux/ppp_defs.h>
+./plugins/rp-pppoe/plugin.c:#include <linux/if_ppp.h>
+./plugins/rp-pppoe/plugin.c:#include <linux/if_pppox.h>
+./sys-linux.c:#include <asm/types.h>		/* glibc 2 conflicts with linux/types.h */
+./sys-linux.c:#include <linux/types.h>
+./sys-linux.c:#include <linux/if.h>
+./sys-linux.c:#include <linux/if_arp.h>
+./sys-linux.c:#include <linux/route.h>
+./sys-linux.c:#include <linux/if_ether.h>
+./sys-linux.c:#include <linux/ppp_defs.h>
+./sys-linux.c:#include <linux/if_ppp.h>
+./sys-linux.c:#include <linux/ipx.h>
+./sys-linux.c:#include <linux/filter.h>
+./sys-linux.c: *    This is in linux/include/net/ipv6.h.

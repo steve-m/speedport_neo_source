@@ -1,0 +1,20 @@
+--- chillispot-1.0/src/tun.c	2005-09-18 14:07:49.000000000 +0200
++++ chillispot-1.0.dev/src/tun.c	2007-03-27 15:58:02.000000000 +0200
+@@ -669,11 +669,13 @@
+   
+ #if defined(__linux__)
+   /* Open the actual tun device */
+-  if (((*tun)->fd  = open("/dev/net/tun", O_RDWR)) < 0) {
+-    sys_err(LOG_ERR, __FILE__, __LINE__, errno, "open() failed");
+-    return -1;
++  if (((*tun)->fd  = open("/dev/tun", O_RDWR)) < 0) {
++  	if (((*tun)->fd  = open("/dev/net/tun", O_RDWR)) < 0) {
++		sys_err(LOG_ERR, __FILE__, __LINE__, errno, "open() failed");
++		return -1;
++	}
+   }
+-  
++
+   /* Set device flags. For some weird reason this is also the method
+      used to obtain the network interface name */
+   memset(&ifr, 0, sizeof(ifr));

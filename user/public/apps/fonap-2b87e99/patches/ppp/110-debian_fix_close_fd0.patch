@@ -1,0 +1,42 @@
+Subject: Bug#298582: pppoe: looks like a pppd bug
+From: Alan Curry <pacman@clss.net>
+
+Package: pppoe
+Version: 3.5-4
+Followup-For: Bug #298582
+
+I have found a bug in pppd that may explain why this happens.
+
+pppoe-server invokes "pppd pty 'pppoe ...'" with no file descriptors open.
+pppd does an openlog() and gets /dev/log on fd 0 (you can already see where
+this is going).
+
+Later, when pppd is setting up file descriptors for the pty subprocess, it
+puts the pty master on fd 0 and 1 and the logfd (which is a distinct log
+file, in addition to syslog, normally set to /dev/null by now) on fd 2. It
+handles this all very carefully, avoiding several potential problems with fds
+getting stomped on. Then it does a closelog(), which stomps on fd 0.
+
+pppoe now gets invoked with fd 0 closed, and hilarity ensues.
+
+Moving the closelog() up a few lines in pppd fixes it for me.
+
+--- ppp-2.4.3.orig/pppd/main.c	2004-11-13 07:05:48.000000000 -0500
++++ ppp-2.4.3/pppd/main.c	2005-06-19 05:13:27.000000000 -0500
+@@ -1569,6 +1569,8 @@
+ 	if (errfd == 0 || errfd == 1)
+ 		errfd = dup(errfd);
+ 
++	closelog();
++
+ 	/* dup the in, out, err fds to 0, 1, 2 */
+ 	if (infd != 0)
+ 		dup2(infd, 0);
+@@ -1577,7 +1579,6 @@
+ 	if (errfd != 2)
+ 		dup2(errfd, 2);
+ 
+-	closelog();
+ 	if (log_to_fd > 2)
+ 		close(log_to_fd);
+ 	if (the_channel->close)

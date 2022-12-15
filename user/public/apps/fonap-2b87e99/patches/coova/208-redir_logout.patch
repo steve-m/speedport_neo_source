@@ -1,0 +1,26 @@
+diff -uprN -X /tmp/dontdiff chillispot-1.0-coova.4/src/chilli.c chillispot-1.0-coova.4-redirlogout/src/chilli.c
+--- chillispot-1.0-coova.4/src/chilli.c	2007-01-31 16:19:38.000000000 +0100
++++ chillispot-1.0-coova.4-redirlogout/src/chilli.c	2007-07-09 13:20:51.000000000 +0200
+@@ -2859,10 +2859,6 @@ int static uam_msg(struct redir_msg_t *m
+     if (options.debug)
+       log_dbg("Received logoff from UAM\n");
+ 
+-    memcpy(appconn->uamchal, msg->uamchal, REDIR_MD5LEN);
+-    appconn->uamtime = time(NULL);
+-    appconn->uamabort = 0;
+-    dhcpconn->authstate = DHCP_AUTH_DNAT;
+ 
+     if (appconn->authenticated == 1) {
+       terminate_appconn(appconn, RADIUS_TERMINATE_CAUSE_USER_REQUEST);
+@@ -2874,6 +2870,11 @@ int static uam_msg(struct redir_msg_t *m
+       appconn->params.idletimeout = 0;
+     }
+ 
++    memcpy(appconn->uamchal, msg->uamchal, REDIR_MD5LEN);
++    appconn->uamtime = time(NULL);
++    appconn->uamabort = 0;
++    dhcpconn->authstate = DHCP_AUTH_DNAT;
++
+     return 0;
+   }
+   else if (msg->type == REDIR_ABORT) {

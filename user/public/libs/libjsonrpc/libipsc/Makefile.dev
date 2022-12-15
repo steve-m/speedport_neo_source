@@ -1,0 +1,8 @@
+CC     = $(CROSS_COMPILE)gcc
+LD     = $(CROSS_COMPILE)ld
+AR     = $(CROSS_COMPILE)ar
+RANLIB = $(CROSS_COMPILE)ranlib
+
+CFLAGS += -Wall -fPIC -O2 -g3
+
+include main.mk

@@ -1,0 +1,92 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          skeleton
+# Required-Start:    $remote_fs
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Example initscript
+# Description:       This file should be used to construct scripts to be
+#                    placed in /etc/init.d.
+### END INIT INFO
+
+# Author: Foo Bar <foobar@baz.org>
+#
+# Please remove the "Author" lines above and replace them
+# with your own name if you copy and modify this script.
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+DEBUG=0
+
+NAME=fonsmcd
+DAEMON=/usr/sbin/$NAME
+PIDFILE=/var/run/$NAME.pid
+
+
+FWVERSION=$(cat /tmp/fw_info/fw_ver)
+VERSION=${FWVERSION:7:1}.${FWVERSION:9:1}.${FWVERSION:12:2}
+REVISION=${FWVERSION:11:1}
+WANMODE=$(/usr/sbin/cmld_client getv Device.Ethernet.Link.1.LowerLayers)
+NASID=$(ifconfig eth0 | head -n1 | awk '{print $5}'|sed s/:/-/g)
+FON_KEY=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Key)
+HOST=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Host)
+PORT=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Port)
+PERIODONLINE=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PeriodOnline)
+PERIODOFFLINE=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PeriodOffline)
+PERIODFASTDETECTION=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PeriodFastDetection)
+PERIODTIMEOUT=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PeriodTimeout)
+RETRIES=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Retries)
+SUFFIX=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Suffix)
+RETRIES=`expr $RETRIES + 1`
+OPTS="-v $VERSION -r $REVISION -m $NASID -w $FON_KEY --port $PORT --host $HOST --period_online $PERIODONLINE --period_offline $PERIODOFFLINE \
+--period_fast $PERIODFASTDETECTION --timeout $PERIODTIMEOUT --retries $RETRIES --rsapath=/etc/public_sm_rsa_key.pem --suffix=$SUFFIX \
+--trigger_online=/usr/sbin/fonsmcd_online --trigger_offline=/usr/sbin/fonsmcd_offline"
+
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+case "$1" in
+  start)
+	echo "Starting $NAME"
+ 	if [ "$DEBUG" = "1" ] ; then
+            echo $OPTS
+	    $DAEMON $OPTS -n &
+	else
+	    $DAEMON $OPTS &
+	fi
+	;;
+
+  stop)
+	echo "Stopping $DESC" "$NAME"
+        $DAEMON -k > /dev/null 2>&1
+        /etc/fon/fon_hm stop
+        ;;
+
+  #reload|force-reload)
+	#
+	# If do_reload() is not implemented then leave this commented out
+	# and leave 'force-reload' as an alias for 'restart'.
+	#
+	#log_daemon_msg "Reloading $DESC" "$NAME"
+	#do_reload
+	#log_end_msg $?
+	#;;
+  restart)
+        $0 stop
+        sleep 2
+        $0 start
+	;;
+
+  *)
+        N=/etc/fon/$NAME
+	echo "Usage: $N {start|stop|restart}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

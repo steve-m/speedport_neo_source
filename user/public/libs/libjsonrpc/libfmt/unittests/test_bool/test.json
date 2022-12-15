@@ -1,0 +1,5 @@
+{
+	"testme_true": true,
+	"testme_false": false,
+	"not_true": "true"
+}

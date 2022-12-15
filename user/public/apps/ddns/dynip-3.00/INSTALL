@@ -1,0 +1,57 @@
+                DynIP Client for Unix Installtion           Dec, 1999
+
+
+To create the DynIP client binaries for your operating system
+follow these steps:
+
+(1) Run the Configure script to create the Makefile and build the
+    program executables.  The script will display a list of known systems
+    and ask for the type of system if one is not provided on the command
+    line.  For instance, if you are running a Linux system, type:
+
+		./Configure linux
+
+    To see the current known list, type
+
+                ./Configure
+
+(2) type ``make install'' to install the binaries in your
+    installtion directory. You must have write priviliges
+    in this directory.  The installation directory defaults to
+    /usr/local/bin.
+
+(3) type ``make man'' to copy the man pages to the system man 
+    pages directory. You can then issue the ``man dynipadmin''
+    command or ``man dynipclient'' command to get more information
+    on how to use these programs.  The default man page directory
+    is /usr/local/man/man1.
+
+(4) Run the dynipadmin program to register your Internet Name.  See
+    the man pages for more details.
+
+The binaries have been succesfully compiled on the following operating
+systems and hardware platforms:
+
+	OS		OS version	Platform
+======================================================================
+	FreeBSD		2.1.7-STABLE	Intel
+	FreeBSD		2.2-STABLE	Intel
+	FreeBSD		3.5		Intel
+	FreeBSD		4.4		Intel
+	Linux		2.0.30		Intel
+	Linux Redhat	4.01 (k2.0.27)	Intel
+	Linux Redhat	5.1		Intel
+	Linux Redhat	5.2		Intel
+	Linux Redhat	6.0		Intel
+	Linux Redhat	7.x		Intel
+	Mac OS/X	X		PowerPC
+	OpenBSD		unknown		Intel
+	OSF/1		V3.2D-2		Alpha
+	OSF/1		V3.2G		Alpha
+	SunOS		5.3		Sparc
+	SunOS		5.5.1		UltraSparc
+
+If you have to make changes to get this to compile/run on other
+Unix types, please send your (diff -c) patches to support@dynip.com.
+If it compiles without changes on other platforms, also please let us
+know and we'll ad them to the list above.

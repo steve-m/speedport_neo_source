@@ -1,0 +1,19 @@
+Index: package/coova/src/chilli.c
+===================================================================
+RCS file: /filer1/dev_projets/cvs/souche_linux/application/coova/package/coova/src/chilli.c,v
+retrieving revision 1.1.1.2
+retrieving revision 1.1.1.3
+diff -c -u -r1.1.1.2 -r1.1.1.3
+--- package/coova/src/chilli.c	31 May 2011 15:20:45 -0000	1.1.1.2
++++ package/coova/src/chilli.c	1 Jun 2011 16:28:23 -0000	1.1.1.3
+@@ -1507,7 +1507,9 @@
+   /*
+    *  Return if there is no RADIUS accounting for this session.
+    */
+-  if (conn->s_params.flags & NO_ACCOUNTING)
++    log_err(0, "chilli conn->s_params.flags %x",conn->s_params.flags);
++/*Flag should be passed by fon-api but does not work - workaround*/
++  //if (conn->s_params.flags & NO_ACCOUNTING)
+     return 0;
+   
+   /*

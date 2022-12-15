@@ -1,0 +1,127 @@
+#!/bin/sh
+#
+#	DynIP Client (tm) Unix configure script
+#
+
+# default install directory
+DEFBINDIR=/usr/local/bin
+DEFMANDIR=/usr/man/man1
+DEFCFGDIR=/etc
+
+# Is this a Posix or bsd-ish shell?
+
+if echo '\c' | grep -s c >/dev/null 2>&1
+then
+	ECHO_N="echo -n"
+	ECHO_C=""
+else
+	ECHO_N="echo"
+	ECHO_C='\c'
+fi
+
+if [ -z "$1" ]; then
+cat - <<EOF
+The following platforms are defined:
+	freebsd		FreeBSD
+	linux		Linux
+	osf1		Digital Unix (OSF/1)
+	sunos		Sun Microsystems Solaris
+
+See ./INSTALL for details.
+
+EOF
+        $ECHO_N "Build platform []: $ECHO_C"
+        read platform
+	if [ -z "$platform" ]; then
+		platform="XXemptyXX"
+	fi
+else
+        platform="$1"
+fi
+
+if [ -z "$2" ]; then
+        $ECHO_N "Installation directory [" $DEFBINDIR "]: $ECHO_C"
+        read bindir
+	if [ -z "$bindir" ]; then
+		bindir="$DEFBINDIR";
+	fi
+else
+        bindir="$2"
+fi
+
+if [ -z "$3" ]; then
+        $ECHO_N "Configuration file directory [" $DEFCFGDIR "]: $ECHO_C"
+        read cfgdir
+	if [ -z "$cfgdir" ]; then
+		cfgdir="$DEFCFGDIR";
+	fi
+else
+        cfgdir="$3"
+fi
+
+if [ -z "$4" ]; then
+        $ECHO_N "Man pages directory [" $DEFMANDIR "]: $ECHO_C"
+        read mandir
+	if [ -z "$mandir" ]; then
+		mandir="$DEFMANDIR";
+	fi
+else
+        mandir="$4"
+fi
+
+if [ $platform = "linux" ]; then
+	echo 'Compiling Linux target'
+	sed -e 	"s|%cflags%|-DLINUX|" \
+	    -e	"s|%libs%||" \
+	    -e  "s|%manpath%|$mandir|" \
+	    -e  "s|%bindir%|$bindir|" \
+	    -e  "s|%ostype%|6|" \
+            -e  "s|%cfgdir%|$cfgdir|" \
+		Makefile.X > Makefile
+elif [ $platform = "freebsd" ]; then
+	echo 'Compiling FreeBSD target'
+	sed -e 	"s|%cflags%|-DFREEBSD|" \
+	    -e  "s|%libs%||" \
+	    -e  "s|%manpath%|$mandir|" \
+	    -e  "s|%bindir%|$bindir|" \
+	    -e  "s|%ostype%|7|" \
+            -e  "s|%cfgdir%|$cfgdir|" \
+		Makefile.X > Makefile
+elif [ $platform = "sunos" ]; then
+	echo 'Compiling SunOS target'
+	sed -e 	"s|%cflags%|-DSUNOS|" \
+	    -e  "s|%libs%|-lsocket -lnsl|" \
+	    -e  "s|%manpath%|$mandir|" \
+	    -e  "s|%bindir%|$bindir|" \
+	    -e  "s|%ostype%|8|" \
+            -e  "s|%cfgdir%|$cfgdir|" \
+		Makefile.X > Makefile
+elif [ $platform = "osf1" ]; then
+	echo 'Compiling Digital Unix target'
+	sed -e 	"s|%cflags%|-DOSF1|" \
+	    -e  "s|%libs%||" \
+	    -e  "s|%manpath%|$mandir|" \
+	    -e  "s|%bindir%|$bindir|" \
+            -e  "s|%ostype%|9|" \
+            -e  "s|%cfgdir%|$cfgdir|" \
+		Makefile.X > Makefile
+elif [ $platform = "clean" ]; then
+	make -f ./Makefile.X $1
+elif [ $platform = "man" ]; then
+	make -f ./Makefile.X $1
+elif [ $platform = "install" ]; then
+	make -f ./Makefile.X $1
+else
+	echo "====="
+	echo "Nothing done."
+	exit
+fi
+
+echo "===== Starting Build ====="
+make -f ./Makefile clean
+make -f ./Makefile
+echo "===== Build Done ====="
+echo
+echo "Now run 'make install' to install programs"
+echo "and 'make man' to install man pages"
+echo

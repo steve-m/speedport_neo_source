@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_20" class="java.beans.XMLDecoder">
+ <object class="com.horstmann.violet.SequenceDiagramGraph">
+  <void method="addNode">
+   <object class="com.horstmann.violet.ImplicitParameterNode">
+    <void property="name">
+     <void property="text">
+      <string>Client</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>0.0</double>
+     <double>0.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="ImplicitParameterNode0" class="com.horstmann.violet.ImplicitParameterNode">
+    <void property="name">
+     <void property="text">
+      <string>Coova chilli
+Captive Portal Gateway</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>240.0</double>
+     <double>0.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="ImplicitParameterNode1" class="com.horstmann.violet.ImplicitParameterNode">
+    <void property="name">
+     <void property="text">
+      <string>Authenticator</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>620.0</double>
+     <double>0.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="CallNode0" class="com.horstmann.violet.CallNode">
+    <void method="addChild">
+     <object id="CallNode1" class="com.horstmann.violet.CallNode">
+      <void property="implicitParameter">
+       <object idref="ImplicitParameterNode1"/>
+      </void>
+     </object>
+    </void>
+    <void property="implicitParameter">
+     <object idref="ImplicitParameterNode0"/>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>312.0</double>
+     <double>218.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="ImplicitParameterNode2" class="com.horstmann.violet.ImplicitParameterNode">
+    <void property="name">
+     <void property="text">
+      <string>PPP client</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>970.0</double>
+     <double>0.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="CallNode2" class="com.horstmann.violet.CallNode">
+    <void method="addChild">
+     <object id="CallNode3" class="com.horstmann.violet.CallNode">
+      <void method="addChild">
+       <object idref="CallNode0"/>
+      </void>
+      <void property="implicitParameter">
+       <object idref="ImplicitParameterNode1"/>
+      </void>
+     </object>
+    </void>
+    <void property="implicitParameter">
+     <object idref="ImplicitParameterNode2"/>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>1002.0</double>
+     <double>172.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object idref="CallNode3"/>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>662.0</double>
+     <double>195.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object class="java.awt.Color">
+      <int>255</int>
+      <int>165</int>
+      <int>0</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>Session-Timeout
+Idle-Timeout
+On Server</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>950.0</double>
+     <double>90.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="NoteNode0" class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object id="Color0" class="java.awt.Color">
+      <int>255</int>
+      <int>165</int>
+      <int>0</int>
+      <int>255</int>
+     </object>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>&lt;ip-address&gt;</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>430.0</double>
+     <double>120.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="PointNode0" class="com.horstmann.violet.PointNode"/>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>480.0</double>
+     <double>218.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object idref="CallNode1"/>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>670.0</double>
+     <double>236.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="NoteNode1" class="com.horstmann.violet.NoteNode">
+    <void property="color">
+     <object idref="Color0"/>
+    </void>
+    <void property="text">
+     <void property="text">
+      <string>$FRAMED_IP_ADDRESS
+$CALLING_STATION_ID
+$USERNAME</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>400.0</double>
+     <double>290.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object id="PointNode1" class="com.horstmann.violet.PointNode"/>
+   <object class="java.awt.geom.Point2D$Double">
+    <void method="setLocation">
+     <double>480.0</double>
+     <double>236.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.CallEdge">
+    <void property="middleLabel">
+     <string>Close Session</string>
+    </void>
+    <void property="signal">
+     <boolean>true</boolean>
+    </void>
+   </object>
+   <object idref="CallNode2"/>
+   <object idref="CallNode3"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.CallEdge">
+    <void property="middleLabel">
+     <string>fonctl logout</string>
+    </void>
+    <void property="signal">
+     <boolean>true</boolean>
+    </void>
+   </object>
+   <object idref="CallNode3"/>
+   <object idref="CallNode0"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.NoteEdge"/>
+   <object idref="NoteNode0"/>
+   <object idref="PointNode0"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.CallEdge">
+    <void property="middleLabel">
+     <string>session-stop</string>
+    </void>
+    <void property="signal">
+     <boolean>true</boolean>
+    </void>
+   </object>
+   <object idref="CallNode0"/>
+   <object idref="CallNode1"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.NoteEdge"/>
+   <object idref="NoteNode1"/>
+   <object idref="PointNode1"/>
+  </void>
+ </object>
+</java>

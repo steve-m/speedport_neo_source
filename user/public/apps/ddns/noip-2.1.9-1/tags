@@ -1,0 +1,314 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ALREADYSET	./noip2.c	263;"	d	file:
+ALREADYSETGRP	./noip2.c	274;"	d	file:
+ARCH	./Makefile	/^ARCH=linux$/;"	m
+ARGC	./noip2.c	224;"	d	file:
+ARGD	./noip2.c	232;"	d	file:
+ARGF	./noip2.c	225;"	d	file:
+ARGI	./noip2.c	228;"	d	file:
+ARGK	./noip2.c	235;"	d	file:
+ARGM	./noip2.c	234;"	d	file:
+ARGS	./noip2.c	233;"	d	file:
+ARGU	./noip2.c	227;"	d	file:
+ARGY	./noip2.c	226;"	d	file:
+ARGi	./noip2.c	236;"	d	file:
+ARGp	./noip2.c	230;"	d	file:
+ARGu	./noip2.c	229;"	d	file:
+ARGx	./noip2.c	231;"	d	file:
+B64MOD	./noip2.c	251;"	d	file:
+BADACTIVATE	./noip2.c	294;"	d	file:
+BADCONFIG1	./noip2.c	288;"	d	file:
+BADCONFIG2	./noip2.c	289;"	d	file:
+BADCONFIG3	./noip2.c	290;"	d	file:
+BADCONFIG4	./noip2.c	291;"	d	file:
+BADCONFIG5	./noip2.c	292;"	d	file:
+BADCONFIG6	./noip2.c	293;"	d	file:
+BADGRP	./noip2.c	272;"	d	file:
+BADHOST	./noip2.c	265;"	d	file:
+BADPASSWD	./noip2.c	266;"	d	file:
+BADUSER	./noip2.c	267;"	d	file:
+BIGBUFLEN	./noip2.c	198;"	d	file:
+BINDIR	./Makefile	/^BINDIR=${PREFIX}\/bin$/;"	m
+CC	./Makefile	/^CC=gcc$/;"	m
+CHKSUM_SKIP	./noip2.c	412;"	d	file:
+CLIENT_IP_PORT	./noip2.c	205;"	d	file:
+CMSG01	./noip2.c	296;"	d	file:
+CMSG02	./noip2.c	297;"	d	file:
+CMSG03	./noip2.c	298;"	d	file:
+CMSG04	./noip2.c	299;"	d	file:
+CMSG05	./noip2.c	300;"	d	file:
+CMSG06	./noip2.c	301;"	d	file:
+CMSG07	./noip2.c	302;"	d	file:
+CMSG08	./noip2.c	303;"	d	file:
+CMSG09	./noip2.c	304;"	d	file:
+CMSG10	./noip2.c	305;"	d	file:
+CMSG100	./noip2.c	344;"	d	file:
+CMSG101	./noip2.c	346;"	d	file:
+CMSG11	./noip2.c	306;"	d	file:
+CMSG12	./noip2.c	307;"	d	file:
+CMSG13	./noip2.c	308;"	d	file:
+CMSG14	./noip2.c	309;"	d	file:
+CMSG16	./noip2.c	310;"	d	file:
+CMSG17	./noip2.c	311;"	d	file:
+CMSG18	./noip2.c	312;"	d	file:
+CMSG19	./noip2.c	313;"	d	file:
+CMSG20	./noip2.c	314;"	d	file:
+CMSG21	./noip2.c	315;"	d	file:
+CMSG22	./noip2.c	316;"	d	file:
+CMSG23	./noip2.c	317;"	d	file:
+CMSG24	./noip2.c	318;"	d	file:
+CMSG25	./noip2.c	319;"	d	file:
+CMSG25a	./noip2.c	320;"	d	file:
+CMSG26	./noip2.c	321;"	d	file:
+CMSG27	./noip2.c	322;"	d	file:
+CMSG28	./noip2.c	323;"	d	file:
+CMSG29	./noip2.c	324;"	d	file:
+CMSG30	./noip2.c	325;"	d	file:
+CMSG31	./noip2.c	326;"	d	file:
+CMSG32	./noip2.c	327;"	d	file:
+CMSG33	./noip2.c	328;"	d	file:
+CMSG34	./noip2.c	329;"	d	file:
+CMSG35	./noip2.c	330;"	d	file:
+CMSG36	./noip2.c	331;"	d	file:
+CMSG37	./noip2.c	332;"	d	file:
+CMSG38	./noip2.c	333;"	d	file:
+CMSG39	./noip2.c	334;"	d	file:
+CMSG40	./noip2.c	335;"	d	file:
+CMSG40a	./noip2.c	336;"	d	file:
+CMSG41	./noip2.c	337;"	d	file:
+CMSG42	./noip2.c	338;"	d	file:
+CMSG43	./noip2.c	339;"	d	file:
+CMSG44	./noip2.c	340;"	d	file:
+CMSG99	./noip2.c	341;"	d	file:
+CMSG99a	./noip2.c	342;"	d	file:
+COMMA	./noip2.c	261;"	d	file:
+COMMENT	./noip2.c	260;"	d	file:
+CONFDIR	./Makefile	/^CONFDIR=${PREFIX}\/etc$/;"	m
+CONFIG	./noip2.c	/^struct CONFIG {$/;"	s	file:
+CONFIG_FILENAME	./noip2.c	246;"	d	file:
+CONFIG_FILEPATH	./noip2.c	245;"	d	file:
+CONFIG_MAGIC	./noip2.c	252;"	d	file:
+CONFSTRLEN	./noip2.c	247;"	d	file:
+CONNECT_TIMEOUT	./noip2.c	193;"	d	file:
+CONNFAIL	./noip2.c	282;"	d	file:
+CONNTIMEOUT	./noip2.c	281;"	d	file:
+Connect	./noip2.c	/^int Connect(int port)$/;"	f
+DEBUG	./noip2.c	184;"	d	file:
+DEFAULT_NAT_INTERVAL	./noip2.c	255;"	d	file:
+DOMAIN	./noip2.c	241;"	d	file:
+DecodeTable	./noip2.c	/^unsigned char DecodeTable[] = {$/;"	v
+ENCRYPT	./noip2.c	186;"	d	file:
+EQUALS	./noip2.c	259;"	d	file:
+EncodeTable	./noip2.c	/^unsigned char EncodeTable[] =$/;"	v
+FATALERR	./noip2.c	278;"	d	file:
+FORCE_INTERVAL	./noip2.c	194;"	d	file:
+FORCE_UPDATE	./noip2.c	187;"	d	file:
+Force_Update	./noip2.c	/^int	Force_Update		=	FORCE_INTERVAL;$/;"	v
+GROUP	./noip2.c	240;"	d	file:
+GROUPS	./noip2.c	/^struct GROUPS {$/;"	s	file:
+GetNextLine	./noip2.c	/^int GetNextLine(char *dest)$/;"	f
+HOST	./noip2.c	239;"	d	file:
+HOSTDISABLED	./noip2.c	270;"	d	file:
+HOSTISREDIRECT	./noip2.c	271;"	d	file:
+INSTANCE	./noip2.c	/^struct INSTANCE {$/;"	s	file:
+IPLEN	./noip2.c	196;"	d	file:
+IPaddress	./noip2.c	/^char	IPaddress[IPLEN];$/;"	v
+LIBS	./Makefile	/^LIBS=$/;"	m
+LINELEN	./noip2.c	197;"	d	file:
+Last_IP_Addr	./noip2.c	/^	char	Last_IP_Addr[IPLEN];$/;"	m	struct:INSTANCE	file:
+MAX	./noip2.c	189;"	d	file:
+MAX_DEVLEN	./noip2.c	248;"	d	file:
+MAX_INSTANCE	./noip2.c	249;"	d	file:
+MAX_NET_DEVS	./noip2.c	250;"	d	file:
+Malloc	./noip2.c	/^void *Malloc(int size)$/;"	f
+Msg	./noip2.c	/^void Msg(char *fmt, ...)$/;"	f
+NAMES	./noip2.c	/^struct NAMES {$/;"	s	file:
+NOCONFIG	./noip2.c	287;"	d	file:
+NODNSGROUP	./noip2.c	238;"	d	file:
+NOHOSTLOOKUP	./noip2.c	279;"	d	file:
+NOIP_IP_SCRIPT	./noip2.c	204;"	d	file:
+NOIP_KEY	./noip2.c	253;"	d	file:
+NOIP_NAME	./noip2.c	201;"	d	file:
+OPTCHARS	./noip2.c	220;"	d	file:
+OPTCHARS	./noip2.c	222;"	d	file:
+PKG	./Makefile	/^PKG=noip-2.1.tgz$/;"	m
+PREFIX	./Makefile	/^PREFIX=\/usr\/local$/;"	m
+PREFIX	./noip2.c	243;"	d	file:
+PRIVATEIP	./noip2.c	269;"	d	file:
+PWDSTRNG	./noip2.c	211;"	d	file:
+READFAIL	./noip2.c	284;"	d	file:
+READTIMEOUT	./noip2.c	283;"	d	file:
+READ_TIMEOUT	./noip2.c	191;"	d	file:
+RELEASEDISABLED	./noip2.c	275;"	d	file:
+REQUEST	./noip2.c	213;"	d	file:
+REQUEST	./noip2.c	215;"	d	file:
+Read	./noip2.c	/^int Read(int sock, char *buf, size_t count)$/;"	f
+SETTINGS	./noip2.c	/^struct SETTINGS {$/;"	s	file:
+SETTING_SCRIPT	./noip2.c	209;"	d	file:
+SHARED	./noip2.c	/^struct SHARED {$/;"	s	file:
+SHMEM_SIZE	./noip2.c	254;"	d	file:
+SOCKETFAIL	./noip2.c	280;"	d	file:
+SPACE	./noip2.c	258;"	d	file:
+SUCCESS	./noip2.c	264;"	d	file:
+SUCCESSGRP	./noip2.c	273;"	d	file:
+SkipHeaders	./noip2.c	/^void SkipHeaders()$/;"	f
+Sleep	./noip2.c	/^int Sleep(int seconds)		\/\/ some BSD systems don't interrupt sleep!$/;"	f
+TGT	./Makefile	/^TGT=noip2$/;"	m
+TOSVIOLATE	./noip2.c	268;"	d	file:
+UNKNOWNERR	./noip2.c	277;"	d	file:
+UPDATE_SCRIPT	./noip2.c	217;"	d	file:
+UPD_NAME	./noip2.c	202;"	d	file:
+UPD_SCRIPT	./noip2.c	203;"	d	file:
+USER_AGENT	./noip2.c	208;"	d	file:
+USTRNG	./noip2.c	210;"	d	file:
+Usage	./noip2.c	/^void Usage()$/;"	f
+VERSION	./noip2.c	207;"	d	file:
+WGET_PGM	./noip2.c	256;"	d	file:
+WRITEFAIL	./noip2.c	286;"	d	file:
+WRITETIMEOUT	./noip2.c	285;"	d	file:
+WRITE_TIMEOUT	./noip2.c	192;"	d	file:
+Write	./noip2.c	/^int Write(int fd, char *buf, size_t count)$/;"	f
+add_to_list	./noip2.c	/^void add_to_list(char *gnm, struct NAMES *ns)$/;"	f
+add_to_request	./noip2.c	/^int add_to_request(int kind, char *p)$/;"	f
+alarm_handler	./noip2.c	/^void alarm_handler(int signum)	\/\/ entered on SIGALRM$/;"	f
+answer	./noip2.c	/^char	answer[LINELEN];$/;"	v
+argin	./noip2.c	/^struct	termios argin, argout;$/;"	v	typeref:struct:termios
+argout	./noip2.c	/^struct	termios argin, argout;$/;"	v	typeref:struct:
+args	./noip2.c	/^	char	args[LINELEN - (2 *IPLEN)];$/;"	m	struct:INSTANCE	file:
+autoconf	./noip2.c	/^void autoconf()$/;"	f
+background	./noip2.c	/^int	background		=	1;	\/\/ new default$/;"	v
+banned_version	./noip2.c	/^	char	banned_version[16];$/;"	m	struct:SHARED	file:
+bdecode	./noip2.c	/^int bdecode(char *p_in, char *p_out)$/;"	f
+bencode	./noip2.c	/^int bencode(const char *p_s, char *p_dst)$/;"	f
+buffer	./noip2.c	/^char    buffer[BIGBUFLEN];$/;"	v
+cfilename	./noip2.c	/^	char	cfilename[LINELEN];$/;"	m	struct:INSTANCE	file:
+checkconfig	./gentoo.noip2.sh	/^checkconfig() {$/;"	f
+chksum	./noip2.c	/^	ushort	chksum;$/;"	m	struct:CONFIG	file:
+chksum	./noip2.c	/^ushort chksum(char *p_buf, unsigned int size)$/;"	f
+config_fd	./noip2.c	/^int	config_fd		=	-1;$/;"	v
+config_file_inuse	./noip2.c	/^int config_file_inuse()$/;"	f
+config_filename	./noip2.c	/^char	*config_filename	=	NULL;$/;"	v
+connect_fail	./noip2.c	/^int	connect_fail		=	0;$/;"	v
+converse_with_web_server	./noip2.c	/^int converse_with_web_server()$/;"	f
+count	./noip2.c	/^	char	count;$/;"	m	struct:CONFIG	file:
+count	./noip2.c	/^	int	count;$/;"	m	struct:GROUPS	file:
+debug	./noip2.c	/^	char	debug;$/;"	m	struct:INSTANCE	file:
+debug	./noip2.c	/^int	debug			= 	0;$/;"	v
+debug_toggle	./noip2.c	/^int	debug_toggle		=	0;$/;"	v
+depend	./gentoo.noip2.sh	/^depend() {$/;"	f
+despace	./noip2.c	/^char *despace(char *p)$/;"	f
+device	./noip2.c	/^	char	device[MAX_DEVLEN];$/;"	m	struct:CONFIG	file:
+device	./noip2.c	/^char	device[LINELEN];$/;"	v
+display_current_config	./noip2.c	/^void display_current_config()$/;"	f
+display_one_config	./noip2.c	/^void display_one_config(char *req, int interval, int nat, $/;"	f
+dmn	./noip2.c	/^char    dmn[LINELEN];$/;"	v
+domains	./noip2.c	/^int domains(char *p)$/;"	f
+dummy	./noip2.c	/^int	dummy			=	0;$/;"	v
+dump_buffer	./noip2.c	/^void dump_buffer(int x)$/;"	f
+dump_shm	./noip2.c	/^void dump_shm(struct shmid_ds *d)$/;"	f
+dynamic_update	./noip2.c	/^int dynamic_update()$/;"	f
+elength	./noip2.c	/^	ushort	elength;$/;"	m	struct:CONFIG	file:
+encrypt	./noip2.c	/^	char	encrypt;$/;"	m	struct:CONFIG	file:
+execpath	./noip2.c	/^	char	execpath[0];$/;"	m	struct:CONFIG	file:
+execpath	./noip2.c	/^char	*execpath		=	NULL;$/;"	v
+exit_handler	./noip2.c	/^void exit_handler(int signum)	\/\/entered on SIGINT,  SIGTERM & SIGQUIT$/;"	f
+filler	./noip2.c	/^	char	filler;$/;"	m	struct:CONFIG	file:
+firewallbox	./noip2.c	/^int	firewallbox		=	0;$/;"	v
+force_update	./noip2.c	/^int force_update()$/;"	f
+forceyes	./noip2.c	/^int	forceyes		=	0;$/;"	v
+fqdn	./noip2.c	/^        char    *fqdn;$/;"	m	struct:NAMES	file:
+func	./noip2.c	/^        int     (*func)(char *);$/;"	m	struct:SETTINGS	file:
+get_all_device_names	./noip2.c	/^int get_all_device_names(char *devs)$/;"	f
+get_credentials	./noip2.c	/^void get_credentials(char *l, char *p)$/;"	f
+get_device_name	./noip2.c	/^void get_device_name(char *d)$/;"	f
+get_one_config	./noip2.c	/^void get_one_config(char *name)$/;"	f
+get_our_visible_IPaddr	./noip2.c	/^void get_our_visible_IPaddr(char *dest)$/;"	f
+get_shm_info	./noip2.c	/^int get_shm_info()$/;"	f
+get_update_selection	./noip2.c	/^int get_update_selection(int tgrp, int thst)$/;"	f
+get_version	./noip2.c	/^char *get_version(unsigned char z)$/;"	f
+get_xml_field	./noip2.c	/^int get_xml_field(char *name, char *line, char *dest)$/;"	f
+getip	./noip2.c	/^void getip(char *p, char *device)$/;"	f
+glink	./noip2.c	/^        struct  GROUPS *glink;$/;"	m	struct:GROUPS	typeref:struct:GROUPS::GROUPS	file:
+groups	./noip2.c	/^} *groups = NULL;$/;"	v	typeref:struct:GROUPS
+grp	./noip2.c	/^        char    *grp;$/;"	m	struct:GROUPS	file:
+handle_config_error	./noip2.c	/^int handle_config_error(int err_code)$/;"	f
+handle_dynup_error	./noip2.c	/^int handle_dynup_error(int error_code)$/;"	f
+hosts	./noip2.c	/^int hosts(char *p)$/;"	f
+iface	./noip2.c	/^char	iface[MAX_DEVLEN];$/;"	v
+ignore	./noip2.c	/^int ignore(char *p)$/;"	f
+instance	./noip2.c	/^	struct INSTANCE instance[MAX_INSTANCE];$/;"	m	struct:SHARED	typeref:struct:SHARED::INSTANCE	file:
+interval	./noip2.c	/^	short	interval;$/;"	m	struct:INSTANCE	file:
+interval	./noip2.c	/^	ushort	interval;	\/\/ don't move this (see display_current_config)$/;"	m	struct:CONFIG	file:
+interval	./noip2.c	/^int	interval		=	0;$/;"	v
+keyword	./noip2.c	/^        char    *keyword;$/;"	m	struct:SETTINGS	file:
+kill_proc	./noip2.c	/^int	kill_proc		=	0;$/;"	v
+lastIP	./noip2.c	/^	char	lastIP[IPLEN];$/;"	m	struct:CONFIG	file:
+len	./noip2.c	/^        int     len;$/;"	m	struct:SETTINGS	file:
+link	./noip2.c	/^        struct  NAMES *link;$/;"	m	struct:NAMES	typeref:struct:NAMES::NAMES	file:
+log2syslog	./noip2.c	/^int	log2syslog		= 	0;$/;"	v
+login	./noip2.c	/^char	login[LINELEN];$/;"	v
+magic	./noip2.c	/^	uint	magic;$/;"	m	struct:CONFIG	file:
+main	./noip2.c	/^int main(int argc, char *argv[])$/;"	f
+multiple_instances	./noip2.c	/^int	multiple_instances	=	0;$/;"	v
+my_instance	./noip2.c	/^} *my_instance = NULL;$/;"	v	typeref:struct:INSTANCE
+nat	./noip2.c	/^	char	nat;$/;"	m	struct:CONFIG	file:
+nat	./noip2.c	/^int	nat			=	0;$/;"	v
+ncount	./noip2.c	/^	int	ncount;$/;"	m	struct:GROUPS	file:
+needs_conf	./noip2.c	/^int	needs_conf 		=	0;$/;"	v
+new_config	./noip2.c	/^} *new_config = NULL;$/;"	v	typeref:struct:CONFIG
+nlink	./noip2.c	/^        struct  NAMES *nlink;$/;"	m	struct:GROUPS	typeref:struct:GROUPS::NAMES	file:
+ns	./noip2.c	/^} *ns = NULL;$/;"	v	typeref:struct:NAMES
+offset	./noip2.c	/^int     offset                  =       0;$/;"	v
+ourname	./noip2.c	/^char	*ourname		=	NULL;$/;"	v
+parse_config	./noip2.c	/^int parse_config()$/;"	f
+password	./noip2.c	/^char	password[LINELEN];$/;"	v
+pid	./noip2.c	/^	int	pid;$/;"	m	struct:INSTANCE	file:
+pid_path	./noip2.c	/^char	*pid_path		=	NULL;$/;"	v
+port_to_use	./noip2.c	/^int	port_to_use		=	CLIENT_IP_PORT;$/;"	v
+process_options	./noip2.c	/^void process_options(int argc, char *argv[])$/;"	f
+program	./noip2.c	/^char	*program		=	NULL;$/;"	v
+prompt_for_executable	./noip2.c	/^int	prompt_for_executable	=	1;$/;"	v
+put_version	./noip2.c	/^char put_version(char *ver)$/;"	f
+reqnum	./noip2.c	/^int	reqnum			=	0;$/;"	v
+request	./noip2.c	/^char	*request		=	NULL;$/;"	v
+requests	./noip2.c	/^	char	requests[0];$/;"	m	struct:CONFIG	file:
+restart	./redhat.noip.sh	/^restart() {$/;"	f
+rlength	./noip2.c	/^	ushort	rlength;$/;"	m	struct:CONFIG	file:
+run_as_background	./noip2.c	/^int run_as_background()$/;"	f
+save_IP	./noip2.c	/^void save_IP()$/;"	f
+saved_args	./noip2.c	/^char	saved_args[LINELEN];$/;"	v
+settings	./noip2.c	/^} settings[] = {$/;"	v	typeref:struct:SETTINGS
+shared	./noip2.c	/^} *shared = NULL;$/;"	v	typeref:struct:SHARED
+shm_dump_active	./noip2.c	/^int	shm_dump_active		=	0;$/;"	v
+shmaddr	./noip2.c	/^void	*shmaddr		=	NULL;$/;"	v
+shmid	./noip2.c	/^int	shmid			=	0;$/;"	v
+show_config	./noip2.c	/^int	show_config		=	0;$/;"	v
+sig	./noip2.c	/^struct	sigaction sig;$/;"	v	typeref:struct:sigaction
+sigchld_handler	./noip2.c	/^void sigchld_handler(int signum)	\/\/entered on death of child (SIGCHLD)$/;"	f
+socket_fd	./noip2.c	/^int	socket_fd		=	-1;$/;"	v
+start	./gentoo.noip2.sh	/^start() {$/;"	f
+start	./redhat.noip.sh	/^start() {$/;"	f
+stop	./gentoo.noip2.sh	/^stop() {$/;"	f
+stop	./redhat.noip.sh	/^stop() {$/;"	f
+supplied_executable	./noip2.c	/^char	*supplied_executable	=	NULL;$/;"	v
+supplied_password	./noip2.c	/^char	*supplied_password	=	NULL;$/;"	v
+supplied_username	./noip2.c	/^char	*supplied_username	=	NULL;$/;"	v
+timed_out	./noip2.c	/^int	timed_out		=	0;$/;"	v
+tmp_filename	./noip2.c	/^char	tmp_filename[LINELEN]	=	"\/tmp\/NO-IPXXXXXX";$/;"	v
+update_cycle	./noip2.c	/^int	update_cycle		=	0;$/;"	v
+update_handler	./noip2.c	/^void update_handler(int signum)	\/\/ entered on SIGUSR2$/;"	f
+url_decode	./noip2.c	/^char url_decode(char *p)$/;"	f
+url_encode	./noip2.c	/^void url_encode(char *p_in, char *p_out)$/;"	f
+use	./noip2.c	/^	int	use;$/;"	m	struct:GROUPS	file:
+use	./noip2.c	/^        int     use;$/;"	m	struct:NAMES	file:
+validate_IP_addr	./noip2.c	/^int validate_IP_addr(char *src, char *dest)$/;"	f
+validate_name	./noip2.c	/^int validate_name(int flag, char *name)$/;"	f
+version	./noip2.c	/^	char	version;$/;"	m	struct:INSTANCE	file:
+wake_handler	./noip2.c	/^void wake_handler(int signum)	\/\/entered on SIGUSR1$/;"	f
+xmlerr	./noip2.c	/^int xmlerr(char *p)$/;"	f
+yesno	./noip2.c	/^int yesno(char *fmt, ...)$/;"	f

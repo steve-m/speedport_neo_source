@@ -1,0 +1,55 @@
+{
+    "car": {
+        "doors": {
+            "left": "red", 
+            "right": "blue"
+        }, 
+        "engine": "flintstones-like", 
+        "seats": {
+            "back": "plastic", 
+            "front": "leather"
+        }, 
+        "wheels": [
+            "front-left", 
+            "front-right", 
+            "rear-left", 
+            "rear-right"
+        ]
+    }, 
+    "road": "asphalt", 
+    "temp": "34", 
+    "unknown-stuff": {
+        "immortal": "is anyone actually", 
+        "problem": "P =? NP", 
+        "the weather": "tomorrow"
+    }, 
+    "world": {
+        "countries": [
+            {
+                "name": "Latvia", 
+                "population": "2"
+            }, 
+            {
+                "name": "Lithuania", 
+                "population": "3"
+            }, 
+            {
+                "name": "Germany", 
+                "population": "81"
+            }
+        ], 
+        "dangers": [
+            [
+                "earthquake", 
+                "volcano eruption", 
+                "ice age", 
+                "the Sun explodes", 
+                "out of toilet paper"
+            ], 
+            [
+                "martian invasion", 
+                "cats take over the world"
+            ]
+        ]
+    }
+}

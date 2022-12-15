@@ -1,0 +1,16 @@
+Input:
+{"group":{"other":{"dsc":"some dsc","enable":true,"sensors":["i2c.PVG","fiejwoi",{"a":"b"}]},"default":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]}}}
+Saving 'sensors' from 'other': OK
+Saving 'sensors' from 'default': OK
+Trying to delete 'sensors' from 'other': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true},"default":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]}}}
+Trying to insert 'sensors' from 'default' to 'other': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]},"default":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]}}}
+Trying to delete 'sensors' from 'default': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]},"default":{"dsc":"some dsc","enable":true}}}
+Trying to insert 'sensors' from 'other' to 'default': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]},"default":{"dsc":"some dsc","enable":true,"sensors":["i2c.PVG","fiejwoi",{"a":"b"}]}}}

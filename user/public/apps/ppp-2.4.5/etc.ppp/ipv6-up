@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# This script is called with the following parameters:
+# interface tty speed local-address remote-address ipparam
+#
+
+
+# Start router advertisements on this link.
+# Based on radvd 0.5.0 behaviour
+
+DEVICE=$1
+echo "PPPoE: IPv6 up" > /dev/console
+echo 2 > /proc/sys/net/ipv6/conf/$DEVICE/accept_ra
+#/usr/sbin/rc dhcp6c restart &
+#/usr/sbin/rc firewall6 start wan&
+
+# Using "rc_app" instead of "rc" is in order to send 
+# RS within 1 second after IPv6CP session ok.
+/usr/sbin/rc_app rsdvd start&
+#/usr/sbin/ip6_autod $DEVICE &
+
+#if [ $ACCOUNT != "public" ]; then
+#/usr/sbin/led_app on 20
+#fi

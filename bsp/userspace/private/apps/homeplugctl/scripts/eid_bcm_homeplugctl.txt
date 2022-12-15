@@ -1,0 +1,6 @@
+BEGIN
+  eid         = EID_HOMEPLUGCTL
+  name        = homeplugctl
+  flags       = EIF_MDM|EIF_MESSAGING_CAPABLE
+END
+

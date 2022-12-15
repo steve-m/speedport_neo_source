@@ -1,0 +1,19 @@
+libipsc
+=======
+
+Fatless Inter Process/System Communication library
+
+
+Features
+--------
+
+* Clean, not overloaded API
+* Epoll
+* Unix sockets for local communications
+* TLS support
+
+
+Documentation
+-------------
+
+The code for now.

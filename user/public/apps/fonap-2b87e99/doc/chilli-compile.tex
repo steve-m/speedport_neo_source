@@ -1,0 +1,148 @@
+A short description, and some additional comments, for the available
+compile time options. List also found here:
+\href{http://www.coova.org/CoovaChilli/Building}{http://www.coova.org/CoovaChilli/Building}.
+
+\begin{longtable}{lp{5.5in}}
+
+\textbf{Option} & \textbf{Description} \\\hline\\[-12px]
+
+\compileopt{disable-chilliquery}{Disable support for the
+  \texttt{chilli\_query} utility.}
+
+\compileopt{disable-leakybucket}{Disable use of leaky bucket rate
+  shaping.}
+
+\comments{1}{You will likely keep this enabled (do not disable).}
+
+\compileopt{disable-json}{Disable support for JSON support}
+        
+\comments{1}{Support is required to use the Ajax JSON client}
+
+\compileopt{disable-sessgarden}{Disable support for session-based
+  walled garden}
+        
+\comments{1}{Allows for session based white listing}
+
+\compileopt{disable-ieee8021q}{Disable support for IEEE 802.1Q (VLAN
+  tagging on dhcpif interface)}
+        
+\comments{1}{802.1Q VLAN support allows chilli to handle multiple VLAN
+  networks with one server instance.}
+
+\compileopt{enable-chillixml}{Enable support for a chilli status XML}
+
+\compileopt{enable-proxyvsa}{Enable support for VSA attribute proxy}
+        
+\comments{1}{ This is a new option that will allow chilli to ``learn''
+    certain attributes from other access controllers (Cisco, Aruba,
+    etc).}
+
+\compileopt{enable-dnslog}{Enable support for the logging of all DNS
+  requests}
+
+\compileopt{enable-ipwhitelist}{Enable support for the use of a binary
+  list of IP addresses to allow in walled garden}
+
+\compileopt{enable-uamdomainfile}{Enable support for DNS-based white listing based on regular expressions}
+
+\compileopt{enable-redirdnsreq}{Enable support for the automatic DNS request for all non-allowed hostnames}
+
+\comments{1}{This will help ensure that DNS-based walled garden resources are always available}
+
+\compileopt{enable-largelimits}{Enable larger limits for use with
+  non-embedded systems. Bigger memory usage for more users}
+        
+\comments{1}{ This option for building chilli for use on full-sized
+    machines that don't have limited memory.  }
+
+\compileopt{enable-binstatusfile}{Enable support for binary status
+  file. The status bin file saves and restores session state}
+        
+\comments{1}{ Enables support for keeping a binary status
+    file. Chilli will write the session states to the file. It can
+    then read this file on start-up and return all sessions to their
+    former state!}
+
+\compileopt{enable-statusfile}{Enable support for status file. The
+  status file is informational only}
+        
+\comments{1}{ This option enabled a non-binary status file (that is
+  never loaded). It is for informational purposes. }
+
+\compileopt{enable-chilliproxy}{Enable support for HTTP AAA
+  Proxy. Required for uamaaaurl}
+        
+\comments{1}{ This option will have the program \texttt{chilli\_proxy} built
+    which is used by chilli to proxy RADIUS to HTTP requests.}
+
+\compileopt{enable-chilliradsec}{Enable support for RadSec AAA
+  Proxy. Required SSL support}
+        
+\comments{1}{ This will enable support for building the
+  \texttt{chilli\_radsec} program, which requires also SSL support. }
+
+\compileopt{enable-chilliredir}{Enable support for redir
+  server. Required for uamregex}
+        
+\comments{1}{ This enables support for building the
+  \texttt{chilli\_redir} program which chilli launches to handle all
+  ``redirections'' instead of handling them in the main chilli
+  loop. Required for \textbf{uamregex} option.}
+
+\compileopt{enable-chilliscript}{Enable support for building a setuid helper utility}
+
+\compileopt{enable-miniportal}{Enable support Coova
+  miniportal. Includes a simple haserl captive portal}
+        
+\comments{1}{ This option includes the ``embedded portal'' files into
+  the build.}
+
+\compileopt{enable-miniconfig}{Enable support a minimal configuration system}
+
+\compileopt{enable-modules}{Enable support for dynamically loadable modules}
+
+\compileopt{enable-ssdp}{Enable support for unicasting Simple Service Discovery Protocol (SSDP) broadcasts to authorized clients}
+
+\compileopt{enable-cluster}{Enable support for clustering (experimental)}
+
+\compileopt{enable-layer3}{Enable support for Layer3 only (experimental)}
+
+\compileopt{enable-netnat}{Enable net interface nat (experimental)}
+
+\compileopt{with-openssl}{Enable support for OpenSSL. Required for
+  radsec, redirssl, or uamuissl}
+
+\compileopt{with-matrixssl}{Enable support for MatrixSSL. Required for
+  radsec, redirssl, or uamuissl}
+
+\compileopt{with-nfqueue}{Enable support for Netfilter\_queue}
+
+\compileopt{with-nfcoova}{Enable support for coova kernel module}
+        
+\comments{1}{The above two options are experimental and enable
+    chilli for use with a kernel module. The second one is for using
+    the coova kernel module.}
+
+\compileopt{with-pcap}{Enable support for pcap}
+        
+\comments{1}{An alternative to using the raw sockets in chilli. }
+
+\compileopt{with-curl}{Enable support for curl (optional and used with
+  --enable-chilliproxy}
+        
+\comments{1}{An anternate HTTP client to use with HTTP AAA API} 
+
+\compileopt{with-mmap}{Enable support for mmap (experimental)}
+
+\compileopt{with-poll}{Enable support for poll (epoll is auto-detected
+  and used if available)}
+        
+\compileopt{with-ipc-msg}{Enable support for msgsnd/msgrcv SV IPC}
+
+\comments{1}{ This will return chilli to using SV IPC "messages" for
+  inter-process communication. \texttt{chilli} now uses UNIX sockets
+  per default since it was found to be better performance and requires
+  less kernel support.}
+
+\end{longtable}
+

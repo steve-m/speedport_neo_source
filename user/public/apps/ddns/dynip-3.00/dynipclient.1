@@ -1,0 +1,68 @@
+.TH dynipclient 1 "DynIP Client" "June 15, 1998" \" -*- nroff -*- 
+.SH NAME
+dynipclient \- DynIP Client 
+.SH SYNOPSIS
+\fBdynipclient\fP [\fB\-k\fP] 
+[\fB\-n\fP] [\fB\-f\fP <\fIconfiguration file\fP>]
+.SH DESCRIPTION
+.I DynIP(sm)
+is a Dynamic IP Management System which allows internet hosts with dynamic IP
+addresses, such as dial-up users, to have a permanent static Internet Name.
+.B dynipclient
+informs the 
+.I DynIP
+server of your current dynamic IP address and activates
+your registered Internet Name. In order to use the
+.B dynipclient
+program you must first register a valid Internet Name using the
+.B dynipadmin
+Internet Name Administration Program. The
+.B dynipclient
+program silently runs in the background and periodically sends a
+keep alive packet to the DynIP server. When you want to disconnect
+from the Internet, you must run the 
+.B dynipclient
+program with the 
+.B -k
+option. This informs the DynIP server that you
+are disconnecting from the Internet and that your current IP address
+for your Internet Name is no longer valid. It also causes the 
+.B dynipclient
+program that is running in the background to terminate.
+.SS OPTIONS
+.TP
+.B "\-n"
+Do not print any error or warning messages to the tty, but continue to log them
+in the system log (SYSLOG).
+.TP
+.B "\-k"
+Terminate the
+.B dynipclient
+program that is running in the background and inform the DynIP
+server that we are disconnecting from the Internet.
+.TP
+.B "\-f"
+Specify an alternate location for the configuration file. This parameter
+must be followed by a complete path specification, including the filename.
+.SH FILES
+.TP
+dynipclient.pid
+The process ID of the dynipclient program while running in the background. The default  directory
+can be modified by adding the entry 'ClientPIDdirectory="/newdirectory"'
+to the 
+.B dynip.cfg 
+file. If you leave this entry blank, no process ID file
+is written.
+.TP
+dynip.cfg	The DynIP Client configuration file
+.SH NOTES
+You do not need to run the
+.B dynipclient
+program if you have registered an Internet Name that points to a static
+IP address (i.e., when the ``ip address'' parameter was specified on the
+.B dynipadmin
+command-line).
+.SH SEE ALSO
+dynipadmin(1)
+.br
+DynIP, a division of CanWeb Internet Services Ltd.

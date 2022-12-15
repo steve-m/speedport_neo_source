@@ -1,0 +1,23 @@
+From 3de10a23d612faab722d9a2558455d6e92287b1c Mon Sep 17 00:00:00 2001
+From: Cedric Jehasse <cedric.jehasse@softathome.com>
+Date: Wed, 26 Sep 2012 09:53:07 +0200
+CSP 712401: [PATCH] Add patch to define SFD_CLOEXEC correctly on mips.
+
+--- a/include/sys/signalfd.h
++++ b/include/sys/signalfd.h
+@@ -63,7 +63,14 @@ enum
+     SFD_NONBLOCK = 04
+ # define SFD_NONBLOCK SFD_NONBLOCK
+   };
+-
++#elif defined __mips__
++enum
++  {
++    SFD_CLOEXEC = 02000000,
++# define SFD_CLOEXEC SFD_CLOEXEC
++    SFD_NONBLOCK = 0200
++# define SFD_NONBLOCK SFD_NONBLOCK
++  };
+ #else
+ enum
+   {

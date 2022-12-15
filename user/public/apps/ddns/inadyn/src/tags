@@ -1,0 +1,492 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BASE_64_H_INCLUDED	./base64.h	35;"	d
+BOOL	./os.h	/^    typedef int BOOL;$/;"	t
+BOOL	./os.h	33;"	d
+CMD_DATA	./get_cmd.h	/^} CMD_DATA;$/;"	t	typeref:struct:__anon21
+CMD_DESCRIPTION_TYPE	./get_cmd.h	/^} CMD_DESCRIPTION_TYPE;$/;"	t	typeref:struct:__anon23
+CMD_OPTION_HANDLER_FUNC	./get_cmd.h	/^typedef RC_TYPE (*CMD_OPTION_HANDLER_FUNC)(CMD_DATA *p_cmd, int current_nr, void *p_context);$/;"	t
+CMD_OPTION_HANDLER_TYPE	./get_cmd.h	/^} CMD_OPTION_HANDLER_TYPE;$/;"	t	typeref:struct:__anon22
+CMD_STOP	./dyndns.h	/^	CMD_STOP = 1$/;"	e	enum:__anon5
+COMMENT	./inadyn_cmd.c	/^    COMMENT,$/;"	e	enum:__anon18	file:
+CUSTOM_HTTP_BASIC_AUTH	./dyndns.h	/^	CUSTOM_HTTP_BASIC_AUTH,$/;"	e	enum:__anon1
+DATA	./inadyn_cmd.c	/^    DATA,$/;"	e	enum:__anon18	file:
+DBG_DEST	./os.h	/^} DBG_DEST;$/;"	t	typeref:enum:__anon17
+DBG_FILE_LOG	./os.h	/^    DBG_FILE_LOG \/*file output*\/$/;"	e	enum:__anon17
+DBG_PRINTF	./debug_if.h	56;"	d
+DBG_PRINTF	./debug_if.h	63;"	d
+DBG_STD_LOG	./os.h	/^    DBG_STD_LOG, \/*stdout*\/$/;"	e	enum:__anon17
+DBG_SYS_LOG	./os.h	/^    DBG_SYS_LOG, \/*syslog, for Unix only*\/$/;"	e	enum:__anon17
+DBG_TYPE	./debug_if.h	/^} DBG_TYPE;$/;"	t	typeref:struct:__anon20
+DNS_SYSTEM_REQUEST_FUNC	./dyndns.h	/^typedef int (*DNS_SYSTEM_REQUEST_FUNC)(struct _DYN_DNS_CLIENT *this, int nr, struct DYNDNS_SYSTEM *p_sys_info);$/;"	t
+DNS_SYSTEM_SRV_RESPONSE_OK_FUNC	./dyndns.h	/^typedef int (*DNS_SYSTEM_SRV_RESPONSE_OK_FUNC)(struct _DYN_DNS_CLIENT *this, char *p_rsp, const char*p_ok_str);$/;"	t
+DYNDNS_AGENT_NAME	./dyndns.h	29;"	d
+DYNDNS_ALIAS_INFO	./dyndns.h	/^} DYNDNS_ALIAS_INFO;$/;"	t	typeref:struct:__anon10
+DYNDNS_ALL_DIGITS	./dyndns.h	64;"	d
+DYNDNS_CREDENTIALS	./dyndns.h	/^} DYNDNS_CREDENTIALS;$/;"	t	typeref:struct:__anon7
+DYNDNS_CUSTOM	./dyndns.h	/^    DYNDNS_CUSTOM,$/;"	e	enum:__anon1
+DYNDNS_DEFAULT	./dyndns.h	/^    DYNDNS_DEFAULT,$/;"	e	enum:__anon1
+DYNDNS_DEFAULT_CMD_CHECK_PERIOD	./dyndns.h	132;"	d
+DYNDNS_DEFAULT_CONFIG_FILE	./dyndns.h	47;"	d
+DYNDNS_DEFAULT_DEBUG_LEVEL	./dyndns.h	46;"	d
+DYNDNS_DEFAULT_ITERATIONS	./dyndns.h	133;"	d
+DYNDNS_DEFAULT_SLEEP	./dyndns.h	128;"	d
+DYNDNS_DYNAMIC	./dyndns.h	/^    DYNDNS_DYNAMIC,$/;"	e	enum:__anon1
+DYNDNS_EMAIL_ADDR	./dyndns.h	30;"	d
+DYNDNS_GET_MY_IP_HTTP_REQUEST	./dyndns.h	75;"	d
+DYNDNS_GET_MY_IP_HTTP_REQUEST_FORMAT	./dyndns.h	79;"	d
+DYNDNS_HASH_STRING_MAX_LENGTH	./dyndns.h	144;"	d
+DYNDNS_HASH_TYPE	./dyndns.h	/^} DYNDNS_HASH_TYPE;$/;"	t	typeref:struct:__anon6
+DYNDNS_HTTP_PORT	./dyndns.h	57;"	d
+DYNDNS_HTTP_REQUEST_BUFFER_SIZE	./dyndns.h	135;"	d
+DYNDNS_HTTP_RESPONSE_BUFFER_SIZE	./dyndns.h	134;"	d
+DYNDNS_INFO_TYPE	./dyndns.h	/^} DYNDNS_INFO_TYPE;$/;"	t	typeref:struct:__anon9
+DYNDNS_INPUT_FILE_OPT_STRING	./inadyn_cmd.c	43;"	d	file:
+DYNDNS_IP_ADDR_FORMAT	./dyndns.h	63;"	d
+DYNDNS_IP_SERVER_RESPONSE_BEGIN	./dyndns.h	62;"	d
+DYNDNS_MAX_ALIAS_NUMBER	./dyndns.h	136;"	d
+DYNDNS_MAX_SLEEP	./dyndns.h	130;"	d
+DYNDNS_MIN_SLEEP	./dyndns.h	129;"	d
+DYNDNS_MY_DNS_SERVER	./dyndns.h	53;"	d
+DYNDNS_MY_DNS_SERVER_URL	./dyndns.h	54;"	d
+DYNDNS_MY_DNS_SYSTEM	./dyndns.h	72;"	d
+DYNDNS_MY_FORCED_UPDATE_PERIOD_S	./dyndns.h	131;"	d
+DYNDNS_MY_HOST_NAME_1	./dyndns.h	55;"	d
+DYNDNS_MY_HOST_NAME_2	./dyndns.h	56;"	d
+DYNDNS_MY_IP_ADDRESS_LENGTH	./dyndns.h	139;"	d
+DYNDNS_MY_IP_SERVER	./dyndns.h	51;"	d
+DYNDNS_MY_IP_SERVER_URL	./dyndns.h	52;"	d
+DYNDNS_MY_PASSWD	./dyndns.h	50;"	d
+DYNDNS_MY_PASSWORD_LENGTH	./dyndns.h	141;"	d
+DYNDNS_MY_USERNAME	./dyndns.h	49;"	d
+DYNDNS_MY_USERNAME_LENGTH	./dyndns.h	140;"	d
+DYNDNS_OK_NOCHANGE	./dyndns.h	124;"	d
+DYNDNS_OK_RESPONSE	./dyndns.h	123;"	d
+DYNDNS_ORG_SPECIFIC_DATA	./dyndns.h	/^} DYNDNS_ORG_SPECIFIC_DATA;$/;"	t	typeref:struct:__anon4
+DYNDNS_SERVER_NAME	./dyndns.h	/^} DYNDNS_SERVER_NAME;$/;"	t	typeref:struct:__anon8
+DYNDNS_SERVER_NAME_LENGTH	./dyndns.h	142;"	d
+DYNDNS_SERVER_URL_LENGTH	./dyndns.h	143;"	d
+DYNDNS_STATIC	./dyndns.h	/^    DYNDNS_STATIC,$/;"	e	enum:__anon1
+DYNDNS_SYSTEM	./dyndns.h	/^}DYNDNS_SYSTEM;$/;"	t	typeref:struct:__anon2
+DYNDNS_SYSTEM_CUSTOM	./dyndns.h	67;"	d
+DYNDNS_SYSTEM_DYNAMIC	./dyndns.h	68;"	d
+DYNDNS_SYSTEM_ID	./dyndns.h	/^} DYNDNS_SYSTEM_ID;$/;"	t	typeref:enum:__anon1
+DYNDNS_SYSTEM_INFO	./dyndns.h	/^} DYNDNS_SYSTEM_INFO;$/;"	t	typeref:struct:__anon3
+DYNDNS_SYSTEM_STATIC	./dyndns.h	69;"	d
+DYNDNS_VERSION_STRING	./dyndns.h	28;"	d
+DYN_DNS_CLIENT	./dyndns.h	/^typedef struct DYN_DNS_CLIENT$/;"	s
+DYN_DNS_CLIENT	./dyndns.h	/^} DYN_DNS_CLIENT;$/;"	t	typeref:struct:DYN_DNS_CLIENT
+DYN_DNS_CMD	./dyndns.h	/^} DYN_DNS_CMD;$/;"	t	typeref:enum:__anon5
+ERROR_NAME	./errorcode.c	/^} ERROR_NAME;$/;"	t	typeref:struct:__anon26	file:
+ESCAPE	./inadyn_cmd.c	/^    ESCAPE$/;"	e	enum:__anon18	file:
+FALSE	./os.h	89;"	d
+FAR	./os.h	73;"	d
+FAR	./psos_net.h	32;"	d
+FREEDNS_AFRAID_ORG_DEFAULT	./dyndns.h	/^    FREEDNS_AFRAID_ORG_DEFAULT,$/;"	e	enum:__anon1
+FREEDNS_UPDATE_MY_IP_REQUEST_FORMAT	./dyndns.h	94;"	d
+GENERIC_DNS_BASIC_AUTH_MY_IP_REQUEST_FORMAT	./dyndns.h	108;"	d
+GENERIC_DNS_IP_SERVER_NAME	./dyndns.h	71;"	d
+GENERIC_NOIP_AUTH_MY_IP_REQUEST_FORMAT	./dyndns.h	115;"	d
+HAVE_OS_BOOL	./os.h	34;"	d
+HAVE_OS_BOOL	./os.h	45;"	d
+HAVE_OS_SYSLOG	./os.h	53;"	d
+HOSTENT	./os.h	/^    typedef struct hostent HOSTENT;$/;"	t	typeref:struct:hostent
+HOSTENT	./psos_net.h	/^    } HOSTENT;$/;"	t	typeref:struct:hostent
+HTTP_CLIENT	./http_client.h	/^} HTTP_CLIENT;$/;"	t	typeref:struct:__anon27
+HTTP_DEFAULT_PORT	./http_client.h	32;"	d
+HTTP_DEFAULT_TIMEOUT	./http_client.h	31;"	d
+HTTP_TRANSACTION	./http_client.h	/^} HTTP_TRANSACTION;$/;"	t	typeref:struct:__anon28
+IP_DEFAULT_READ_CHUNK_SIZE	./ip.h	31;"	d
+IP_DEFAULT_TIMEOUT	./ip.h	29;"	d
+IP_SOCKET	./ip.h	/^} IP_SOCKET;$/;"	t	typeref:struct:__anon25
+IP_SOCKET_MAX_PORT	./ip.h	30;"	d
+IP_TYPES	./ip.h	/^} IP_TYPES;$/;"	t	typeref:enum:__anon24
+IP_V4_IP_ADDR_FORMAT	./os.h	102;"	d
+IP_V4_MAX_LENGTH	./dyndns.h	145;"	d
+LAST_DNS_SYSTEM	./dyndns.h	/^    LAST_DNS_SYSTEM = -1$/;"	e	enum:__anon1
+LAST_SIGNAL	./os.h	/^		LAST_SIGNAL = -1$/;"	e	enum:__anon12
+LOG_ALERT	./os.h	107;"	d
+LOG_CRIT	./os.h	108;"	d
+LOG_DEBUG	./os.h	113;"	d
+LOG_EMERG	./os.h	106;"	d
+LOG_ERR	./os.h	109;"	d
+LOG_INFO	./os.h	112;"	d
+LOG_NOTICE	./os.h	111;"	d
+LOG_WARNING	./os.h	110;"	d
+MAXSTRING	./os.c	88;"	d	file:
+MODULE_TAG	./dyndns.c	35;"	d	file:
+MODULE_TAG	./get_cmd.c	27;"	d	file:
+MODULE_TAG	./inadyn_cmd.c	31;"	d	file:
+MODULE_TAG	./ip.c	18;"	d	file:
+MODULE_TAG	./main.c	40;"	d	file:
+MODULE_TAG	./os_unix.c	19;"	d	file:
+MODULE_TAG	./os_windows.c	19;"	d	file:
+NEW_LINE	./inadyn_cmd.c	/^    NEW_LINE,$/;"	e	enum:__anon18	file:
+NOIP_DEFAULT	./dyndns.h	/^	NOIP_DEFAULT,	$/;"	e	enum:__anon1
+NO_CMD	./dyndns.h	/^	NO_CMD = 0,$/;"	e	enum:__anon5
+OPTION_FILE_PARSER	./inadyn_cmd.c	/^} OPTION_FILE_PARSER;$/;"	t	typeref:struct:__anon19	file:
+OS_CTRL_BREAK_SIGNAL	./os.h	/^		OS_CTRL_BREAK_SIGNAL = 2,	$/;"	e	enum:__anon12
+OS_CTRL_CLOSE_SIGNAL	./os.h	/^		OS_CTRL_CLOSE_SIGNAL = 1,$/;"	e	enum:__anon12
+OS_CTRL_C_SIGNAL	./os.h	/^		OS_CTRL_C_SIGNAL = 0,$/;"	e	enum:__anon12
+OS_CTRL_LOGOFF_SIGNAL	./os.h	/^		OS_CTRL_LOGOFF_SIGNAL = 3,$/;"	e	enum:__anon12
+OS_CTRL_SHUTDOWN_SIGNAL	./os.h	/^		OS_CTRL_SHUTDOWN_SIGNAL = 4,$/;"	e	enum:__anon12
+OS_DEF_OK	./os.h	26;"	d
+OS_DEF_OK	./os.h	30;"	d
+OS_DEF_OK	./os.h	31;"	d
+OS_DEF_OK	./os.h	39;"	d
+OS_DEF_OK	./os.h	40;"	d
+OS_EVENT_TYPE	./os_windows.c	/^} OS_EVENT_TYPE;$/;"	t	typeref:struct:__anon32	file:
+OS_SIGNALS	./os.h	/^} OS_SIGNALS;$/;"	t	typeref:enum:__anon12
+OS_SIGNAL_HANDLER_FUNC	./os.h	/^typedef int (*OS_SIGNAL_HANDLER_FUNC) (OS_SIGNAL_TYPE, void*);$/;"	t
+OS_SIGNAL_HANDLER_TYPE	./os.h	/^} OS_SIGNAL_HANDLER_TYPE;$/;"	t	typeref:struct:__anon14
+OS_SIGNAL_TYPE	./os.h	/^} OS_SIGNAL_TYPE;$/;"	t	typeref:struct:__anon13
+OS_THREAD_TYPE	./os.h	/^} OS_THREAD_TYPE;$/;"	t	typeref:struct:__anon16
+OS_USER_INFO	./os.h	/^} OS_USER_INFO;$/;"	t	typeref:struct:__anon15
+PARSER_STATE	./inadyn_cmd.c	/^} PARSER_STATE;$/;"	t	typeref:enum:__anon18	file:
+PSOS_OS	./os.h	41;"	d
+RC_CMD_PARSER_INVALID_OPTION	./errorcode.h	/^	RC_CMD_PARSER_INVALID_OPTION = 0x50,$/;"	e	enum:__anon31
+RC_CMD_PARSER_INVALID_OPTION_ARGUMENT	./errorcode.h	/^	RC_CMD_PARSER_INVALID_OPTION_ARGUMENT = 0x51,$/;"	e	enum:__anon31
+RC_DYNDNS_BUFFER_TOO_SMALL	./errorcode.h	/^	RC_DYNDNS_BUFFER_TOO_SMALL = 0x40,$/;"	e	enum:__anon31
+RC_DYNDNS_INVALID_DNS_SYSTEM_DEFAULT	./errorcode.h	/^    RC_DYNDNS_INVALID_DNS_SYSTEM_DEFAULT = 0x47,$/;"	e	enum:__anon31
+RC_DYNDNS_INVALID_IP_ADDR_IN_HTTP_RESPONSE	./errorcode.h	/^	RC_DYNDNS_INVALID_IP_ADDR_IN_HTTP_RESPONSE = 0x41,$/;"	e	enum:__anon31
+RC_DYNDNS_INVALID_OPTION	./errorcode.h	/^	RC_DYNDNS_INVALID_OPTION = 0x44,$/;"	e	enum:__anon31
+RC_DYNDNS_INVALID_OR_MISSING_PARAMETERS	./errorcode.h	/^	RC_DYNDNS_INVALID_OR_MISSING_PARAMETERS = 0x45,$/;"	e	enum:__anon31
+RC_DYNDNS_INVALID_RSP_FROM_IP_SERVER	./errorcode.h	/^	RC_DYNDNS_INVALID_RSP_FROM_IP_SERVER = 0x42,$/;"	e	enum:__anon31
+RC_DYNDNS_RSP_NOTOK	./errorcode.h	/^    RC_DYNDNS_RSP_NOTOK = 0x48,$/;"	e	enum:__anon31
+RC_DYNDNS_TOO_MANY_ALIASES	./errorcode.h	/^	RC_DYNDNS_TOO_MANY_ALIASES = 0x43,$/;"	e	enum:__anon31
+RC_DYNDNS_UNRESOLVED_ALIAS	./errorcode.h	/^	RC_DYNDNS_UNRESOLVED_ALIAS = 0x46,$/;"	e	enum:__anon31
+RC_ERROR	./errorcode.h	/^	RC_ERROR = 1,$/;"	e	enum:__anon31
+RC_FILE_IO_OPEN_ERROR	./errorcode.h	/^    RC_FILE_IO_OPEN_ERROR = 0x70,$/;"	e	enum:__anon31
+RC_FILE_IO_OUT_OF_BUFFER	./errorcode.h	/^	RC_FILE_IO_OUT_OF_BUFFER = 0x72$/;"	e	enum:__anon31
+RC_FILE_IO_READ_ERROR	./errorcode.h	/^    RC_FILE_IO_READ_ERROR = 0x71,$/;"	e	enum:__anon31
+RC_HTTP_BAD_PARAMETER	./errorcode.h	/^	RC_HTTP_BAD_PARAMETER = 0x31,$/;"	e	enum:__anon31
+RC_HTTP_OBJECT_NOT_INITIALIZED	./errorcode.h	/^	RC_HTTP_OBJECT_NOT_INITIALIZED = 0x30,$/;"	e	enum:__anon31
+RC_INVALID_POINTER	./errorcode.h	/^	RC_INVALID_POINTER = 2,$/;"	e	enum:__anon31
+RC_IP_BAD_PARAMETER	./errorcode.h	/^	RC_IP_BAD_PARAMETER = 0x11,$/;"	e	enum:__anon31
+RC_IP_CONNECT_FAILED	./errorcode.h	/^	RC_IP_CONNECT_FAILED = 0x13,$/;"	e	enum:__anon31
+RC_IP_INVALID_REMOTE_ADDR	./errorcode.h	/^	RC_IP_INVALID_REMOTE_ADDR = 0x12,$/;"	e	enum:__anon31
+RC_IP_OBJECT_NOT_INITIALIZED	./errorcode.h	/^	RC_IP_OBJECT_NOT_INITIALIZED = 0x16,$/;"	e	enum:__anon31
+RC_IP_OS_SOCKET_INIT_FAILED	./errorcode.h	/^	RC_IP_OS_SOCKET_INIT_FAILED = 0x17,$/;"	e	enum:__anon31
+RC_IP_RECV_ERROR	./errorcode.h	/^	RC_IP_RECV_ERROR = 0x15,$/;"	e	enum:__anon31
+RC_IP_SEND_ERROR	./errorcode.h	/^	RC_IP_SEND_ERROR = 0x14,$/;"	e	enum:__anon31
+RC_IP_SOCKET_CREATE_ERROR	./errorcode.h	/^	RC_IP_SOCKET_CREATE_ERROR = 0x10,$/;"	e	enum:__anon31
+RC_OK	./errorcode.h	/^	RC_OK = 0,$/;"	e	enum:__anon31
+RC_OS_CHANGE_PERSONA_FAILURE	./errorcode.h	/^	RC_OS_CHANGE_PERSONA_FAILURE = 0x63,$/;"	e	enum:__anon31
+RC_OS_ERROR_INSTALLING_SIGNAL_HANDLER	./errorcode.h	/^	RC_OS_ERROR_INSTALLING_SIGNAL_HANDLER = 0x60,$/;"	e	enum:__anon31
+RC_OS_FORK_FAILURE	./errorcode.h	/^    RC_OS_FORK_FAILURE = 0x62,$/;"	e	enum:__anon31
+RC_OS_INVALID_IP_ADDRESS	./errorcode.h	/^    RC_OS_INVALID_IP_ADDRESS = 0x61,$/;"	e	enum:__anon31
+RC_OUT_BUFFER_OVERFLOW	./errorcode.h	/^	RC_OUT_BUFFER_OVERFLOW = 4,$/;"	e	enum:__anon31
+RC_OUT_OF_MEMORY	./errorcode.h	/^	RC_OUT_OF_MEMORY = 3,$/;"	e	enum:__anon31
+RC_TCP_OBJECT_NOT_INITIALIZED	./errorcode.h	/^	RC_TCP_OBJECT_NOT_INITIALIZED = 0x20,$/;"	e	enum:__anon31
+RC_TYPE	./errorcode.h	/^} RC_TYPE;$/;"	t	typeref:enum:__anon31
+SOCKET	./os.h	/^    typedef int SOCKET;$/;"	t
+SOCKET	./psos_net.h	/^    typedef int SOCKET;$/;"	t
+SOCKET_ERROR	./os.h	100;"	d
+SPACE	./inadyn_cmd.c	/^    SPACE,$/;"	e	enum:__anon18	file:
+TCP_CLIENT_SOCKET	./tcp.h	/^} TCP_CLIENT_SOCKET;$/;"	t	typeref:struct:__anon30
+TCP_DEFAULT_TIMEOUT	./tcp.h	31;"	d
+TCP_SOCKET	./tcp.h	/^} TCP_SOCKET;$/;"	t	typeref:struct:__anon29
+TRUE	./os.h	90;"	d
+TYPE_TCP	./ip.h	/^	TYPE_TCP,$/;"	e	enum:__anon24
+TYPE_UDP	./ip.h	/^	TYPE_UDP$/;"	e	enum:__anon24
+UNIX_OS	./os.h	52;"	d
+USER_INFO	./dyndns.h	/^} USER_INFO;$/;"	t	typeref:struct:__anon11
+ZONE_EDIT_DEFAULT	./dyndns.h	/^	ZONE_EDIT_DEFAULT,$/;"	e	enum:__anon1
+_BMC_MOD_DEBUG	./debug_if.h	58;"	d
+_DEBUG_IF_INCLUDED	./debug_if.h	26;"	d
+_DYNDNS_INCLUDED	./dyndns.h	21;"	d
+_ERRORCODE_INCLUDED	./errorcode.h	21;"	d
+_GET_CMD_IF_INCLUDED	./get_cmd.h	29;"	d
+_HTTP_CLIENT_H_INCLUDED	./http_client.h	23;"	d
+_IP_H_INCLUDED	./ip.h	22;"	d
+_OS_H_INCLUDED	./os.h	20;"	d
+_PSOS_OS_H_INCLUDED	./psos_net.h	21;"	d
+_TCP_H_INCLUDED	./tcp.h	23;"	d
+__TIMESTAMP__	./os.h	78;"	d
+abort	./dyndns.h	/^	BOOL abort;$/;"	m	struct:DYN_DNS_CLIENT
+abort_on_network_errors	./dyndns.h	/^	BOOL abort_on_network_errors;$/;"	m	struct:DYN_DNS_CLIENT
+alias_info	./dyndns.h	/^	DYNDNS_ALIAS_INFO alias_info;$/;"	m	struct:DYN_DNS_CLIENT
+arg_nr	./get_cmd.h	/^	int arg_nr;$/;"	m	struct:__anon23
+argc	./get_cmd.h	/^    int argc;$/;"	m	struct:__anon21
+argv	./get_cmd.h	/^    char **argv;$/;"	m	struct:__anon21
+b64blocks	./base64utils.c	48;"	d	file:
+b64buffer	./base64utils.c	/^char *b64buffer(char *s, bool f)$/;"	f
+b64encode	./base64utils.c	/^char* b64encode(char *s)$/;"	f
+b64is7bit	./base64utils.c	47;"	d	file:
+b64octets	./base64utils.c	49;"	d	file:
+b64valid	./base64utils.c	/^bool b64valid(uchar *c)$/;"	f
+bool	./base64.h	/^	typedef int bool;$/;"	t
+change_persona	./dyndns.h	/^	BOOL change_persona;$/;"	m	struct:DYN_DNS_CLIENT
+close_console_window	./os_psos.c	/^RC_TYPE close_console_window(void)$/;"	f
+close_console_window	./os_unix.c	/^RC_TYPE close_console_window(void)$/;"	f
+close_console_window	./os_windows.c	/^RC_TYPE close_console_window(void)$/;"	f
+closesocket	./os.h	71;"	d
+closesocket	./psos_net.h	28;"	d
+cmd	./dyndns.h	/^	DYN_DNS_CMD cmd;$/;"	m	struct:DYN_DNS_CLIENT
+cmd_add_val	./get_cmd.c	/^RC_TYPE cmd_add_val(CMD_DATA *p_cmd, char *p_val)$/;"	f
+cmd_add_vals_from_argv	./get_cmd.c	/^RC_TYPE cmd_add_vals_from_argv(CMD_DATA *p_cmd, char **argv, int argc)$/;"	f
+cmd_check_period	./dyndns.h	/^	int cmd_check_period; \/*time to wait for a command*\/$/;"	m	struct:DYN_DNS_CLIENT
+cmd_destruct	./get_cmd.c	/^RC_TYPE cmd_destruct(CMD_DATA *p_cmd)$/;"	f
+cmd_init	./get_cmd.c	/^RC_TYPE cmd_init(CMD_DATA *p_cmd)$/;"	f
+cmd_options_table	./inadyn_cmd.c	/^static CMD_DESCRIPTION_TYPE cmd_options_table[] = $/;"	v	file:
+connect	./psos_net.h	29;"	d
+count	./dyndns.h	/^	int count;$/;"	m	struct:__anon10
+credentials	./dyndns.h	/^	DYNDNS_CREDENTIALS credentials;$/;"	m	struct:__anon9
+dbg	./dyndns.h	/^	DBG_TYPE dbg;$/;"	m	struct:DYN_DNS_CLIENT
+debug_to_syslog	./dyndns.h	/^	BOOL debug_to_syslog;$/;"	m	struct:DYN_DNS_CLIENT
+dns_system_table	./dyndns.c	/^DYNDNS_SYSTEM_INFO dns_system_table[] = $/;"	v
+do_check_alias_update_table	./dyndns.c	/^static RC_TYPE do_check_alias_update_table(DYN_DNS_CLIENT *p_self)$/;"	f	file:
+do_ip_server_transaction	./dyndns.c	/^static RC_TYPE do_ip_server_transaction(DYN_DNS_CLIENT *p_self)$/;"	f	file:
+do_parse_my_ip_address	./dyndns.c	/^static RC_TYPE do_parse_my_ip_address(DYN_DNS_CLIENT *p_self)$/;"	f	file:
+do_update_alias_table	./dyndns.c	/^static RC_TYPE do_update_alias_table(DYN_DNS_CLIENT *p_self)$/;"	f	file:
+dwCreateFlags	./os.h	/^	unsigned int dwCreateFlags;	$/;"	m	struct:__anon16
+dyn_dns_construct	./dyndns.c	/^RC_TYPE dyn_dns_construct(DYN_DNS_CLIENT **pp_self)$/;"	f
+dyn_dns_destruct	./dyndns.c	/^RC_TYPE dyn_dns_destruct(DYN_DNS_CLIENT *p_self)$/;"	f
+dyn_dns_init	./dyndns.c	/^RC_TYPE dyn_dns_init(DYN_DNS_CLIENT *p_self)$/;"	f
+dyn_dns_main	./dyndns.c	/^int dyn_dns_main(DYN_DNS_CLIENT *p_dyndns, int argc, char* argv[])$/;"	f
+dyn_dns_print_hello	./dyndns.c	/^void dyn_dns_print_hello(void*p)$/;"	f
+dyn_dns_shutdown	./dyndns.c	/^RC_TYPE dyn_dns_shutdown(DYN_DNS_CLIENT *p_self)$/;"	f
+dyn_dns_update_ip	./dyndns.c	/^RC_TYPE dyn_dns_update_ip(DYN_DNS_CLIENT *p_self)$/;"	f
+dyn_dns_wait_for_cmd	./dyndns.c	/^static RC_TYPE dyn_dns_wait_for_cmd(DYN_DNS_CLIENT *p_self)$/;"	f	file:
+dyndns_org_custom	./dyndns.c	/^DYNDNS_ORG_SPECIFIC_DATA dyndns_org_custom = {"custom"};$/;"	v
+dyndns_org_dynamic	./dyndns.c	/^DYNDNS_ORG_SPECIFIC_DATA dyndns_org_dynamic = {"dyndns"};$/;"	v
+dyndns_org_static	./dyndns.c	/^DYNDNS_ORG_SPECIFIC_DATA dyndns_org_static = {"statdns"};$/;"	v
+dyndns_server_name	./dyndns.h	/^	DYNDNS_SERVER_NAME dyndns_server_name;$/;"	m	struct:__anon9
+dyndns_server_url	./dyndns.h	/^	char dyndns_server_url[DYNDNS_SERVER_URL_LENGTH];$/;"	m	struct:__anon9
+dyndns_win32_signal_handler_func	./os_windows.c	/^static int dyndns_win32_signal_handler_func(OS_SIGNAL_TYPE signal, void *p_in)$/;"	f	file:
+encoded	./dyndns.h	/^	BOOL encoded;$/;"	m	struct:__anon7
+errorcode_get_name	./errorcode.c	/^const char* errorcode_get_name(RC_TYPE rc)$/;"	f
+false	./base64.h	40;"	d
+force_addr_update	./dyndns.h	/^	BOOL force_addr_update;$/;"	m	struct:DYN_DNS_CLIENT
+forced_update_period_sec	./dyndns.h	/^	int forced_update_period_sec; $/;"	m	struct:DYN_DNS_CLIENT
+forced_update_times	./dyndns.h	/^	int forced_update_times; \/* the same forced update period counted in sleep periods*\/$/;"	m	struct:DYN_DNS_CLIENT
+get_alias_handler	./inadyn_cmd.c	/^static RC_TYPE get_alias_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_cmd_parse_data	./get_cmd.c	/^RC_TYPE get_cmd_parse_data(char **argv, int argc, CMD_DESCRIPTION_TYPE *p_cmd_descr)$/;"	f
+get_config_data	./inadyn_cmd.c	/^RC_TYPE get_config_data(DYN_DNS_CLIENT *p_self, int argc, char** argv)$/;"	f
+get_dbg_dest	./os.c	/^DBG_DEST get_dbg_dest(void)$/;"	f
+get_default_config_data	./dyndns.c	/^RC_TYPE get_default_config_data(DYN_DNS_CLIENT *p_self)$/;"	f
+get_dns_server_name_handler	./inadyn_cmd.c	/^static RC_TYPE get_dns_server_name_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_dns_server_url_handler	./inadyn_cmd.c	/^RC_TYPE get_dns_server_url_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f
+get_dns_system_by_id	./dyndns.c	/^static DYNDNS_SYSTEM* get_dns_system_by_id(DYNDNS_SYSTEM_ID id)$/;"	f	file:
+get_dyndns_system_handler	./inadyn_cmd.c	/^static RC_TYPE get_dyndns_system_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_dyndns_system_table	./dyndns.c	/^DYNDNS_SYSTEM_INFO* get_dyndns_system_table(void)$/;"	f
+get_encoded_user_passwd	./dyndns.c	/^static RC_TYPE get_encoded_user_passwd(DYN_DNS_CLIENT *p_self)$/;"	f	file:
+get_forced_update_period_handler	./inadyn_cmd.c	/^static RC_TYPE get_forced_update_period_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_ip_server_name_handler	./inadyn_cmd.c	/^static RC_TYPE get_ip_server_name_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_logfile_name	./inadyn_cmd.c	/^static RC_TYPE get_logfile_name(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_name_and_port	./inadyn_cmd.c	/^static RC_TYPE get_name_and_port(char *p_src, char *p_dest_name, int *p_dest_port)$/;"	f	file:
+get_options_from_file_handler	./inadyn_cmd.c	/^static RC_TYPE get_options_from_file_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_password_handler	./inadyn_cmd.c	/^static RC_TYPE get_password_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_proxy_server_handler	./inadyn_cmd.c	/^static RC_TYPE get_proxy_server_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_req_for_dyndns_server	./dyndns.c	/^static int get_req_for_dyndns_server(DYN_DNS_CLIENT *p_self, int cnt,DYNDNS_SYSTEM *p_sys_info)$/;"	f	file:
+get_req_for_freedns_server	./dyndns.c	/^static int get_req_for_freedns_server(DYN_DNS_CLIENT *p_self, int cnt, DYNDNS_SYSTEM *p_sys_info)$/;"	f	file:
+get_req_for_generic_http_dns_server	./dyndns.c	/^static int get_req_for_generic_http_dns_server(DYN_DNS_CLIENT *p_self, int cnt, DYNDNS_SYSTEM *p_sys_info)$/;"	f	file:
+get_req_for_ip_server	./dyndns.c	/^static int get_req_for_ip_server(DYN_DNS_CLIENT *p_self, void *p_specific_data)$/;"	f	file:
+get_req_for_noip_http_dns_server	./dyndns.c	/^static int get_req_for_noip_http_dns_server(DYN_DNS_CLIENT *p_self, int cnt,  DYNDNS_SYSTEM *p_sys_info)$/;"	f	file:
+get_update_period_handler	./inadyn_cmd.c	/^static RC_TYPE get_update_period_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_update_period_sec_handler	./inadyn_cmd.c	/^static RC_TYPE get_update_period_sec_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+get_username_handler	./inadyn_cmd.c	/^static RC_TYPE get_username_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+gethostbyname	./os_psos.c	/^struct hostent FAR *gethostbyname(const char FAR *name )$/;"	f
+gid	./dyndns.h	/^	int gid;$/;"	m	struct:__anon11
+gid	./os.h	/^	int gid;$/;"	m	struct:__anon15
+global_error_table	./errorcode.c	/^static const ERROR_NAME global_error_table[]  =$/;"	v	file:
+global_mod_dbg_dest	./os.c	/^static DBG_DEST global_mod_dbg_dest = DBG_STD_LOG;$/;"	v	file:
+global_os_handler	./os_windows.c	/^    static OS_SIGNAL_HANDLER_TYPE global_os_handler = { NULL, NULL};$/;"	v	file:
+global_p_signal_handler_param	./os_unix.c	/^static void *global_p_signal_handler_param = NULL;$/;"	v	file:
+h_addr_list	./psos_net.h	/^      char FAR * FAR * h_addr_list;$/;"	m	struct:hostent
+h_addrtype	./psos_net.h	/^      short            h_addrtype;$/;"	m	struct:hostent
+h_aliases	./psos_net.h	/^      char FAR * FAR * h_aliases;$/;"	m	struct:hostent
+h_length	./psos_net.h	/^      short            h_length;$/;"	m	struct:hostent
+h_name	./psos_net.h	/^      char FAR *       h_name;$/;"	m	struct:hostent
+hashes	./dyndns.h	/^	DYNDNS_HASH_TYPE hashes[DYNDNS_MAX_ALIAS_NUMBER]; $/;"	m	struct:__anon10
+help_handler	./inadyn_cmd.c	/^static RC_TYPE help_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+hostent	./psos_net.h	/^    typedef struct hostent {$/;"	s
+http_client_construct	./http_client.c	/^RC_TYPE http_client_construct(HTTP_CLIENT *p_self)$/;"	f
+http_client_destruct	./http_client.c	/^RC_TYPE http_client_destruct(HTTP_CLIENT *p_self)$/;"	f
+http_client_get_port	./http_client.c	/^RC_TYPE http_client_get_port(HTTP_CLIENT *p_self, int *p)$/;"	f
+http_client_get_remote_name	./http_client.c	/^RC_TYPE http_client_get_remote_name(HTTP_CLIENT *p_self, const char* *p)$/;"	f
+http_client_get_remote_timeout	./http_client.c	/^RC_TYPE http_client_get_remote_timeout(HTTP_CLIENT *p_self, int *p)$/;"	f
+http_client_init	./http_client.c	/^RC_TYPE http_client_init(HTTP_CLIENT *p_self)$/;"	f
+http_client_set_port	./http_client.c	/^RC_TYPE http_client_set_port(HTTP_CLIENT *p_self, int p)$/;"	f
+http_client_set_remote_name	./http_client.c	/^RC_TYPE http_client_set_remote_name(HTTP_CLIENT *p_self, const char* p)$/;"	f
+http_client_set_remote_timeout	./http_client.c	/^RC_TYPE http_client_set_remote_timeout(HTTP_CLIENT *p_self, int p)$/;"	f
+http_client_shutdown	./http_client.c	/^RC_TYPE http_client_shutdown(HTTP_CLIENT *p_self)$/;"	f
+http_client_transaction	./http_client.c	/^RC_TYPE http_client_transaction(HTTP_CLIENT *p_self, HTTP_TRANSACTION *p_tr )$/;"	f
+http_to_dyndns	./dyndns.h	/^	HTTP_CLIENT http_to_dyndns;$/;"	m	struct:DYN_DNS_CLIENT
+http_to_ip_server	./dyndns.h	/^	HTTP_CLIENT http_to_ip_server;$/;"	m	struct:DYN_DNS_CLIENT
+http_tr	./dyndns.h	/^	HTTP_TRANSACTION http_tr;$/;"	m	struct:DYN_DNS_CLIENT
+id	./dyndns.h	/^    DYNDNS_SYSTEM_ID id;$/;"	m	struct:__anon3
+inadyn_main	./main.c	/^int inadyn_main(int argc, char* argv[])$/;"	f
+info	./dyndns.h	/^	DYNDNS_INFO_TYPE info; \/*servers, names, passwd*\/$/;"	m	struct:DYN_DNS_CLIENT
+initialized	./dyndns.h	/^	BOOL initialized;$/;"	m	struct:DYN_DNS_CLIENT
+initialized	./http_client.h	/^	BOOL initialized;$/;"	m	struct:__anon27
+initialized	./ip.h	/^	BOOL initialized;$/;"	m	struct:__anon25
+initialized	./tcp.h	/^	BOOL initialized;$/;"	m	struct:__anon29
+ip_construct	./ip.c	/^RC_TYPE ip_construct(IP_SOCKET *p_self)$/;"	f
+ip_destruct	./ip.c	/^RC_TYPE ip_destruct(IP_SOCKET *p_self)$/;"	f
+ip_get_port	./ip.c	/^RC_TYPE ip_get_port(IP_SOCKET *p_self, int *p_port)$/;"	f
+ip_get_remote_name	./ip.c	/^RC_TYPE ip_get_remote_name(IP_SOCKET *p_self, const char* *p)$/;"	f
+ip_get_remote_timeout	./ip.c	/^RC_TYPE ip_get_remote_timeout(IP_SOCKET *p_self, int *p)$/;"	f
+ip_initialize	./ip.c	/^RC_TYPE ip_initialize(IP_SOCKET *p_self)$/;"	f
+ip_recv	./ip.c	/^RC_TYPE ip_recv(IP_SOCKET *p_self, char *p_buf, int max_recv_len, int *p_recv_len)$/;"	f
+ip_send	./ip.c	/^RC_TYPE ip_send(IP_SOCKET *p_self, const char *p_buf, int len)$/;"	f
+ip_server_name	./dyndns.h	/^	DYNDNS_SERVER_NAME ip_server_name;$/;"	m	struct:__anon9
+ip_server_url	./dyndns.h	/^	char ip_server_url[DYNDNS_SERVER_URL_LENGTH];$/;"	m	struct:__anon9
+ip_set_port	./ip.c	/^RC_TYPE ip_set_port(IP_SOCKET *p_self, int p)$/;"	f
+ip_set_remote_name	./ip.c	/^RC_TYPE ip_set_remote_name(IP_SOCKET *p_self, const char* p)$/;"	f
+ip_set_remote_timeout	./ip.c	/^RC_TYPE ip_set_remote_timeout(IP_SOCKET *p_self, int t)$/;"	f
+ip_shutdown	./ip.c	/^RC_TYPE ip_shutdown(IP_SOCKET *p_self)$/;"	f
+is_dyndns_server_rsp_ok	./dyndns.c	/^static BOOL is_dyndns_server_rsp_ok( DYN_DNS_CLIENT *p_self, char*p_rsp, char* p_ok_string)$/;"	f	file:
+is_freedns_server_rsp_ok	./dyndns.c	/^static BOOL is_freedns_server_rsp_ok( DYN_DNS_CLIENT *p_self, char*p_rsp, char* p_ok_string)$/;"	f	file:
+is_generic_server_rsp_ok	./dyndns.c	/^static BOOL is_generic_server_rsp_ok( DYN_DNS_CLIENT *p_self, char*p_rsp, char* p_ok_string)$/;"	f	file:
+is_zoneedit_server_rsp_ok	./dyndns.c	/^BOOL is_zoneedit_server_rsp_ok( DYN_DNS_CLIENT *p_self, char*p_rsp, char* p_ok_string)$/;"	f
+level	./debug_if.h	/^	int level;$/;"	m	struct:__anon20
+local_set_params	./http_client.c	/^static RC_TYPE local_set_params(HTTP_CLIENT *p_self)$/;"	f	file:
+local_set_params	./tcp.c	/^static RC_TYPE local_set_params(TCP_SOCKET *p_self)$/;"	f	file:
+main	./os_unix.c	/^int main(int argc, char* argv[])$/;"	f
+main	./os_windows.c	/^int main(int argc, char* argv[])$/;"	f
+max_rsp_len	./http_client.h	/^	int max_rsp_len;$/;"	m	struct:__anon28
+my_ip_address	./dyndns.h	/^	DYNDNS_SERVER_NAME my_ip_address;$/;"	m	struct:__anon9
+my_ip_has_changed	./dyndns.h	/^    BOOL my_ip_has_changed;$/;"	m	struct:__anon9
+my_password	./dyndns.h	/^	char my_password[DYNDNS_MY_PASSWORD_LENGTH];$/;"	m	struct:__anon7
+my_username	./dyndns.h	/^	char my_username[DYNDNS_MY_USERNAME_LENGTH];$/;"	m	struct:__anon7
+nStackSize	./os.h	/^	unsigned int nStackSize;$/;"	m	struct:__anon16
+name	./dyndns.h	/^	char name[DYNDNS_SERVER_NAME_LENGTH];$/;"	m	struct:__anon8
+names	./dyndns.h	/^	DYNDNS_SERVER_NAME names[DYNDNS_MAX_ALIAS_NUMBER];$/;"	m	struct:__anon10
+opt_search	./get_cmd.c	/^static CMD_DESCRIPTION_TYPE * opt_search(CMD_DESCRIPTION_TYPE *p_table, char *p_opt)$/;"	f	file:
+original	./os_windows.c	/^    DWORD	original;$/;"	m	struct:__anon32	file:
+os_change_persona	./os_psos.c	/^RC_TYPE os_change_persona(OS_USER_INFO *p_usr_info)$/;"	f
+os_change_persona	./os_unix.c	/^RC_TYPE os_change_persona(OS_USER_INFO *p_usr_info)$/;"	f
+os_change_persona	./os_windows.c	/^RC_TYPE os_change_persona(OS_USER_INFO *p_usr_info)$/;"	f
+os_close_dbg_output	./os.c	/^RC_TYPE os_close_dbg_output(void)$/;"	f
+os_convert_ip_to_inet_addr	./os.c	/^RC_TYPE os_convert_ip_to_inet_addr(unsigned long *p_addr, const char *p_name)$/;"	f
+os_events_table	./os_windows.c	/^static const OS_EVENT_TYPE os_events_table [] =$/;"	v	file:
+os_get_inet_addr	./os_windows.c	/^static unsigned long os_get_inet_addr(char* addr)$/;"	f	file:
+os_get_socket_error	./os_psos.c	/^	int  os_get_socket_error (void)$/;"	f
+os_get_socket_error	./os_unix.c	/^int  os_get_socket_error (void)$/;"	f
+os_get_socket_error	./os_windows.c	/^int  os_get_socket_error (void)$/;"	f
+os_install_signal_handler	./os_psos.c	/^RC_TYPE os_install_signal_handler(void* p_dyndns)$/;"	f
+os_install_signal_handler	./os_unix.c	/^RC_TYPE os_install_signal_handler(void *p_dyndns)$/;"	f
+os_install_signal_handler	./os_windows.c	/^RC_TYPE os_install_signal_handler(void *p_dyndns)$/;"	f
+os_ip_support_cleanup	./os_psos.c	/^	RC_TYPE os_ip_support_cleanup(void)$/;"	f
+os_ip_support_cleanup	./os_unix.c	/^RC_TYPE os_ip_support_cleanup(void)$/;"	f
+os_ip_support_cleanup	./os_windows.c	/^RC_TYPE os_ip_support_cleanup(void)$/;"	f
+os_ip_support_startup	./os_psos.c	/^	RC_TYPE os_ip_support_startup(void)$/;"	f
+os_ip_support_startup	./os_unix.c	/^RC_TYPE os_ip_support_startup(void)$/;"	f
+os_ip_support_startup	./os_windows.c	/^RC_TYPE os_ip_support_startup(void)$/;"	f
+os_open_dbg_output	./os.c	/^RC_TYPE os_open_dbg_output(DBG_DEST dest, const char *p_prg_name, const char *p_logfile_name)$/;"	f
+os_printf	./os.c	/^void os_printf(int prio, char *fmt, ... )$/;"	f
+os_signal_wrapper_handler	./os_windows.c	/^static BOOL WINAPI os_signal_wrapper_handler( DWORD dwCtrlType)$/;"	f	file:
+os_sleep_ms	./os_psos.c	/^	void os_sleep_ms(int ms)$/;"	f
+os_sleep_ms	./os_unix.c	/^void os_sleep_ms(int ms)$/;"	f
+os_sleep_ms	./os_windows.c	/^void os_sleep_ms(int ms)$/;"	f
+os_syslog_close	./os_psos.c	/^RC_TYPE os_syslog_close(void)$/;"	f
+os_syslog_close	./os_unix.c	/^RC_TYPE os_syslog_close(void)$/;"	f
+os_syslog_close	./os_windows.c	/^RC_TYPE os_syslog_close(void)$/;"	f
+os_syslog_open	./os_psos.c	/^RC_TYPE os_syslog_open(const char *p_prg_name)$/;"	f
+os_syslog_open	./os_unix.c	/^RC_TYPE os_syslog_open(const char *p_prg_name)$/;"	f
+os_syslog_open	./os_windows.c	/^RC_TYPE os_syslog_open(const char *p_prg_name)$/;"	f
+pBase64	./base64utils.c	/^uchar   pBase64[]   =   {                   \/* table.*\/$/;"	v	file:
+pIndex	./base64utils.c	/^uchar  pIndex[]     =   {                   \/* and decoding table.*\/$/;"	v	file:
+p_context	./get_cmd.h	/^	void *p_context;$/;"	m	struct:__anon22
+p_description	./get_cmd.h	/^	char *p_description;$/;"	m	struct:__anon23
+p_dns_system	./dyndns.h	/^	DYNDNS_SYSTEM *p_dns_system;$/;"	m	struct:__anon9
+p_dns_update_req_func	./dyndns.h	/^    DNS_SYSTEM_REQUEST_FUNC p_dns_update_req_func;$/;"	m	struct:__anon2
+p_dyndns_server_name	./dyndns.h	/^    const char *p_dyndns_server_name;$/;"	m	struct:__anon2
+p_dyndns_server_url	./dyndns.h	/^	const char *p_dyndns_server_url;$/;"	m	struct:__anon2
+p_enc_usr_passwd_buffer	./dyndns.h	/^	char *p_enc_usr_passwd_buffer;$/;"	m	struct:__anon7
+p_file	./debug_if.h	/^	FILE *p_file;$/;"	m	struct:__anon20
+p_file	./inadyn_cmd.c	/^    FILE *p_file;$/;"	m	struct:__anon19	file:
+p_func	./get_cmd.h	/^	CMD_OPTION_HANDLER_FUNC p_func;$/;"	m	struct:__anon22
+p_func	./os.h	/^	OS_SIGNAL_HANDLER_FUNC p_func;$/;"	m	struct:__anon14
+p_func	./os.h	/^	void (*p_func) (void*);$/;"	m	struct:__anon16
+p_handler	./get_cmd.h	/^	CMD_OPTION_HANDLER_TYPE p_handler;	$/;"	m	struct:__anon23
+p_in_data	./os.h	/^	void *p_in_data;$/;"	m	struct:__anon13
+p_in_data	./os.h	/^	void *p_in_data;$/;"	m	struct:__anon14
+p_ip_server_name	./dyndns.h	/^    const char *p_ip_server_name;$/;"	m	struct:__anon2
+p_ip_server_url	./dyndns.h	/^	const char *p_ip_server_url;$/;"	m	struct:__anon2
+p_key	./dyndns.h	/^    const char* p_key;$/;"	m	struct:__anon2
+p_logfilename	./debug_if.h	/^	char p_logfilename[1024];$/;"	m	struct:__anon20
+p_name	./errorcode.c	/^	const char *p_name;$/;"	m	struct:__anon26	file:
+p_option	./get_cmd.h	/^	char *p_option;$/;"	m	struct:__anon23
+p_out_data	./os.h	/^	void *p_out_data;$/;"	m	struct:__anon13
+p_params	./os.h	/^	void *p_params;$/;"	m	struct:__anon16
+p_remote_host_name	./ip.h	/^	const char *p_remote_host_name;  $/;"	m	struct:__anon25
+p_req	./http_client.h	/^	char *p_req;$/;"	m	struct:__anon28
+p_req_buffer	./dyndns.h	/^	char *p_req_buffer; \/* for HTTP requests*\/$/;"	m	struct:DYN_DNS_CLIENT
+p_rsp	./http_client.h	/^	char *p_rsp;$/;"	m	struct:__anon28
+p_rsp_ok_func	./dyndns.h	/^    DNS_SYSTEM_SRV_RESPONSE_OK_FUNC p_rsp_ok_func;$/;"	m	struct:__anon2
+p_specific_data	./dyndns.h	/^    void* p_specific_data;$/;"	m	struct:__anon2
+p_success_string	./dyndns.h	/^	const char *p_success_string;$/;"	m	struct:__anon2
+p_system	./dyndns.h	/^    const char *p_system;$/;"	m	struct:__anon4
+p_work_buffer	./dyndns.h	/^	char *p_work_buffer; \/* for HTTP responses*\/$/;"	m	struct:DYN_DNS_CLIENT
+parser_init	./inadyn_cmd.c	/^static RC_TYPE parser_init(OPTION_FILE_PARSER *p_cfg, FILE *p_file)$/;"	f	file:
+parser_read_option	./inadyn_cmd.c	/^static RC_TYPE parser_read_option(OPTION_FILE_PARSER *p_cfg, char *p_buffer, int maxlen)$/;"	f	file:
+port	./dyndns.h	/^    int port;$/;"	m	struct:__anon8
+port	./ip.h	/^	unsigned short port;$/;"	m	struct:__anon25
+print_help_page	./inadyn_cmd.c	/^void print_help_page(void)$/;"	f
+print_version_handler	./inadyn_cmd.c	/^RC_TYPE print_version_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f
+priority	./os.h	/^	int priority;$/;"	m	struct:__anon16
+proxy_server_name	./dyndns.h	/^	DYNDNS_SERVER_NAME proxy_server_name;$/;"	m	struct:__anon9
+push_in_buffer	./inadyn_cmd.c	/^static RC_TYPE push_in_buffer(char* p_src, int src_len, char *p_buffer, int* p_act_len, int max_len)$/;"	f	file:
+rc	./errorcode.c	/^	RC_TYPE rc;$/;"	m	struct:__anon26	file:
+remote_addr	./ip.h	/^	struct sockaddr_in remote_addr;$/;"	m	struct:__anon25	typeref:struct:__anon25::sockaddr_in
+req_buffer_size	./dyndns.h	/^	int req_buffer_size;$/;"	m	struct:DYN_DNS_CLIENT
+req_len	./http_client.h	/^	int req_len;$/;"	m	struct:__anon28
+rsp_len	./http_client.h	/^	int rsp_len;$/;"	m	struct:__anon28
+run_in_background	./dyndns.h	/^	BOOL run_in_background;$/;"	m	struct:DYN_DNS_CLIENT
+set_change_persona_handler	./inadyn_cmd.c	/^static RC_TYPE set_change_persona_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+set_dbg_dest	./os.c	/^void set_dbg_dest(DBG_DEST dest)$/;"	f
+set_iterations_handler	./inadyn_cmd.c	/^static RC_TYPE set_iterations_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+set_silent_handler	./inadyn_cmd.c	/^static RC_TYPE set_silent_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+set_syslog_handler	./inadyn_cmd.c	/^static RC_TYPE set_syslog_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+set_verbose_handler	./inadyn_cmd.c	/^static RC_TYPE set_verbose_handler(CMD_DATA *p_cmd, int current_nr, void *p_context)$/;"	f	file:
+signal	./os.h	/^	OS_SIGNALS signal;$/;"	m	struct:__anon13
+size	./dyndns.h	/^	int size;$/;"	m	struct:__anon7
+sleep_sec	./dyndns.h	/^	int sleep_sec; \/* time between 2 updates*\/$/;"	m	struct:DYN_DNS_CLIENT
+socket	./ip.h	/^	SOCKET socket; $/;"	m	struct:__anon25
+state	./inadyn_cmd.c	/^    PARSER_STATE state;$/;"	m	struct:__anon19	file:
+status	./http_client.h	/^	int status;$/;"	m	struct:__anon28
+str	./dyndns.h	/^    char str[DYNDNS_HASH_STRING_MAX_LENGTH];$/;"	m	struct:__anon6
+super	./http_client.h	/^	TCP_SOCKET super;$/;"	m	struct:__anon27
+super	./tcp.h	/^	IP_SOCKET super;$/;"	m	struct:__anon29
+super	./tcp.h	/^	TCP_SOCKET super;$/;"	m	struct:__anon30
+super_construct	./http_client.c	23;"	d	file:
+super_destruct	./http_client.c	24;"	d	file:
+super_init	./http_client.c	25;"	d	file:
+super_shutdown	./http_client.c	26;"	d	file:
+sys_usr_info	./dyndns.h	/^	USER_INFO sys_usr_info; \/*info about the current account running inadyn*\/$/;"	m	struct:DYN_DNS_CLIENT
+system	./dyndns.h	/^    DYNDNS_SYSTEM system;$/;"	m	struct:__anon3
+tcp_construct	./tcp.c	/^RC_TYPE tcp_construct(TCP_SOCKET *p_self)$/;"	f
+tcp_destruct	./tcp.c	/^RC_TYPE tcp_destruct(TCP_SOCKET *p_self)$/;"	f
+tcp_get_port	./tcp.c	/^RC_TYPE tcp_get_port(TCP_SOCKET *p_self, int *p)$/;"	f
+tcp_get_remote_name	./tcp.c	/^RC_TYPE tcp_get_remote_name(TCP_SOCKET *p_self, const char* *p)$/;"	f
+tcp_get_remote_timeout	./tcp.c	/^RC_TYPE tcp_get_remote_timeout(TCP_SOCKET *p_self, int *p)$/;"	f
+tcp_initialize	./tcp.c	/^RC_TYPE tcp_initialize(TCP_SOCKET *p_self)$/;"	f
+tcp_recv	./tcp.c	/^RC_TYPE tcp_recv(TCP_SOCKET *p_self,char *p_buf, int max_recv_len, int *p_recv_len)$/;"	f
+tcp_send	./tcp.c	/^RC_TYPE tcp_send(TCP_SOCKET *p_self, const char *p_buf, int len)$/;"	f
+tcp_set_port	./tcp.c	/^RC_TYPE tcp_set_port(TCP_SOCKET *p_self, int p)$/;"	f
+tcp_set_remote_name	./tcp.c	/^RC_TYPE tcp_set_remote_name(TCP_SOCKET *p_self, const char* p)$/;"	f
+tcp_set_remote_timeout	./tcp.c	/^RC_TYPE tcp_set_remote_timeout(TCP_SOCKET *p_self, int p)$/;"	f
+tcp_shutdown	./tcp.c	/^RC_TYPE tcp_shutdown(TCP_SOCKET *p_self)$/;"	f
+timeout	./ip.h	/^	int timeout;$/;"	m	struct:__anon25
+times_since_last_update	./dyndns.h	/^	int times_since_last_update;$/;"	m	struct:DYN_DNS_CLIENT
+total_iterations	./dyndns.h	/^	int total_iterations;$/;"	m	struct:DYN_DNS_CLIENT
+translate_os_signal	./os_windows.c	/^static int translate_os_signal(DWORD in)$/;"	f	file:
+translated	./os_windows.c	/^    int		translated;$/;"	m	struct:__anon32	file:
+true	./base64.h	41;"	d
+type	./ip.h	/^	int type;$/;"	m	struct:__anon25
+uchar	./base64utils.c	/^char    uchar;                              \/* Define unsigned char as uchar.*\/$/;"	t	file:
+uid	./dyndns.h	/^	int uid;$/;"	m	struct:__anon11
+uid	./os.h	/^	int uid;$/;"	m	struct:__anon15
+uint	./base64utils.c	/^int     uint;                               \/* Define unsigned int as uint.*\/$/;"	t	file:
+unix_signal_handler	./os_unix.c	/^static void unix_signal_handler(int signo)$/;"	f	file:
+unknown_error	./errorcode.c	/^static const char* unknown_error = "Unknown error";$/;"	v	file:
+update_required	./dyndns.h	/^	int update_required[DYNDNS_MAX_ALIAS_NUMBER];$/;"	m	struct:__anon10
+use_proxy	./dyndns.h	/^    BOOL use_proxy;$/;"	m	struct:DYN_DNS_CLIENT
+verbose	./debug_if.h	/^	int verbose;$/;"	m	struct:__anon20
+work_buffer_size	./dyndns.h	/^	int work_buffer_size;$/;"	m	struct:DYN_DNS_CLIENT

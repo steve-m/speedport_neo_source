@@ -1,0 +1,297 @@
+FONSMCD DOC
+===========
+CPE Team <cpeteam@fon.com>
+v1.0, 2011-03
+
+[abstract]
+Legal notice
+------------
+This material contains information which is proprietary and confidential
+to Fon Wireless Ltd. It is not allowed to reproduce, copy, divulge or
+sell all or any part thereof without prior written consent of an
+authorized representative of Fon Wireless Ltd.
+
+Status Manager (fonsmcd)
+--------------------------
+
+The Status Manager is an application that connects periodically to Fon to
+notify that the CPE is online and at the same time, allow the CPE to detect
+whether the Fon servers are available. The notification message or heart beat
+packets (HBP) is formatted into a DNS request to make it lightweight and
+scalable. The payload is encrypted with a pre-shared key, unique to every CPE,
+in order to assure the identity of both ends of the communication.
+
+image:./images-fon/blockDiaIntro02.png["Block diagram",align="center",alt="Block diagram"]
+
+Description
+~~~~~~~~~~~
+
+The SM is the responsible to turn on and off the Fon functionality depending on
+whether the Fon servers are available. 
+
+. The Status Manager (SM) should be configured at run-time by a file called
+fonsmcd.conf. The SM behaviour is determined by the configuration values in
+that file. The fonsmcd.conf file, structured as a series of key and parameter
+pairings. An example follows:
+
+--------------------------------------------------
+suffix .sm.fon.com
+period_online 60
+period_offline 60
+rsapath "/etc/public_sm_rsa_key.pem"
+aespath "/etc/aes_key"
+host cthulhu.fon.com 54 UDP
+timeout 3000
+retries 3
+trigger 1 "true"  
+trigger 2 "true" 
+trigger online "online_script" 
+trigger offline "offline_script" 
+--------------------------------------------------
+
+. Not all in the file are currently used, however all pairings should be in the
+file to ensure the correct functioning of the SM
+
+. The Status Manager has 2 different states: Online and Off-line reflecting
+whether the Fon Service is available. The SM switches between Online and
+Offline based on the responses received or not from the Heart Beat server.
+
+. When the CPE boots, the Status Manager should assemble and send a HBP. If an
+Acknowledgement is received from FON servers then the SM should interpret this
+as there being full connectivity with the FON network and the SM should switch
+to an Online state by:
+
+.. Enabling the Public SSID of the CPE
+.. Enabling the Hot Spot Manager (HM) functionality
+.. Executing the program referred to in the trigger_offline parameter. This
+hook can be used by the developer to disable the HM
+
+. If an Failure is received from FON’s Heartbeat servers then the SM interprets
+this as there being no connectivity with the FON network and the SM switches to
+an Offline state by:
+
+.. Disabling the Public SSID
+.. Disabling the Hot Spot Manager (HM) functionality
+.. Executing the program referred to in the trigger_offline parameter. This
+hook can be used by the developer to disable the HM
+
+. When SM is in Online state, the SM sends a new HBP every period_online
+seconds. If an Acknowledgement is received then the SM stays in an Online
+state. If a Failure or Time-out occurs then the SM switches to an Offline state
+as specified above
+
+.. HBP should be sent periodically every period_online seconds as long as the
+heart beats receive a positive reply from the server within the time-out period
+
+. If the SM is in an Offline state then it should send a HBP periodically every
+period_offline seconds. If an Acknowledgement is received then the SM should
+switch to an Online state as specified in 4.6. Otherwise the SM should stay in
+an Offline State
+
+. When the SM sends a HBP, and a Failure is received, this will occur for three
+reasons:
+
+.. The MAC / Key combination not match and the FON server was unable to decode
+the heartbeat
+.. The HBP was incorrect or malformed
+.. The MAC / Key combination cannot be found in the database
+
+System implementation details
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+NOTE: This section is informative and provided for completion. 
+No details on this section are needed to port the fonsmcd client
+
+The status manager client, fonsmcd, is a daemon running in the CPE
+that periodically sends heartbeats to our server. The client is a
+daemon written using ANSI C. 
+
+This heartbeats are packed inside regular DNS queries, both to make the
+protocol lightweight, and to make it work even on partial network
+connectivity, as most firewalls do not block DNS queries. An added
+advantage is that even in the case of DNS queries being redirected to
+other DNS servers than our own, the query will get to it, due to the
+queries being replied - proxied - by the servers to the top most domain
+on the query, that happens to be sm.fon.com.
+
+The heartbeats are encrypted using an AES key 32 bytes long. The key is
+generated randomly and preloaded on the routers upon manufacturing
+them. The Status Manager Server uses this key both to decrypt the query
+coming from the router, and to encrypt the answer.
+
+The queries are then coded into a dns TXT query, by converting the query
+to base32, and adding to it the suffix .sm.fon.com. The query is sent to
+cthulhu.fon.com, the domain name of our balanced status manager servers.
+
+NOTE: The servers are not usable as regular DNS servers. Even as the 
+status manager server is implemented on top of the DNS
+infraestructure, the servers are not fully compliant DNS servers, and 
+any query that doesn't conform to the protocol described here, for example,
+a regular 'A' DNS query, will be rejected, being answered with SERVFAIL.
+
+Preshared key
+~~~~~~~~~~~~~
+
+The key used to encrypt the payload of the HB messages is random generated by
+the manufacturer.
+
+//////////////////////////
+Prior to shipping of the CPE to the end user, each CPE needs to have a FON Key
+inserted into it.  This is done to support the Status Manager in its
+communication with the Heart Beat server. There
+are two steps to this process.
+
+Generating the keys and pairing them to the MAC address of the CPE Inserting
+the key into the CPE.
+//////////////////////////
+
+Generating MAC / Keys Pairings
+++++++++++++++++++++++++++++++
+The encryption keys used are 256bits AES keys. These should be generated them
+using a random number generator, either hardware or software based. It is
+important that the key should be random and should not be able to be derived or
+calculated from knowing other data about the CPE, such as MAC, serial or
+similar. It is important that external users cannot access, extract or change
+the key.  This requirement prevents the risk of Denial of Service attacks on
+the FON network or allowing un- registered access to the FON Network.  Each key
+is paired to the MAC address of a specific CPE. The CPE manufacturer needs to
+share this information with FON so that is can be input into FONʼs servers
+prior to shipping of the device. This information is typically shared via a
+document that is emailed from the CPE manufacturer to FON.
+
+Inserting the Keys into the CPE
++++++++++++++++++++++++++++++++
+The keys need to be securely inserted into the CPE. The standard procedure that
+FON recommends for newly produced devices is to use part of the mother-board
+information region of the device to store this information, in a similar way
+that the MAC address or radio information are usually stored.  Most devices
+have room enough for this in that area.  If this is not possible, or if the key
+is to be inserted into an existing device are already produced devices, then a
+remote procedure can be used to insert the key.  In previous implementations,
+FON, the manufacturer of the device and the ISP have agreed to use DOCSYS/SNMP
+and TR-069 to do this. In this case, the manufacturer generates the keys and
+assigns one per MAC address. Then these MAC/key pairs are passed on both to FON
+and the ISP to transfer them to the devices using the selected protocol.
+
+Interface: Status Manager (fonsmcd) - Chilli
+-------------------------------------------
+
+The file fonsmcd.conf has configured the actions to do when the Status Manager
+changes from online to offline and vice versa.
+--------------------------------------------------
+trigger 1 "true"  
+trigger 2 "true" 
+trigger online "online_script" 
+trigger offline "offline_script" 
+--------------------------------------------------
+
+So Chilli can be started and stopped defining the triggers.  +   
+
+image:./images-fon/Fonsmcd_integration_block_diagram.png["Fonsmcd_integration_block_diagram",align="center",alt="Fonsmcd_integration_block_diagram"]
+
+IMPORTANT: The CPEM will be responsable to configure the trigger to drop the
+chilli and the public signal and to launch them when the Status Manager
+receives the reply from the Heart Beat.  Chilli will use a ready-up interface
+so it's important that the CPE configure the public signal up/down when
+corresponds. 
+
+Portability of fonsmcd
+----------------------
+The aproach on developing the client software was to make it run on a
+conventional computer with Debian GNU/Linux, so it can be easily debugged.
+Hence, it will be easily portable as well.
+
+Testing framework
+-----------------
+
+On a Debian 5.0 "Lenny" distribution, apart from the usual autoconf, automake,
+GNU make, GNU gcc and the rest of common tools on development, the next
+libraries should be installed (apt-get):
+
+  libdjbdns1, libdjbdns1-dev, libdaemon0, libdaemon-dev, openssl
+
+To compile, issue the usual configure && make sequence:
+------------------------------------
+  cd build
+  ../configure --enable-maintainer-mode --enable-debug --prefix=$(pwd)
+  make
+------------------------------------
+
+Debugging options ('enable-maintainer-mode', 'enable-debug')
+should be removed once included in the native toolchain.
+
+To try the software against the FON Server you should request access to the
+Heart Beat server contacting with FON.
+
+Dependencies
+------------
+
+djbdns client library
+~~~~~~~~~~~~~~~~~~~~~
+The djbdns client library by D.J. Bernstein http://cr.yp.to/djbdns.html
+
+The uClibc (c library used in La Fonera) doesn't implement any resolver
+function other than gethostbyname(), so I used this. The client library code
+was put on the public domain by Bernstein.
+
+Getting rid of the dependencies of djbdns and using other resolver library
+would be a medium effort.
+
+libdaemon
+~~~~~~~~~
+libdaemon is a lightweight C library that eases the writing of
+UNIX daemons, by Lennart Poettering
+ http://0pointer.de/lennart/projects/libdaemon/
+
+This library uses some mechanisms that are very UNIX-specific, and probably
+isn't needed in your OS. The code doesn't depend on it except for some
+initialization boilerplate.
+
+libfonrsa
+~~~~~~~~~
+This is a library made taking parts of axTLS (the bignum
+implementation), and a RIPMEMD160 implementation (used as the signature hash for
+upgrade files and not used by fonsmcd). The parts needed are already included
+in the distribution tarball.
+
+libc
+~~~~
+The code doesn't use any GNU libc specific functions, as it runs over uClibc on
+La Fonera, and on GNU libc on x86. If porting to a platform using newlib,
+differences between uClibc and newlib should be taken in account, probably the
+getopt() implementations.
+
+Part of the protocol code also uses an implementation of AES, and several base
+conversion routines, as the protocol uses base32 and base64 on queries and
+answers. This is also included in the source distribution tarball.  
+
+Source code overview
+--------------------
+
+On the fonsmcd distribution tarball, 'fonsmcd-<git hash>.tar.gz', apart from 
+the regular configure and autotools stuff, the source code can be divided as
+follows:
+
+-------------------
+ aes.h
+ aes.c           AES implementation
+ protocol.c      Protocol library
+ protocol.h
+
+ urandom.c       Some utility functions
+ urandom.h
+ log.h
+ log.c
+ poption.c
+ poption.h
+
+ base*.[ch]     Base converting routines
+ rmd160.c       Ripemd 160 implementation
+ rmd160.h
+ fonrsa.c       FONRSA bundle library
+ fonrsa.h
+ bigint.h       axTLS bigint implementation
+ bigint.c
+ bigint_impl.h
+ Makefile.am    Makefile template for automake
+-------------------

@@ -1,0 +1,24 @@
+Input:
+{"rfc":"list_show","T0":{"T1":[{"r":"none","qwe":["sdf","sdfsdg"]},{"r":"qwesdg"},{"r":"dsfsdgsd"},{"r":"sdsdgsdg"},{"r":"sdfsdsdf"}]},"aaa":"bbb"}
+next element: {"r":"none","qwe":["sdf","sdfsdg"]}
+value of 'r': none
+next element: {"r":"qwesdg"}
+value of 'r': qwesdg
+next element: {"r":"dsfsdgsd"}
+value of 'r': dsfsdgsd
+next element: {"r":"sdsdgsdg"}
+value of 'r': sdsdgsdg
+next element: {"r":"sdfsdsdf"}
+value of 'r': sdfsdsdf
+array 'T1':
+[{"r":"none","qwe":["sdf","sdfsdg"]},{"r":"qwesdg"},{"r":"dsfsdgsd"},{"r":"sdsdgsdg"},{"r":"sdfsdsdf"}]
+next element: {"r":"none","qwe":["sdf","sdfsdg"]}
+value of 'r': none
+next element: {"r":"qwesdg"}
+value of 'r': qwesdg
+next element: {"r":"dsfsdgsd"}
+value of 'r': dsfsdgsd
+next element: {"r":"sdsdgsdg"}
+value of 'r': sdsdgsdg
+next element: {"r":"sdfsdsdf"}
+value of 'r': sdfsdsdf

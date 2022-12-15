@@ -1,0 +1,55 @@
+[{
+	"vartype":"value",
+	"varid":"device_name",
+	"varvalue":"Speedport GRMC"
+},
+{
+	"vartype":"value",
+	"varid":"factorydefault",
+	"varvalue":"1"
+},
+{
+	"vartype":"value",
+	"varid":"rebooting",
+	"varvalue":"0"
+},
+{
+	"vartype":"value",
+	"varid":"router_state",
+	"varvalue":"Ok"
+},
+{
+	"vartype":"value",
+	"varid":"save_fails",
+	"varvalue":"0"
+},
+{
+	"vartype":"page_title",
+	"varid":"title",
+	"varvalue":"Speedport GRMC Konfigurationsprogramm"
+},
+{
+	"vartype":"option",
+	"varid":"askAssist",
+	"varvalue":"0"
+},
+{
+	"vartype":"option",
+	"varid":"dontstartAssist",
+	"varvalue":"0"
+},
+{
+	"vartype":"option",
+	"varid":"internetFinished",
+	"varvalue":"0"
+},
+{
+	"vartype":"option",
+	"varid":"phoneFinished",
+	"varvalue":"0"
+},
+{
+	"vartype":"option",
+	"varid":"wlanFinished",
+	"varvalue":"0"
+}]

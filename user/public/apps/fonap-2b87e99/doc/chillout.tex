@@ -1,0 +1,447 @@
+% Description of the FONERA L2TP implementation (Chillout)
+% This is a TeX source file. Convert to PDF using pdftex as follows:
+% pdftex fonucs_test_plan.tex
+% run twice generate index in the first pass and include it in
+%\input manmac
+% METAPOST mlgraphics
+%\input epsf
+%\input ifpdf.sty
+\input supp-pdf
+%\def\epsfbox#1{\hbox{\convertMPtoPDF{#1}{1}{1}}}
+
+%\input supp-mis.tex
+%\input supp-pdf.tex
+% fonts
+\font\disclaimerfont=cmr10 at 9truept
+\font\footsc=cmcsc10 at 8truept
+\font\footbf=cmbx10 at 8truept
+\font\footrm=cmr10 at 10truept
+\footline={\footsc The FONERA L2TP implementation (Chillout). \hfil\footrm\folio}
+\font\bigrm=cmr12 at 14pt
+\font\titlefont=cmssdc10 scaled\magstep4
+\font\sectfont=cmssdc10 scaled\magstep2
+\font\subsectfont=cmssdc10 scaled\magstep1
+\font\subsubsectfont=cmssdc10
+% TOC macros
+\newwrite\toc
+\openout\toc=\jobname.toc
+\def \tocsection[#1]#2{\line{#2 \dotfill #1}}
+\def \tocsubsection[#1]#2{\line{\quad#2 \dotfill #1}}
+\def \tocsubsubsection[#1]#2{\line{\qquad#2 \dotfill #1}}
+% Section title macros
+\def \title #1{\centerline{\titlefont #1}\bigskip}
+\def \section#1{\bigskip\par{\leftline{\sectfont#1}}\par\smallskip
+	\write\toc{\string\tocsection[\the\pageno]{#1}}}
+\def \subsection#1{\bigskip\par{\leftline{\subsectfont#1}}\par\smallskip
+	\write\toc{\string\tocsubsection[\the\pageno]{#1}}}
+\def \subsubsection#1{\smallskip\leftline{\subsubsectfont#1}
+	\write\toc{\string\tocsubsubsection[\the\pageno]{#1}}}
+% Document header
+\def \header#1.  #2.  #3.  #4. {
+\centerline{#1 \tt<#4>}\centerline{#2}\centerline{#3}}
+\def\\{\hfil\break}
+
+\outer\def\begindisplay{\obeylines\startdisplay}
+{\obeylines\gdef\startdisplay#1
+  {\catcode`\^^M=5$$#1\halign\bgroup\indent##\hfil&&\qquad##\hfil\cr}}
+\outer\def\enddisplay{\crcr\egroup$$}
+\chardef\other=12
+\def\ttverbatim{\begingroup \catcode`\\=\other \catcode`\{=\other
+  \catcode`\}=\other \catcode`\$=\other \catcode`\&=\other
+  \catcode`\#=\other \catcode`\%=\other \catcode`\~=\other
+  \catcode`\_=\other \catcode`\^=\other
+  \obeyspaces \obeylines \tt}
+{\obeyspaces\gdef {\ }} % \obeyspaces now gives \ , not \space
+\outer\def\begintt{$$\let\par=\endgraf \ttverbatim \parskip=0pt
+  \catcode`\|=0 \rightskip=-5pc \ttfinish}
+{\catcode`\|=0 |catcode`|\=\other % | is temporary escape character
+  |obeylines % end of line is active
+  |gdef|ttfinish#1^^M#2\endtt{#1|vbox{#2}|endgroup$$}}
+\catcode`\|=\active
+{\obeylines\gdef|{\ttverbatim\spaceskip=\ttglue\let^^M=\ \let|=\endgroup}}
+
+\title{The FONERA L2TP implementation (Chillout)}
+\header Pablo Mart\'\i{}n.  Department of Firmware Development.  FON
+Technology, Madrid, Spain.  pablo@fon.com.
+\begintt $Id$
+\endtt
+{\disclaimerfont
+This material contains information which is proprietary and confidential to
+Fon Wireless Ltd. It is not allowed to reproduce, copy, divulge or sell all
+or any part thereof without prior written consent of an authorized
+representative of Fon Wireless Ltd.}
+%\par
+%\centerline{\sectfont ChangeLog}
+%\item {1.0} 2007-07-24 First draft
+%\item {1.1} 2007-08-02 Changes after the Aug 1 meeting with Juan Manuel Munoz
+%\item {1.2} 2007-08-08 Changes after the Aug 8 meeting with Juan Manuel Munoz \&
+%                  Gonzalo Becares.
+%\item {1.3} 2007-08-09 Planning added.
+%\item {1.4} 2007-10-10 Documented the implementation and the chillout protocol
+%\item {1.5} 2010-10-21 Additions and description of the actual implementation.
+%                  Planning and notes not relevant to the description removed
+%\bigskip
+%\par
+\bigskip
+\centerline{\sectfont Table of Contents}
+\input \jobname.toc
+\bigskip
+\section{Introduction}
+
+In order to comply with legal requirements in the United Kingdom, about
+traceability of end-user communications in ISP's, in the La Fonera router
+was implemented a way of redirection of the FON users' traffic between the
+router and the internet.
+
+The implemented solution manages tunnels between the Fonera and a 
+specialiced network device set up by FON. These tunnels carry the
+traffic of a user logged to the public signal in La Fonera. The user
+traffic is separated and the record of the user activities is
+allowed.
+
+The preferred solution was to use L2TP as tunneling creation and control
+protocol, as a lightweight way to establish tunnels. L2TP allows the
+tunneling of PPP packets across an intervening network (the "La Fonera"'s
+client ISP) in a way that is as transparent as possible. This document
+explains the components involved inside the La Fonera, and the IPC mechanism
+developed to syncronize all those parts together.
+%\par
+%\hbox{\convertMPtoPDF{chillout.1}{1}{1}}
+%\hbox{\convertMPtoPDF{chillout.2}{1}{1}}
+%\par
+\section{1. L2TP in ``La Fonera''}
+There are few open source solutions for implementing a LAC (L2TP Access
+Concentrator) in Linux. The ones researched were:
+
+\item {1.} Roaring Penguin L2TPD
+\item {2.} Open L2TPD
+\item {3.} Xelerance XL2TPD
+
+The first one is the less tested of the three, and is not maintained anymore.
+The second one is the more feature-rich of the three, but had lot of
+requirements for our limited platform. The third consists of some patches
+over the original L2TPD implementation for Linux, by Marc Spencer. Those
+patches where made by Xelerance, the company behind OpenSwan, to support
+L2TP with IPSec. Xl2tp was choosen, because:
+
+\item {$\bullet$} It runs entirely on userspace, thus allowing the instalation as
+   an "add-on" on La Fonera, without disturbing the actual stable
+   system.
+\item {$\bullet$} has lightweight requirements
+\item {$\bullet$} It seems to be easily modifiable (the number of maintainers for the
+   code base over the time account for this)
+
+\section{2. Elements involved in the tunnel creation and maintenance}
+
+The PPP sessions must be created when the user logs in, opening the
+ppp session and authenticating it with the radius servers.
+This puts a somehow peculiar requirement for a PPP client, in
+that it must provide the credentials dinamically, instead of the usual
+static setup in wich the ISP's PPP user doesn't change over time.
+
+This was implemented over the original pppd code by modifying it's
+authentication code (FIXME: patch file)
+
+The user credentials are retrieved from the FON Captive Portal, i.e.
+Coova Chillispot. The PPP session is stablished by the xl2tpd process.
+This need thight interaction between the chillispot process
+(chilli), the L2TP LAC (xl2tpd), and the PPP daemon (pppd). The agent used
+to perform this interaction was called ``chilloutd'', and is a
+daemon that communicates with the three elements involved
+through UNIX-domain sockets.  
+
+\section{3. Tunnel creation sequence}
+% (FIXME: tunnel_creation.dia)
+
+\item {1.} Until a public user is associated to the public SSID, xl2tp
+remains dormant. One a user is associated, Chillispot notifies
+it to chillout, that stores the pair $mac, ip\_addresss$ in
+its memory. In this step the tunnel is not yet stablished
+
+\item {2.} Chillispot shows the captive portal to the user, giving the
+users computer an IP address and redirecting her to the
+captive portal.
+\item {3.} The user authenticates itself in the captive portal, as usual.
+Through a redirection chillispot receives a one-time password (OTP)
+used to authenticate the session in the radius servers.
+\item {4.} Chillispot handles the OTP to chillout, that sends the command
+to xl2tpd to stablish the tunnel, and launches a pppd instance to 
+establish an authenticated PPP session trough the xl2tp tunnel, using the
+user and the OTP. 
+The tunnel is not authenticated, the server is configured so
+as to permit tunnel stablishment from anyone but shut it down
+if an authenticated PPP connection over it is not done in a 
+certain period of time, about 5 seconds.
+\item {5.} The radius authentication then also made with the same one-time
+password, directly from chillispot to the radius servers, as if there
+were not tunnel, to maintain compatibility in the radius accounting. This
+step is in process of being removed in future implementations.
+\item {6.} Once stablished the ppp session, all the traffic from/to
+the user (her IP address given in 1), must be redirected
+to the ppp device created, using iptables. The iptables
+calls are done by chillout, associating the local IP address given
+to the user
+\item {7.} Chillispot allows the traffic for the user private's IP
+until logout or ppp session shutdown
+\item {8.} Session can be ended by the user (user logout).  by a timer 
+(timeout in chillispot), by the radius server (session time expire), by ppp
+or tunnel going down. The first two cases are handled by chillout upon
+receiving de DHCP release from chillispot. In the third one the DHCP
+release is forced into chillispot for it to return to a clean state.
+
+\section{4. User logout sequence}
+
+\item {1.} The logout can have three sources:
+\par \begingroup \narrower
+ \item {$\bullet$} The user logouts
+ \item {$\bullet$} After a certain time of inactivity, chillispot acknowledges the user
+  is away, and performs a logout
+ \item {$\bullet$} When the session time expires
+\par \endgroup
+The three of them are handled by chillispot, and the rest of the system 
+will be not aware of the details. The logout details (user, ip address)
+are passed to the chillout daemon.
+
+\item {2.} Chillout shut down the ppp session.
+\item {3.} If it was the last ppp session for the tunnel (the last user), chillout
+tells xl2tp to shut the tunnel down also.
+\item {4.} Chillout undo the iptables redirections. 
+
+\section{5. Xl2TP tunnel brought down sequence}
+
+\item {1.} When the tunnel is brought down, xl2tp notifies that to chillout
+\item {2.} Chillout keeps a list of the users/tunnels currently in use, and
+performs the necessary cleanus to acknowledge those tunnels are not
+in use, and undo the redirection (2.4.4) for each of them.
+\item {3.} Chillispot is not notified of this logouts. The timeouts will happen
+in the server as if chillispot (or la fonera) was down.
+
+\section{6. LNS address queue handling}
+
+xl2tp is provided with at least two lns addresses. This lns addresses will
+be retrieved from the chillispot configuration file, updated with
+chilli\_readconfig.
+
+xl2tp will try to use the first lns on its list, and then the rest, until
+the tunnel is created or the list ends.
+
+This did not require a modificition on xl2tpd, but on it's caller (chilloutd)
+that retry connections with different call identifiers
+
+%\section{Adressing, authentication, authorization and accounting at the LNS}
+
+%This subject, and the administration of the LNS itself, is beyond the scope
+%of this document. The Networking Department will make their own documentation
+%on this.
+
+\section{7. Data dictionary}
+
+\subsection{Static data for the xl2tp daemon (Configuration file)}
+ \item {$\bullet$} LNS IP address
+ \item {$\bullet$} LNS IP port
+ \item {$\bullet$} Configuration: retries, timeout, deadtime.
+ \item {$\bullet$} Authentication mechanisms used.
+
+\subsection{Data going from pppd to chillout}
+ \item {$\bullet$} PPP device name
+ \item {$\bullet$} OTP
+ \item {$\bullet$} Private IP given to the user upon association (to perform
+   iptables redirections)
+
+\subsection{Data going from xl2tpd to pppd (Lauch)}
+ \item {$\bullet$} PPP login (user name)
+ \item {$\bullet$} OTP retrieved from chillispot
+
+\subsection{Data going from ppp to chillout}
+ \item {$\bullet$} Private IP given to the user
+ \item {$\bullet$} PPP device created
+ \item {$\bullet$} IP address of the tunnel endpoints
+ 
+
+\section{8. Implementation}
+
+\subsection{8.1 chilloutd}
+
+chilloutd is a user-space daemon, written in C, using standard POSIX system
+calls and C library functions, and using libdaemon to perform and reuse the
+usual "daemon" boilerplate. It listen on a UNIX domain socket, created upon
+the file /tmp/chillout on start. It source files are:
+\begintt
+chilloutd.c - the daemon itself  
+log.c	    - log subsystem
+log.h
+poption.c   - handy command line options parser
+poption.h
+\endtt
+
+
+The daemon is complemented by a library, that is used by all the components
+talking to chilloutd, and by chilloutd itself. Altough it is a library, 
+programs are not linked against it. I have found it more practical to
+compile it into each modified component, using the openwrt buildroot's
+Makefiles.
+
+{\tt {\obeylines {\obeyspaces
+chillout.c - Only module
+chillout.h - Declaration of structures and exported functions
+}}}
+
+Chillout communication is made through clear text lines, LF-ended,
+through UNIX domain sockets. Each daemon handles two sockets. One is called
+the ``write'' socket and one the ``read'' socket. Altough full bidirectional
+communication can be implemented with one socket, I wanted an easy way to
+associate question and answer, and have the posibility of block in a read()
+while waiting for acknoledge on the "write" socket, and buffer incoming
+bytes on the read socket (that will be select()'ed afterwards) from the same
+client (that can be sending things using the same channel {\sl before} 
+sending acknowledge)
+
+\subsection{8.2 The chillout protocol}
+
+\subsection{8.3 Chillispot modifications}
+
+This describe the changes in the patch file {\tt 400-chillispot-chillout.patch})
+
+Apart from the changes in {\tt cmdline.c}, to retrieve a new parameter
+with the path of the UNIX domain socket where chilloutd listens, the main
+changes are on {\tt chilli.c} where the main event loop is
+Apart from the chilloutd initialization itself (the call to 
+{\tt chillout\_init},
+in the callback called when a dhcp connection is deleted:
+\begintt
+    if (!do_not_notify) {
+        chillout_write(chillout, CHILLOUT_WAIT_FOR_ANSWER | CHILLOUT_WRITE_SOCK, 
+                        "dhcp release %.2X:%.2X:%.2X:%.2X:%.2X:%.2X %s",
+                        conn->hismac[0], conn->hismac[1], conn->hismac[2],
+                        conn->hismac[3], conn->hismac[4],
+                        conn->hismac[5], inet\_ntoa(conn->hisip));
+    }
+\endtt
+
+In {\tt dhcp.c}, the function pointer type dhcp\_release\_mac changes to accept a parameter
+saying wheter to notify chilloutd of the release or not.
+
+And in {\tt redir.c} wich contains the main loop of each process respawned by chillispot per
+each redirection (each time the captive portal is shown) where the login and password is
+sent to chillispot after a successful login:
+\begintt
+    if (chillout_write(chillout, CHILLOUT_WRITE_SOCK ,
+        "login %s %s %s", inet_ntoa(conn.hisip), conn.username, user_password)) {
+         log_err(errno, "Error calling chillout_write");
+         in_error = 1;
+    }
+\endtt
+
+\subsection{8.4 Xl2tpd modifications}
+
+To be done.
+
+\subsection{8.5 pppd modifications}
+
+Each pppd instance registers into chilloutd in main.c
+\begintt
+    if ((chillout = chillout_init(chilloutsocket, "ppp", NULL)) == NULL)
+\endtt
+
+In options.c, two parameters are added to the regular pppd command line:
+
+\begintt
+    { "chillout", o_string, chillout_path,
+      "Set chillout socket path",
+      OPT_PRIO | OPT_PRIV | OPT_STATIC, NULL, MAXPATHLEN },
+
+    { "chilloutmac", o_string, chillout_mac,
+      "Set mac address of the client that will be sent to chilloutd",
+      OPT_PRIO | OPT_PRIV | OPT_STATIC, NULL, MAXPATHLEN },
+\endtt
+
+In {\tt upap.c}, the reason for a failed authentication is sent to
+chilloutd, wich forwards it to chillispot:
+
+\begintt
+\endtt
+
+In {\tt auth.c} the pppd instances states wheter it is correctly authenticated
+
+\begintt
+    if (chillout != NULL) {
+       if (chillout_mac[0] == '\0') {
+               notice("specify chilloutmac");
+       } else {
+               chillout_write(chillout, CHILLOUT_WRITE_SOCK, "register success %s %s %d %s", 
+                               our_name, ifname, getpid(), chillout_mac);
+       }
+    } else {
+       notice("chillout is NULL");
+    }
+\endtt 
+
+
+%\subsection{8.6 Testing environment}
+%
+%The testing environment will be a Debian 4.0 system, with (at least) one
+%instance of QEMU running as the test client.
+%
+%The fonera programs that will be compiled in the test environment are:
+%
+%\item {1.} chillispot 1.0-coova.4
+%\item {2.} ppp 2.4.3
+%\item {3.} xl2tpd 1.1.11
+%
+%In this testing environment, the FON Captive portal, Radius servers and Cisco
+%LNS are used.
+%
+%\subsubsection{8.6.1 Host operating system and qemu images}
+%
+%For ease of testing, three identical qemu images, with debian lenny installed
+%on them will be used, both for host (wich have the coova-chillispot, xl2tpd and
+%pppd installation) and for clients (that run firefox on them and act as the
+%wifi clients would)
+%
+%To setup the clients, make sure you have about 2 GB of free space on the
+%partition where the chillout source tree has been decompressed/checked out,
+%and that qemu and bridge-utils are installed on your system. Then,
+%{\bf as root} 
+%run {\tt install\_qemu\_images}. It will download the debian netinst iso,
+%create 3 qemu images and install debian on them. The images will be located
+%in {\tt qemu/debian\_lenny\_chillout\_server.img},
+%{\tt qemu/debian\_lenny\_chillout\_client\_A.img}, 
+%{\tt qemu/debian\_lenny\_chillout\_client\_B.img} 
+%
+%Both the compilation inside the host machine and the setup of the clients
+%is made using the script {\tt setup\_qemu\_images}. This launches three qemu
+%instances with a common network bridge 
+
+The packages needed to build the fon\_ap in a Debian Lenny system are:
+\begintt
+build-essential autoconf automake autotools-dev libdjbdns-dev 
+libtool automake1.9 libpcap-dev
+\endtt
+%The .deb once compiled is deployed into the image
+%debian\_lenny\_chillout\_server.img
+
+%Later on, and if found necessary, those components will also be hosted
+%on the test environment, making it completely standalone. The researched
+%tools that can be used for this are:
+%
+%\item freeradius 1.1.4
+%\item l2tpns 2.1.21
+%\item apache + PHP for a captive portal implementation
+
+\section{References}
+
+\item {$\bullet$} Layer Two Tunneling Protocol. W. Townsley. Network Working Group (RFC)\\
+	{\tt http://tools.ietf.org/rfc/rfc2661.txt}
+\item {$\bullet$} Point to Point Protocol. Network Working Group (RFC)\\
+	{\tt http://tools.ietf.org/rfc/rfc1661.txt}
+\item {$\bullet$} Cisco Systems. Cisco IOS Documentation.\\
+	{\tt http://www.cisco.com/en/US/docs/ios/12\_0t/12\_0t1/feature/guide/l2tpT.html}\\
+	{\tt http://www.cisco.com/warp/public/cc/pd/iosw/tech/l2pro\_tc.htm}
+\item {$\bullet$} Xelerance. Xl2tp website\\
+	{\tt http://www.xelerance.com/software/xl2tpd/}
+\item {$\bullet$} David Bird and contributors. Chillispot source and documentation. Coova-chillispot website.\\
+	{\tt http://www.coova.org}
+\item {$\bullet$} l2tpns website \\
+	{\tt http://sourceforge.net/projects/l2tpns/}
+\bye
+

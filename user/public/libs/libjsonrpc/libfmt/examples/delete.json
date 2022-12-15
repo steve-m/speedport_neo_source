@@ -1,0 +1,7 @@
+{
+    "avoid": {
+        "value": "config",
+        "module": "config/"
+    },
+    "config": "remove"
+}

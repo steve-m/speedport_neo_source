@@ -1,0 +1,4 @@
+Testing null (parsed): OK
+Testing not null (parsed): OK
+Testing null (new): OK
+Testing not null (new): OK

@@ -1,0 +1,389 @@
+FON API
+=======
+
+[abstract]
+Abstract
+--------
+This document describes a programmatic interface that can be used to
+implement an *External Authenticator* for the FON enabled CoovaChilli
+captive portal gateway, beginning with an overall description of the
+system architecture followed by the API details. The API allows for
+the implementing of a custom 'handler' to receive asynchronous
+notifications (_callbacks_) from the CoovaChilli daemon (+chilli+).
+To query data from +chilli+ and to dynamically change its
+configuration, the +fonctl+ utility program is explained. Finally, a
+list of sequence diagrams for expected interactions and examples for
+the most common uses of the API are also included.
+
+This material contains information which is proprietary and confidential to
+Fon Wireless Ltd. It is not allowed to reproduce, copy, divulge or sell all
+or any part thereof without prior written consent of an authorized
+representative of Fon Wireless Ltd.
+
+Status and block diagram
+------------------------
+
+.Status Diagram
+image::fon-api_state_machine.png["Status Diagram",align="center",alt="Status Diagram"]
+
+.Block Diagram
+image::Fon_API_Diagram.png["Block Diagram",align="center",alt="Block Diagram"]
+
+FON API callbacks from chilli to the Authenticator (Interface A)
+----------------------------------------------------------------
+
+When invoking an External Authenticator (or handler), +chilli+ is
+configured to use the API handler on the command line with
++--module:fon-api:<handler>+. This +handler+ must be a program on the
+Host Machine that is able to receive a set of commands from +chilli+.
+
+The handler receives the API command as the first parameter (main argv
+vector) and the data for the call is passed through environment
+variables that can be retrieved either with getenv(2) in case the
+handler is a binary written in C, or referencing them with
+$VARIABLE_NAME in case the handler is written in shell script.
+
+IMPORTANT: All callbacks are non-blocking (i.e. coova does not wait
+for the handler process to exit to go on), except of the 'login' call,
+for which the forked +chilli+ process that handles it blocks until the
+handler returns or until it's timeout (see below) is reached.
+
+login
+~~~~~
+The login call sets the following parameters
+
+.Login environment variables 
+|================================================
+| USER_NAME | Username of client
+| PASSWORD | Password for login
+| ACCT_SESSION_ID | Session ID 
+| FRAMED_IP_ADDRESS | IP address of Client
+| CALLING_STATION_ID | MAC address of client
+| CALLED_STATION_ID | MAC address of Access Point
+| NAS_ID | NAS Identifier
+| WISPR_LOCATION_ID | WISPr Location Name
+| WISPR_LOCATION_NAME | WISPr Location
+|================================================
+
+A forked process waits for an answer to report back to the +chilli+
+server. The handler exit code is used as a return value. The return
+value is 0 when the login was successful, greater than 0 in the event
+of an error, and less than 0 if 'pending'. 
+
+Valid chilli login response codes can be found in the +redir.h+ header
+file in the coova source. When an error is returned, the standard
+output of the handler program is taken as the 'reply message'.
+
+A return code less than 0 tells +chilli+ to redirect the user to the wait
+(polling) page. In this case, the standard output of the handler is
+taken to be the URL of the wait page.  If the page is not provided, it
+defaults to the internal polling page.
+
+dhcp-lease 
+~~~~~~~~~~ 
+Issued when a DHCP lease is granted (IP address assigned) by +chilli+
+for the user device.
+
+dhcp-release 
+~~~~~~~~~~~~ 
+Issued when chilli releases a DHCP lease. This event can be generated
+by a DHCP release from the client device or due to a timeout. The
+timeout is based on the lease time and the time since the last traffic
+from the client device.  The DHCP lease time defaults to 600 seconds.
+
+session-start
+~~~~~~~~~~~~~
+
+Issued when an authorized user session begins in +chilli+. A session
+may begin from either a successful RADIUS authentication (when being
+used), a zero exit code from the login handler, or the result of a
+call to +fonctl authorize+.
+ 
+session-update
+~~~~~~~~~~~~~~
+Issued periodically throughout the duration of an authorized user
+session.  The period, or interval, depends on the 'Interim-Interval',
+which can be set by RADIUS, +fonctl+, or configured globally as a
+default. When called, information about the session is given to the
+handler (see below for environment variables sent).
+
+session-stop
+~~~~~~~~~~~~
+Issued when an authenticated user session stops. This can be the
+result of a 'Session-Timeout', an 'Idle-Timeout', or an explicit call
+to +fonctl logout+. The Session-Timeout is when a session has exceeded
+it's max allowed time. An Idle-Timeout is when the user device hasn't
+generated network traffic in a configurable amount of time. Both the
+Session-Timeout and Idle-Timeout are configurable on a per session
+basis with RADIUS or +fonctl+.
+
+fon-startup
+~~~~~~~~~~~
+Issued when +chilli+ starts. Informative.
+
+fon-shutdown
+~~~~~~~~~~~~
+Issued when +chilli+ stops. Informative.
+
+Variables updated by callbacks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The handler is able to take advantage of a set of environment
+variables set by +chilli+. Below the variables and a short description:
+
+.Variables
+|================================================
+|USER_NAME | Username of client
+|FRAMED_IP_ADDRESS | IP address of client
+|SESSION_TIMEOUT | Session timeout (max time)
+|IDLE_TIMEOUT | Idle timeout
+|CALLING_STATION_ID | MAC address of client
+|CALLED_STATION_ID | MAC address of Access Point
+|NAS_ID | NAS Identifier
+|ACCT_SESSION_ID | Session ID 
+|ACCT_INTERIM_INTERVAL | Accounting Interval
+|WISPR_LOCATION_ID | WISPr Location Name
+|WISPR_LOCATION_NAME | WISPr Location
+|WISPR_BANDWIDTH_MAX_UP | WISPr Limitation
+|WISPR_BANDWIDTH_MAX_DOWN | WISPr Limitation
+|CHILLISPOT_MAX_INPUT_OCTETS | Data Limit
+|CHILLISPOT_MAX_OUTPUT_OCTETS | Data Limit
+|CHILLISPOT_MAX_TOTAL_OCTETS | Data Limit
+|INPUT_OCTETS | Octets sent up
+|OUTPUT_OCTETS | Octets sent down
+|SESSION_TIME | Session duration
+|IDLE_TIME | Idle time of client
+|CUI | Chargeable-User-Identity RADIUS attribute
+|TERMINATE_CAUSE | Reason for session stop
+|=================================================
+
+The variables pertinent to each caller, which are updated before each
+call, are described in the next table:
+
+.Environment variables per callback
+[options="header", cols="20,3,3,3,3,3,3"]
+|===================================================================
+|                   Variable |lease|release|login|start|update|stop
+|USER_NAME                   |     |       |  X  |  X  |   X  | X
+|PASSWORD                    |     |       |  X  |     |      |  
+|FRAMED_IP_ADDRESS           |  X  |   X   |  X  |  X  |   X  | X
+|SESSION_TIMEOUT             |     |       |     |  X  |   X  | X
+|IDLE_TIMEOUT                |     |       |     |  X  |   X  | X
+|CALLING_STATION_ID          |  X  |   X   |  X  |  X  |   X  | X
+|CALLED_STATION_ID           |  X  |   X   |  X  |  X  |   X  | X
+|NAS_ID                      |  X  |   X   |  X  |  X  |   X  | X
+|ACCT_SESSION_ID             |     |       |  X  |  X  |   X  | X
+|ACCT_INTERIM_INTERVAL       |     |       |     |  X  |   X  | X
+|WISPR_LOCATION_ID           |     |       |     |  X  |   X  | X
+|WISPR_LOCATION_NAME         |     |       |     |  X  |   X  | X
+|WISPR_BANDWIDTH_MAX_UP      |     |       |     |  X  |   X  | X
+|WISPR_BANDWIDTH_MAX_DOWN    |     |       |     |  X  |   X  | X
+|CHILLISPOT_MAX_INPUT_OCTETS |     |       |     |  X  |   X  | X
+|CHILLISPOT_MAX_OUTPUT_OCTETS|     |       |     |  X  |   X  | X
+|CHILLISPOT_MAX_TOTAL_OCTETS |     |       |     |  X  |   X  | X
+|INPUT_OCTETS                |     |       |     |     |   X  | X
+|OUTPUT_OCTETS               |     |       |     |     |   X  | X
+|SESSION_TIME                |     |       |     |     |   X  | X
+|IDLE_TIME                   |     |       |     |     |   X  | X
+|CUI                         |     |       |     |  X  |   X  | X
+|TERMINATE_CAUSE             |     |       |     |     |   X  | X
+|===================================================================
+
+
+FON API Command Line Utility (Interface B)
+------------------------------------------
+
+Basic Usage:
+
+----------------------------
+  /usr/sbin/fonctl <command> [<arguments>...]
+----------------------------
+
+Commands:
+
+----------------------------
+    list, listip, listmac, listgarden, 
+    authorize, login, update, logout, block, procs
+----------------------------
+
+list::
+    Shows a listing of all sessions and their login status
+    and accounting information.
+
+listip <ip-address>::
+listmac <mac-address>::
+    Same as list, but for only one session based on ip or mac address. 
+
+listgarden::
+    Shows the current status of the walled garden access rules. 
+
+authorize ip <ip-address> <session-options>::
+authorize mac <mac-address> <session-options>::
+authorize sessionid <session-id> <session-options>::
+    Authorize a session with no RADIUS login based on the session options. 
+
+login ip <ip-address> <session-options>::
+login mac <mac-address> <session-options>::
+login sessionid <session-id> <session-options>::
+    Attempt to authorize a session using RADIUS based on the session options.
+
+update ip <ip-address> <session-options>::
+update mac <mac-address> <session-options>::
+update sessionid <session-id> <session-options>::
+    Update the session options for a current session.
+    When updating sessions, unspecified options will be reset to zero,
+    so use the same options (with your changes) as those used in 
+    authorize or login.
+
+logout ip <ip-address>::
+logout mac <mac-address>::
+logout sessionid <session-id>::
+    Logout and stop an authorized session.
+
+block <mac-address>::
+    Drop all traffic from the MAC address. 
+
+dhcp-release <mac-address>::
+  Logout and release DHCP lease completely. 
+
+procs::
+  Show the processes controlled by +chilli+, showing number of
+  processes, memory usage, and number of open file descriptors.
+
+.Session Options
+|==============================================================================
+|    username          <value> | string(256)  | Username to use in RADIUS 'login' or authorization
+|    password          <value> | string(256)  | Password to be used for 'login' command
+|    sessiontimeout    <value> | integer(8)   | Max session time (in seconds)
+|    idletimeout       <value> | integer(4)   | Max idle time (in seconds)
+|    interiminterval   <value> | integer(2)   | Accounting interim interval
+|    maxoctets         <value> | integer(8)   | Max input + output octets (bytes)
+|    maxinputoctets    <value> | integer(8)   | Max input octets (bytes)
+|    maxoutputoctets   <value> | integer(8)   | Max output octets (bytes)
+|    maxbwup           <value> | integer(8)   | Max bandwidth up
+|    maxbwdown         <value> | integer(8)   | Max bandwidth down
+|    splash            <value> | string(2048) | Set splash page
+|    url               <value> | string(2048) | Set redirect url
+|    routeidx          <value> | integer(1)   | Route interface index
+|    noacct                    | flag         | No accounting flag
+|==============================================================================
+
+Sequence diagrams
+-----------------
+Login Succeeded
+~~~~~~~~~~~~~~~~
+image::login_success.png["Login succeeded",align="center",alt="Login succeeded"]
+
+Login Failed
+~~~~~~~~~~~~
+image::login_failed.png["Login failed",align="center",alt="Login failed"]
+
+Logout started by client
+~~~~~~~~~~~~~~~~~~~~~~~~
+image::logout_started_by_client.png["Logout started by client",align="center",alt="Logout started by client"]
+
+Logout started by ChilliCoova
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+image::logout_started_by_chilli.png["Logout started by chilli",align="center",alt="Logout started by chilli"]
+
+Logout started by Authenticator
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+image::logout_started_by_authenticator.png["Logout started by Authenticator",align="center",alt="Logout started by Authenticator"]
+
+Examples
+--------
+
+Example authenticator skeleton using shell script
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This is a shell script example of what a handler could look like. The code in the script is only to enrich the understanding and is not necessarily written with a correct syntax.
+
+-----------------------
+  case "$1" in
+    login)
+        # Login Redirect Handler
+	# The Handler must authenticate the user and establish any tunnel, interface, session... that is required
+	# After logging the user in, the required firewall and NAT-ting rules, if any, need to be set in place as well.
+	# Finally, the Handler also needs to notify about the successful establishment through the Interface B using an authorize command.
+	status = start_ppp_session();
+	if status != 0; then exit(status);
+	status = set_firewall_rules(); # This should be a call to the OS firewall
+	exit(status);
+  	;;
+
+    dhcp-lease)
+        # DHCP Lease Handler
+	;;
+
+    dhcp-release)
+        # DHCP Release Handler
+	;;
+
+    session-start)
+        # Session Start Handler
+	;;
+
+    session-update)
+        # Session Update (Interim) Handler
+	;;
+
+    session-stop)
+        # Session Stop Handler
+	;;
+
+    fon-startup)
+	# Daemon Startup
+	;;
+
+    fon-shutdown)
+	# Daemon Shutdown
+	;;
+  esac
+---------------
+
+Example calls to fonctl
+~~~~~~~~~~~~~~~~~~~~~~~
+
+List current sessions:
+
+  # fonctl list
+  00-1C-23-4F-46-10 192.168.182.3 dnat 4d5e8e1600000003 0 - 0/0 0/0 0/0 0/0 0 1 0/0 0/0 -
+
+Authorize a session, setting username and "No Accounting" option:
+
+  # fonctl authorize mac 00-1C-23-4F-46-10 username UserName noacct
+
+List sessions to see authorized user:
+
+  # fonctl list
+  00-1C-23-4F-46-10 192.168.182.3 pass 4d5e8e1600000003 1 UserName 4/0 4/0 0/0 0/0 0 1 0/0 0/0 -
+
+List garden domains:
+
+  # fonctl listgarden
+  main garden:
+  host=212.113.174.13   proto=0   port=0  
+  host=93.189.32.84     proto=0   port=0  
+  host=213.134.44.0     proto=0   port=0  
+  host=122.50.125.118   proto=0   port=0
+  [...]
+  dhcp(dns) garden:
+  host=209.85.146.139   proto=0   port=0  
+  host=209.85.146.101   proto=0   port=0  
+  host=209.85.146.100   proto=0   port=0 
+
+Log out session, this time based on the IP address (could also use mac or sessionid):
+
+  # fonctl logout ip 192.168.182.3
+
+List sessions to get current status:
+
+  # fonctl list
+  00-1C-23-4F-46-10 192.168.182.3 dnat 4d5e8f6c00000003 0 UserName 0/0 0/0 0/0 0/0 0 1 0/0 0/0 -
+
+Update a session to use an alternate redirect URL (be sure it's in the walled garden!):
+
+  # fonctl update ip 192.168.182.3 url http://www.fon.com/
+
+To reset:
+
+  # fonctl update ip 192.168.182.3 url ""
+

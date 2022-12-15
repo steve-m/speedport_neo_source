@@ -1,0 +1,26 @@
+{
+    "T0": {
+        "T1": [
+            {
+                "qwe": [
+                    "sdf", 
+                    "sdfsdg"
+                ], 
+                "r": "none"
+            }, 
+            {
+                "r": "qwesdg"
+            }, 
+            {
+                "r": "dsfsdgsd"
+            }, 
+            {
+                "r": "sdsdgsdg"
+            }, 
+            {
+                "r": "sdfsdsdf"
+            }
+        ]
+    }, 
+    "rfc": "list_show"
+}

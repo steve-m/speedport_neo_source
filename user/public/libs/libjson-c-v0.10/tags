@@ -1,0 +1,356 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ADVANCE_CHAR	json_tokener.c	200;"	d	file:
+ARRAY_LIST_DEFAULT_SIZE	arraylist.h	19;"	d
+CFLAGS	Makefile	/^CFLAGS = -Wall -std=gnu99 -D_GNU_SOURCE -D_REENTRANT$/;"	m
+DECODE_SURROGATE_PAIR	json_tokener.c	66;"	d	file:
+EXEC	Makefile	/^EXEC = test1 test2 test4$/;"	m
+FALSE	json_object.h	21;"	d
+FALSE	json_object.h	22;"	d
+HAVE_DLFCN_H	config.h	5;"	d
+HAVE_FCNTL_H	config.h	11;"	d
+HAVE_INTTYPES_H	config.h	14;"	d
+HAVE_LIMITS_H	config.h	17;"	d
+HAVE_MALLOC	config.h	21;"	d
+HAVE_MEMORY_H	config.h	24;"	d
+HAVE_OPEN	config.h	27;"	d
+HAVE_REALLOC	config.h	31;"	d
+HAVE_STDARG_H	config.h	34;"	d
+HAVE_STDINT_H	config.h	37;"	d
+HAVE_STDLIB_H	config.h	40;"	d
+HAVE_STRERROR	config.h	43;"	d
+HAVE_STRINGS_H	config.h	46;"	d
+HAVE_STRING_H	config.h	49;"	d
+HAVE_STRNCASECMP	config.h	52;"	d
+HAVE_STRNDUP	config.h	55;"	d
+HAVE_SYSLOG_H	config.h	58;"	d
+HAVE_SYS_PARAM_H	config.h	61;"	d
+HAVE_SYS_STAT_H	config.h	64;"	d
+HAVE_SYS_TYPES_H	config.h	67;"	d
+HAVE_UNISTD_H	config.h	70;"	d
+HAVE_VASPRINTF	config.h	73;"	d
+HAVE_VPRINTF	config.h	76;"	d
+HAVE_VSNPRINTF	config.h	79;"	d
+HAVE_VSYSLOG	config.h	82;"	d
+HEADERS	Makefile	/^HEADERS = \\$/;"	m
+IS_HIGH_SURROGATE	json_tokener.c	64;"	d	file:
+IS_LOW_SURROGATE	json_tokener.c	65;"	d	file:
+JSON_FILE_BUF_SIZE	json_util.h	21;"	d
+JSON_OBJECT_DEF_HASH_ENTRIES	json_object.h	19;"	d
+JSON_TOKENER_MAX_DEPTH	json_tokener.h	72;"	d
+LH_EMPTY	linkhash.h	27;"	d
+LH_FREED	linkhash.h	32;"	d
+LH_PRIME	linkhash.h	22;"	d
+LIBNAME	Makefile	/^LIBNAME = libjson.a$/;"	m
+MC_ABORT	debug.h	32;"	d
+MC_ABORT	debug.h	40;"	d
+MC_DEBUG	debug.h	33;"	d
+MC_DEBUG	debug.h	41;"	d
+MC_ERROR	debug.h	34;"	d
+MC_ERROR	debug.h	42;"	d
+MC_GET_DEBUG	debug.h	30;"	d
+MC_GET_DEBUG	debug.h	38;"	d
+MC_INFO	debug.h	35;"	d
+MC_INFO	debug.h	43;"	d
+MC_SET_DEBUG	debug.h	29;"	d
+MC_SET_DEBUG	debug.h	37;"	d
+MC_SET_SYSLOG	debug.h	31;"	d
+MC_SET_SYSLOG	debug.h	39;"	d
+NELEM	json_util.c	206;"	d	file:
+OBJS	Makefile	/^OBJS =  arraylist.o \\$/;"	m
+PACKAGE	config.h	85;"	d
+PACKAGE_BUGREPORT	config.h	88;"	d
+PACKAGE_NAME	config.h	91;"	d
+PACKAGE_STRING	config.h	94;"	d
+PACKAGE_TARNAME	config.h	97;"	d
+PACKAGE_VERSION	config.h	100;"	d
+POP_CHAR	json_tokener.c	185;"	d	file:
+PRINTBUF_DEBUG	printbuf.h	23;"	d
+PRId64	json_inttypes.h	9;"	d
+SCNd64	json_inttypes.h	10;"	d
+SOURCES	Makefile	/^SOURCES = arraylist.c \\$/;"	m
+STDC_HEADERS	config.h	103;"	d
+TRUE	json_object.h	24;"	d
+TRUE	json_object.h	25;"	d
+VERSION	config.h	106;"	d
+WIN32_LEAN_AND_MEAN	json_util.c	40;"	d	file:
+_DEBUG_H_	debug.h	13;"	d
+_arraylist_h_	arraylist.h	13;"	d
+_bits_h_	bits.h	13;"	d
+_debug	debug.c	/^static int _debug = 0;$/;"	v	file:
+_delete	json_object_private.h	/^  json_object_delete_fn *_delete;$/;"	m	struct:json_object
+_json_h_	json.h	13;"	d
+_json_inttypes_h_	json_inttypes.h	3;"	d
+_json_object_h_	json_object.h	13;"	d
+_json_object_private_h_	json_object_private.h	13;"	d
+_json_tokener_h_	json_tokener.h	13;"	d
+_json_util_h_	json_util.h	13;"	d
+_linkhash_h_	linkhash.h	13;"	d
+_pb	json_object_private.h	/^  struct printbuf *_pb;$/;"	m	struct:json_object	typeref:struct:json_object::printbuf
+_printbuf_h_	printbuf.h	17;"	d
+_ref_count	json_object_private.h	/^  int _ref_count;$/;"	m	struct:json_object
+_syslog	debug.c	/^static int _syslog = 0;$/;"	v	file:
+_to_json_string	json_object_private.h	/^  json_object_to_json_string_fn *_to_json_string;$/;"	m	struct:json_object
+array	arraylist.h	/^  void **array;$/;"	m	struct:array_list
+array_list	arraylist.h	/^struct array_list$/;"	s
+array_list	json_object.h	/^typedef struct array_list array_list;$/;"	t	typeref:struct:array_list
+array_list_add	arraylist.c	/^array_list_add(struct array_list *arr, void *data)$/;"	f
+array_list_expand_internal	arraylist.c	/^static int array_list_expand_internal(struct array_list *arr, int max)$/;"	f	file:
+array_list_free	arraylist.c	/^array_list_free(struct array_list *arr)$/;"	f
+array_list_free_fn	arraylist.h	/^typedef void (array_list_free_fn) (void *data);$/;"	t
+array_list_get_idx	arraylist.c	/^array_list_get_idx(struct array_list *arr, int i)$/;"	f
+array_list_length	arraylist.c	/^array_list_length(struct array_list *arr)$/;"	f
+array_list_new	arraylist.c	/^array_list_new(array_list_free_fn *free_fn)$/;"	f
+array_list_put_idx	arraylist.c	/^array_list_put_idx(struct array_list *arr, int idx, void *data)$/;"	f
+boolean	json_object.h	/^typedef int boolean;$/;"	t
+bpos	printbuf.h	/^  int bpos;$/;"	m	struct:printbuf
+buf	printbuf.h	/^  char *buf;$/;"	m	struct:printbuf
+c_array	json_object_private.h	/^    struct array_list *c_array;$/;"	m	union:json_object::data	typeref:struct:json_object::data::array_list
+c_boolean	json_object_private.h	/^    boolean c_boolean;$/;"	m	union:json_object::data
+c_double	json_object_private.h	/^    double c_double;$/;"	m	union:json_object::data
+c_int64	json_object_private.h	/^    int64_t c_int64;$/;"	m	union:json_object::data
+c_object	json_object_private.h	/^    struct lh_table *c_object;$/;"	m	union:json_object::data	typeref:struct:json_object::data::lh_table
+c_string	json_object_private.h	/^    } c_string;$/;"	m	union:json_object::data	typeref:struct:json_object::data::__anon1
+char_offset	json_tokener.h	/^  int depth, is_double, st_pos, char_offset;$/;"	m	struct:json_tokener
+checkit	test_parse_int64.c	/^void checkit(const char *buf)$/;"	f
+collisions	linkhash.h	/^	int collisions;$/;"	m	struct:lh_table
+count	linkhash.h	/^	int count;$/;"	m	struct:lh_table
+current	json_tokener.c	164;"	d	file:
+current	json_tokener.h	/^  struct json_object *current;$/;"	m	struct:json_tokener_srec	typeref:struct:json_tokener_srec::json_object
+data	json_object_private.h	/^  union data {$/;"	u	struct:json_object
+deletes	linkhash.h	/^	int deletes;$/;"	m	struct:lh_table
+depth	json_tokener.h	/^  int depth, is_double, st_pos, char_offset;$/;"	m	struct:json_tokener
+entry	json_object.h	/^	struct lh_entry *entry;$/;"	m	struct:json_object_iter	typeref:struct:json_object_iter::lh_entry
+equal_fn	linkhash.h	/^	lh_equal_fn *equal_fn;$/;"	m	struct:lh_table
+err	json_tokener.h	/^  enum json_tokener_error err;$/;"	m	struct:json_tokener	typeref:enum:json_tokener::json_tokener_error
+error_description	bits.h	25;"	d
+error_ptr	bits.h	24;"	d
+free_fn	arraylist.h	/^  array_list_free_fn *free_fn;$/;"	m	struct:array_list
+free_fn	linkhash.h	/^	lh_entry_free_fn *free_fn;$/;"	m	struct:lh_table
+getit	test_cast.c	/^static void getit(struct json_object *new_obj, const char *field)$/;"	f	file:
+hash_fn	linkhash.h	/^	lh_hash_fn *hash_fn;$/;"	m	struct:lh_table
+head	linkhash.h	/^	struct lh_entry *head;$/;"	m	struct:lh_table	typeref:struct:lh_table::lh_entry
+hexdigit	bits.h	23;"	d
+inserts	linkhash.h	/^	int inserts;$/;"	m	struct:lh_table
+int64_t	json_inttypes.h	/^typedef __int64 int64_t;$/;"	t
+is_double	json_tokener.h	/^  int depth, is_double, st_pos, char_offset;$/;"	m	struct:json_tokener
+is_error	bits.h	26;"	d
+json_escape_str	json_object.c	/^static int json_escape_str(struct printbuf *pb, char *str, int len)$/;"	f	file:
+json_false_str	json_tokener.c	/^static const char* json_false_str = "false";$/;"	v	file:
+json_hex_chars	json_object.c	/^const char *json_hex_chars = "0123456789abcdef";$/;"	v
+json_max	bits.h	20;"	d
+json_min	bits.h	16;"	d
+json_null_str	json_tokener.c	/^static const char* json_null_str = "null";$/;"	v	file:
+json_number_chars	json_object.c	/^const char *json_number_chars = "0123456789.+-eE";$/;"	v
+json_object	json_object.h	/^typedef struct json_object json_object;$/;"	t	typeref:struct:json_object
+json_object	json_object_private.h	/^struct json_object$/;"	s
+json_object_array_add	json_object.c	/^int json_object_array_add(struct json_object *jso,struct json_object *val)$/;"	f
+json_object_array_delete	json_object.c	/^static void json_object_array_delete(struct json_object* jso)$/;"	f	file:
+json_object_array_entry_free	json_object.c	/^static void json_object_array_entry_free(void *data)$/;"	f	file:
+json_object_array_get_idx	json_object.c	/^struct json_object* json_object_array_get_idx(struct json_object *jso,$/;"	f
+json_object_array_length	json_object.c	/^int json_object_array_length(struct json_object *jso)$/;"	f
+json_object_array_put_idx	json_object.c	/^int json_object_array_put_idx(struct json_object *jso, int idx,$/;"	f
+json_object_array_to_json_string	json_object.c	/^static int json_object_array_to_json_string(struct json_object* jso,$/;"	f	file:
+json_object_boolean_to_json_string	json_object.c	/^static int json_object_boolean_to_json_string(struct json_object* jso,$/;"	f	file:
+json_object_delete_fn	json_object_private.h	/^typedef void (json_object_delete_fn)(struct json_object *o);$/;"	t
+json_object_double_to_json_string	json_object.c	/^static int json_object_double_to_json_string(struct json_object* jso,$/;"	f	file:
+json_object_fini	json_object.c	/^static void json_object_fini(void) {$/;"	f	file:
+json_object_from_file	json_util.c	/^struct json_object* json_object_from_file(const char *filename)$/;"	f
+json_object_generic_delete	json_object.c	/^static void json_object_generic_delete(struct json_object* jso)$/;"	f	file:
+json_object_get	json_object.c	/^extern struct json_object* json_object_get(struct json_object *jso)$/;"	f
+json_object_get_array	json_object.c	/^struct array_list* json_object_get_array(struct json_object *jso)$/;"	f
+json_object_get_boolean	json_object.c	/^boolean json_object_get_boolean(struct json_object *jso)$/;"	f
+json_object_get_double	json_object.c	/^double json_object_get_double(struct json_object *jso)$/;"	f
+json_object_get_int	json_object.c	/^int32_t json_object_get_int(struct json_object *jso)$/;"	f
+json_object_get_int64	json_object.c	/^int64_t json_object_get_int64(struct json_object *jso)$/;"	f
+json_object_get_object	json_object.c	/^struct lh_table* json_object_get_object(struct json_object *jso)$/;"	f
+json_object_get_string	json_object.c	/^const char* json_object_get_string(struct json_object *jso)$/;"	f
+json_object_get_string_len	json_object.c	/^int json_object_get_string_len(struct json_object *jso)  {$/;"	f
+json_object_get_type	json_object.c	/^enum json_type json_object_get_type(struct json_object *jso)$/;"	f
+json_object_init	json_object.c	/^static void json_object_init(void) {$/;"	f	file:
+json_object_int_to_json_string	json_object.c	/^static int json_object_int_to_json_string(struct json_object* jso,$/;"	f	file:
+json_object_is_type	json_object.c	/^int json_object_is_type(struct json_object *jso, enum json_type type)$/;"	f
+json_object_iter	json_object.h	/^struct json_object_iter$/;"	s
+json_object_iter	json_object.h	/^typedef struct json_object_iter json_object_iter;$/;"	t	typeref:struct:json_object_iter
+json_object_lh_entry_free	json_object.c	/^static void json_object_lh_entry_free(struct lh_entry *ent)$/;"	f	file:
+json_object_new	json_object.c	/^static struct json_object* json_object_new(enum json_type o_type)$/;"	f	file:
+json_object_new_array	json_object.c	/^struct json_object* json_object_new_array(void)$/;"	f
+json_object_new_boolean	json_object.c	/^struct json_object* json_object_new_boolean(boolean b)$/;"	f
+json_object_new_double	json_object.c	/^struct json_object* json_object_new_double(double d)$/;"	f
+json_object_new_int	json_object.c	/^struct json_object* json_object_new_int(int32_t i)$/;"	f
+json_object_new_int64	json_object.c	/^struct json_object* json_object_new_int64(int64_t i)$/;"	f
+json_object_new_object	json_object.c	/^struct json_object* json_object_new_object(void)$/;"	f
+json_object_new_string	json_object.c	/^struct json_object* json_object_new_string(const char *s)$/;"	f
+json_object_new_string_len	json_object.c	/^struct json_object* json_object_new_string_len(const char *s, int len)$/;"	f
+json_object_object_add	json_object.c	/^void json_object_object_add(struct json_object* jso, const char *key,$/;"	f
+json_object_object_del	json_object.c	/^void json_object_object_del(struct json_object* jso, const char *key)$/;"	f
+json_object_object_delete	json_object.c	/^static void json_object_object_delete(struct json_object* jso)$/;"	f	file:
+json_object_object_foreach	json_object.h	160;"	d
+json_object_object_foreach	json_object.h	166;"	d
+json_object_object_foreachC	json_object.h	176;"	d
+json_object_object_get	json_object.c	/^struct json_object* json_object_object_get(struct json_object* jso, const char *key)$/;"	f
+json_object_object_to_json_string	json_object.c	/^static int json_object_object_to_json_string(struct json_object* jso,$/;"	f	file:
+json_object_put	json_object.c	/^extern void json_object_put(struct json_object *jso)$/;"	f
+json_object_string_delete	json_object.c	/^static void json_object_string_delete(struct json_object* jso)$/;"	f	file:
+json_object_string_to_json_string	json_object.c	/^static int json_object_string_to_json_string(struct json_object* jso,$/;"	f	file:
+json_object_table	json_object.c	/^static struct lh_table *json_object_table;$/;"	v	typeref:struct:lh_table	file:
+json_object_to_file	json_util.c	/^int json_object_to_file(char *filename, struct json_object *obj)$/;"	f
+json_object_to_json_string	json_object.c	/^const char* json_object_to_json_string(struct json_object *jso)$/;"	f
+json_object_to_json_string_fn	json_object_private.h	/^typedef int (json_object_to_json_string_fn)(struct json_object *o,$/;"	t
+json_parse_int64	json_util.c	/^int json_parse_int64(const char *buf, int64_t *retval)$/;"	f
+json_tokener	json_object.h	/^typedef struct json_tokener json_tokener;$/;"	t	typeref:struct:json_tokener
+json_tokener	json_tokener.h	/^struct json_tokener$/;"	s
+json_tokener_continue	json_tokener.h	/^  json_tokener_continue,$/;"	e	enum:json_tokener_error
+json_tokener_error	json_tokener.h	/^enum json_tokener_error {$/;"	g
+json_tokener_error_depth	json_tokener.h	/^  json_tokener_error_depth,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_array	json_tokener.h	/^  json_tokener_error_parse_array,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_boolean	json_tokener.h	/^  json_tokener_error_parse_boolean,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_comment	json_tokener.h	/^  json_tokener_error_parse_comment$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_eof	json_tokener.h	/^  json_tokener_error_parse_eof,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_null	json_tokener.h	/^  json_tokener_error_parse_null,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_number	json_tokener.h	/^  json_tokener_error_parse_number,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_object_key_name	json_tokener.h	/^  json_tokener_error_parse_object_key_name,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_object_key_sep	json_tokener.h	/^  json_tokener_error_parse_object_key_sep,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_object_value_sep	json_tokener.h	/^  json_tokener_error_parse_object_value_sep,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_string	json_tokener.h	/^  json_tokener_error_parse_string,$/;"	e	enum:json_tokener_error
+json_tokener_error_parse_unexpected	json_tokener.h	/^  json_tokener_error_parse_unexpected,$/;"	e	enum:json_tokener_error
+json_tokener_errors	json_tokener.c	/^const char* json_tokener_errors[] = {$/;"	v
+json_tokener_free	json_tokener.c	/^void json_tokener_free(struct json_tokener *tok)$/;"	f
+json_tokener_new	json_tokener.c	/^struct json_tokener* json_tokener_new(void)$/;"	f
+json_tokener_parse	json_tokener.c	/^struct json_object* json_tokener_parse(const char *str)$/;"	f
+json_tokener_parse_ex	json_tokener.c	/^struct json_object* json_tokener_parse_ex(struct json_tokener *tok,$/;"	f
+json_tokener_parse_verbose	json_tokener.c	/^struct json_object* json_tokener_parse_verbose(const char *str, enum json_tokener_error *error)$/;"	f
+json_tokener_reset	json_tokener.c	/^void json_tokener_reset(struct json_tokener *tok)$/;"	f
+json_tokener_reset_level	json_tokener.c	/^static void json_tokener_reset_level(struct json_tokener *tok, int depth)$/;"	f	file:
+json_tokener_srec	json_tokener.h	/^struct json_tokener_srec$/;"	s
+json_tokener_state	json_tokener.h	/^enum json_tokener_state {$/;"	g
+json_tokener_state_array	json_tokener.h	/^  json_tokener_state_array,$/;"	e	enum:json_tokener_state
+json_tokener_state_array_add	json_tokener.h	/^  json_tokener_state_array_add,$/;"	e	enum:json_tokener_state
+json_tokener_state_array_sep	json_tokener.h	/^  json_tokener_state_array_sep,$/;"	e	enum:json_tokener_state
+json_tokener_state_boolean	json_tokener.h	/^  json_tokener_state_boolean,$/;"	e	enum:json_tokener_state
+json_tokener_state_comment	json_tokener.h	/^  json_tokener_state_comment,$/;"	e	enum:json_tokener_state
+json_tokener_state_comment_end	json_tokener.h	/^  json_tokener_state_comment_end,$/;"	e	enum:json_tokener_state
+json_tokener_state_comment_eol	json_tokener.h	/^  json_tokener_state_comment_eol,$/;"	e	enum:json_tokener_state
+json_tokener_state_comment_start	json_tokener.h	/^  json_tokener_state_comment_start,$/;"	e	enum:json_tokener_state
+json_tokener_state_eatws	json_tokener.h	/^  json_tokener_state_eatws,$/;"	e	enum:json_tokener_state
+json_tokener_state_escape_unicode	json_tokener.h	/^  json_tokener_state_escape_unicode,$/;"	e	enum:json_tokener_state
+json_tokener_state_finish	json_tokener.h	/^  json_tokener_state_finish,$/;"	e	enum:json_tokener_state
+json_tokener_state_null	json_tokener.h	/^  json_tokener_state_null,$/;"	e	enum:json_tokener_state
+json_tokener_state_number	json_tokener.h	/^  json_tokener_state_number,$/;"	e	enum:json_tokener_state
+json_tokener_state_object_field	json_tokener.h	/^  json_tokener_state_object_field,$/;"	e	enum:json_tokener_state
+json_tokener_state_object_field_end	json_tokener.h	/^  json_tokener_state_object_field_end,$/;"	e	enum:json_tokener_state
+json_tokener_state_object_field_start	json_tokener.h	/^  json_tokener_state_object_field_start,$/;"	e	enum:json_tokener_state
+json_tokener_state_object_sep	json_tokener.h	/^  json_tokener_state_object_sep$/;"	e	enum:json_tokener_state
+json_tokener_state_object_value	json_tokener.h	/^  json_tokener_state_object_value,$/;"	e	enum:json_tokener_state
+json_tokener_state_object_value_add	json_tokener.h	/^  json_tokener_state_object_value_add,$/;"	e	enum:json_tokener_state
+json_tokener_state_start	json_tokener.h	/^  json_tokener_state_start,$/;"	e	enum:json_tokener_state
+json_tokener_state_string	json_tokener.h	/^  json_tokener_state_string,$/;"	e	enum:json_tokener_state
+json_tokener_state_string_escape	json_tokener.h	/^  json_tokener_state_string_escape,$/;"	e	enum:json_tokener_state
+json_tokener_success	json_tokener.h	/^  json_tokener_success,$/;"	e	enum:json_tokener_error
+json_true_str	json_tokener.c	/^static const char* json_true_str = "true";$/;"	v	file:
+json_type	json_object.h	/^typedef enum json_type {$/;"	g
+json_type	json_object.h	/^} json_type;$/;"	t	typeref:enum:json_type
+json_type_array	json_object.h	/^  json_type_array,$/;"	e	enum:json_type
+json_type_boolean	json_object.h	/^  json_type_boolean,$/;"	e	enum:json_type
+json_type_double	json_object.h	/^  json_type_double,$/;"	e	enum:json_type
+json_type_int	json_object.h	/^  json_type_int,$/;"	e	enum:json_type
+json_type_name	json_util.c	/^static const char* json_type_name[] = {$/;"	v	file:
+json_type_null	json_object.h	/^  json_type_null,$/;"	e	enum:json_type
+json_type_object	json_object.h	/^  json_type_object,$/;"	e	enum:json_type
+json_type_string	json_object.h	/^  json_type_string,$/;"	e	enum:json_type
+json_type_to_name	json_util.c	/^const char *json_type_to_name(enum json_type o_type)$/;"	f
+k	linkhash.h	/^	void *k;$/;"	m	struct:lh_entry
+key	json_object.h	/^	char *key;$/;"	m	struct:json_object_iter
+len	json_object_private.h	/^        int len;$/;"	m	struct:json_object::data::__anon1
+length	arraylist.h	/^  int length;$/;"	m	struct:array_list
+lh_abort	linkhash.c	/^void lh_abort(const char *msg, ...)$/;"	f
+lh_char_equal	linkhash.c	/^int lh_char_equal(const void *k1, const void *k2)$/;"	f
+lh_char_hash	linkhash.c	/^unsigned long lh_char_hash(const void *k)$/;"	f
+lh_entry	linkhash.h	/^struct lh_entry {$/;"	s
+lh_entry_free_fn	linkhash.h	/^typedef void (lh_entry_free_fn) (struct lh_entry *e);$/;"	t
+lh_equal_fn	linkhash.h	/^typedef int (lh_equal_fn) (const void *k1, const void *k2);$/;"	t
+lh_foreach	linkhash.h	149;"	d
+lh_foreach_safe	linkhash.h	155;"	d
+lh_hash_fn	linkhash.h	/^typedef unsigned long (lh_hash_fn) (const void *k);$/;"	t
+lh_kchar_table_new	linkhash.c	/^struct lh_table* lh_kchar_table_new(int size, const char *name,$/;"	f
+lh_kptr_table_new	linkhash.c	/^struct lh_table* lh_kptr_table_new(int size, const char *name,$/;"	f
+lh_ptr_equal	linkhash.c	/^int lh_ptr_equal(const void *k1, const void *k2)$/;"	f
+lh_ptr_hash	linkhash.c	/^unsigned long lh_ptr_hash(const void *k)$/;"	f
+lh_table	json_object.h	/^typedef struct lh_table lh_table;$/;"	t	typeref:struct:lh_table
+lh_table	linkhash.h	/^struct lh_table {$/;"	s
+lh_table_delete	linkhash.c	/^int lh_table_delete(struct lh_table *t, const void *k)$/;"	f
+lh_table_delete_entry	linkhash.c	/^int lh_table_delete_entry(struct lh_table *t, struct lh_entry *e)$/;"	f
+lh_table_free	linkhash.c	/^void lh_table_free(struct lh_table *t)$/;"	f
+lh_table_insert	linkhash.c	/^int lh_table_insert(struct lh_table *t, void *k, const void *v)$/;"	f
+lh_table_lookup	linkhash.c	/^const void* lh_table_lookup(struct lh_table *t, const void *k)$/;"	f
+lh_table_lookup_entry	linkhash.c	/^struct lh_entry* lh_table_lookup_entry(struct lh_table *t, const void *k)$/;"	f
+lh_table_new	linkhash.c	/^struct lh_table* lh_table_new(int size, const char *name,$/;"	f
+lh_table_resize	linkhash.c	/^void lh_table_resize(struct lh_table *t, int new_size)$/;"	f
+lookups	linkhash.h	/^	int lookups;$/;"	m	struct:lh_table
+main	test1.c	/^int main(int argc, char **argv)$/;"	f
+main	test2.c	/^int main(int argc, char **argv)$/;"	f
+main	test4.c	/^int main() {$/;"	f
+main	test_cast.c	/^int main(int argc, char **argv)$/;"	f
+main	test_null.c	/^int main() {$/;"	f
+main	test_parse_int64.c	/^int main()$/;"	f
+mc_abort	debug.c	/^void mc_abort(const char *msg, ...)$/;"	f
+mc_debug	debug.c	/^void mc_debug(const char *msg, ...)$/;"	f
+mc_error	debug.c	/^void mc_error(const char *msg, ...)$/;"	f
+mc_get_debug	debug.c	/^int mc_get_debug(void) { return _debug; }$/;"	f
+mc_info	debug.c	/^void mc_info(const char *msg, ...)$/;"	f
+mc_set_debug	debug.c	/^void mc_set_debug(int debug) { _debug = debug; }$/;"	f
+mc_set_syslog	debug.c	/^extern void mc_set_syslog(int syslog)$/;"	f
+name	linkhash.h	/^	const char *name;$/;"	m	struct:lh_table
+next	linkhash.h	/^	struct lh_entry *next;$/;"	m	struct:lh_entry	typeref:struct:lh_entry::lh_entry
+o	json_object_private.h	/^  } o;$/;"	m	struct:json_object	typeref:union:json_object::data
+o_type	json_object_private.h	/^  enum json_type o_type;$/;"	m	struct:json_object	typeref:enum:json_object::json_type
+obj	json_tokener.h	/^  struct json_object *obj;$/;"	m	struct:json_tokener_srec	typeref:struct:json_tokener_srec::json_object
+obj_field_name	json_tokener.c	165;"	d	file:
+obj_field_name	json_tokener.h	/^  char *obj_field_name;$/;"	m	struct:json_tokener_srec
+open	json_util.c	46;"	d	file:
+pb	json_tokener.h	/^  struct printbuf *pb;$/;"	m	struct:json_tokener	typeref:struct:json_tokener::printbuf
+prev	linkhash.h	/^	struct lh_entry *prev;$/;"	m	struct:lh_entry	typeref:struct:lh_entry::lh_entry
+print_hex	test4.c	/^void print_hex( const char* s) {$/;"	f
+printbuf	json_object.h	/^typedef struct printbuf printbuf;$/;"	t	typeref:struct:printbuf
+printbuf	printbuf.h	/^struct printbuf {$/;"	s
+printbuf_free	printbuf.c	/^void printbuf_free(struct printbuf *p)$/;"	f
+printbuf_memappend	printbuf.c	/^int printbuf_memappend(struct printbuf *p, const char *buf, int size)$/;"	f
+printbuf_memappend_fast	printbuf.h	44;"	d
+printbuf_new	printbuf.c	/^struct printbuf* printbuf_new(void)$/;"	f
+printbuf_reset	printbuf.c	/^void printbuf_reset(struct printbuf *p)$/;"	f
+quote_char	json_tokener.h	/^  char quote_char;$/;"	m	struct:json_tokener
+realloc	json_util.c	13;"	d	file:
+resizes	linkhash.h	/^	int resizes;$/;"	m	struct:lh_table
+rpl_realloc	json_util.c	/^void* rpl_realloc(void* p, size_t n)$/;"	f
+run_output_test	test-defs.sh	/^run_output_test()$/;"	f
+saved_state	json_tokener.c	163;"	d	file:
+saved_state	json_tokener.h	/^  enum json_tokener_state state, saved_state;$/;"	m	struct:json_tokener_srec	typeref:enum:json_tokener_srec::
+size	arraylist.h	/^  int size;$/;"	m	struct:array_list
+size	linkhash.h	/^	int size;$/;"	m	struct:lh_table
+size	printbuf.h	/^  int size;$/;"	m	struct:printbuf
+sprintbuf	printbuf.c	/^int sprintbuf(struct printbuf *p, const char *msg, ...)$/;"	f
+st_pos	json_tokener.h	/^  int depth, is_double, st_pos, char_offset;$/;"	m	struct:json_tokener
+stack	json_tokener.h	/^  struct json_tokener_srec stack[JSON_TOKENER_MAX_DEPTH];$/;"	m	struct:json_tokener	typeref:struct:json_tokener::json_tokener_srec
+state	json_tokener.c	162;"	d	file:
+state	json_tokener.h	/^  enum json_tokener_state state, saved_state;$/;"	m	struct:json_tokener_srec	typeref:enum:json_tokener_srec::json_tokener_state
+str	json_object_private.h	/^        char *str;$/;"	m	struct:json_object::data::__anon1
+str	json_tokener.h	/^  char *str;$/;"	m	struct:json_tokener
+strncasecmp	json_tokener.c	36;"	d	file:
+strndup	json_tokener.c	/^char* strndup(const char* str, size_t n)$/;"	f
+table	linkhash.h	/^	struct lh_entry *table;$/;"	m	struct:lh_table	typeref:struct:lh_table::lh_entry
+tail	linkhash.h	/^	struct lh_entry *tail;$/;"	m	struct:lh_table	typeref:struct:lh_table::lh_entry
+test1_LDADD	Makefile	/^test1_LDADD = $(lib_LTLIBRARIES)$/;"	m
+test1_SOURCES	Makefile	/^test1_SOURCES = test1.c$/;"	m
+test2_LDADD	Makefile	/^test2_LDADD = $(lib_LTLIBRARIES)$/;"	m
+test2_SOURCES	Makefile	/^test2_SOURCES = test2.c$/;"	m
+test2_SOURCES	Makefile	/^test2_SOURCES = test4.c$/;"	m
+ucs_char	json_tokener.h	/^  unsigned int ucs_char;$/;"	m	struct:json_tokener
+utf8_replacement_char	json_tokener.c	/^static unsigned char utf8_replacement_char[3] = { 0xEF, 0xBF, 0xBD };$/;"	v	file:
+v	linkhash.h	/^	const void *v;$/;"	m	struct:lh_entry
+val	json_object.h	/^	struct json_object *val;$/;"	m	struct:json_object_iter	typeref:struct:json_object_iter::json_object
+vasprintf	printbuf.c	/^static int vasprintf(char **buf, const char *fmt, va_list ap)$/;"	f	file:
+vsnprintf	printbuf.c	69;"	d	file:

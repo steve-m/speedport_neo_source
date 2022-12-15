@@ -1,0 +1,3 @@
+#! /bin/sh
+/etc/fon/fon_hm stop
+/bin/echo Active > /tmp/var/hsfon_status

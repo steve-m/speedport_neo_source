@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+. /usr/share/debconf/confmodule
+
+# Ask questions.
+db_input high fonap/no-dhcp-interface || true
+db_input high fonap/chilli-dhcp-interface || true
+db_input high fonap/device-mac || true
+db_input high fonap/keyword || true
+
+db_go || true

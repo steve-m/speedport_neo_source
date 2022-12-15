@@ -1,0 +1,113 @@
+Dynamic Whitelisting support in chilli through dnsmasq
+======================================================
+Pablo Martín <pablo@fon.com>
+
+[Abstract]
+----------
+This document describes the (as of now, 2011-03) old and
+obsolete implemntation of whitelisting in earlier chilli versions.
+It is maintained for reference purpouses as many devices still
+use this, but it will not be used in future integrations.
+
+The problem
+-----------
+Coova, as included in current fonap.deb reference software, has the ability to
+allow traffic for certain domains, the so called "whitelisted" or "walled
+garden" domains, before the public-signal user logs in. To know wheter a IP
+packet that goes through chillispot is allowed or blocked, chillispot only uses
+the source/destination IP addresses. 
+
+Allowed domains are specified on the chillispot configuration file,
+chilli.conf, as uamallowed lines that can contain both domain names or ip
+addresses, for example:
+
+--------------------
+uamallowed www.martinvarsavsky.net,202.47.16.159,202.47.16.161
+--------------------
+
+Initially, when chillispot boots up, a translation of any domain contained as
+such in the uamallowed lines of chilli.conf (coova configuration file) is
+converted into an ip address using gethostbyname(3)
+
+In the above case, chillispot will list a list containing the ip addresses
+202.47.16.159, 202.47.16.161, and what the resolver answers for
+www.martinvarsavsky.net, i.e. 93.189.32.84.
+
+The problem that the 'dynamic whitelisting' setup addresses is what happens
+when one domain included as uamallowed resolves to many IP addresses, as with
+google.com. In that case, the computer connecting to the AP can resolve a
+different IP address for the domain than the one coova resolved upon booting,
+thus resulting on the user traffic being blocked.
+
+image:dnsmasq_1.png[]
+
+As shown in the figure, the client is blocked when connecting through HTTP to
+the newly resolved IP addess for google.com, even if it was whitelisted in
+chilli.conf, because the IP is different
+
+To solve this, a mechanism for capturating the ip addresses as they where
+resolved by the client and send them to chilli to feed its internal table of
+allowed ip addresses was devised.
+
+The solution
+------------
+
+The system exploits the fact that the client in a fonera does not connect
+directly to the DNS server to query for ip addresses.  Instead, the DHCP server
+(also coova in this case) sends the same IP address of DNS server as the
+gateway, this is, the router serves as DNS server using dnsmasq, a DNS proxy
+daemon commonly found in Linux-based access points.
+
+As dnsmasq can capture the answer to the query done by the client, it can send
+it to chillispot, as shown in the diagram
+
+image:dnsmasq_2.png[]
+
+The implementation
+------------------
+
+Both dnsmasq and chillispot-coova are patched. The patches can be found in the
+fonap source as 104-whitelist.patch and 207-chilli-whitelist.patch respectively
+
+In chilli's dhcp.c a function is added
+-----------------
+int in_dynamic_whitelist(struct dhcp_ippacket_t *pack, unsigned int dnat)
+-----------------
+
+That opens the /tmp/whitelist.cache file each time a packet is captured, adding
+its contents to the filtering logic by calling it in dhcp_doDNAT(), that
+performs the NAT translation of all the packets going through chillispot 
+
+In dnsmasq, a command line option is added to specify a file that is an extract
+of chilli.conf containing the "dynamic" domains that must be
+read by dnsmasq, in src/dnsmasq.c
+
+And in src/cache.c, the functions to insert elements into /tmp/whitelist.cache
+and detect whitelisted domains passing through dnsmasq
+are added:
+
+------------------
+int check_whitelist_file(const char *file);
+void whitelist_cache_insert(unsigned short flags, char *name, struct all_addr *addr);
+int domain_in_whitelist(char *name);
+int commit_whitelist_cache(struct all_addr *addr);
+int dropip_from_cache(struct all_addr *addr);
+-------------------
+
+The process of domains/answers is implemented in src/rfc1035.c where the call
+to domain_in_the_whitelist() is performed in the loop and
+the domains inserted using commit_whitelist_cache.
+
+Originally src/cache.c implements a cache of queries/answers with the TTL of
+the answer to avoid repeated calls to the ISP's DNS server. When an element
+is removed from the cache, its ip address in the /tmp/whitelist.cache is
+also removed. This is to avoid maintaining the whitelisted ip addresses
+forever, wich could cause unwanted domains to be whitelisted (the case for
+Akamai-like content, or hosts with one ip address but serving many HTTP
+hosts)
+
+Also, the process that updates chilli.conf from the FON radius servers (the
+radconfig init script) was changed to generate 2 files, one for dnsmasq
+referred before, and the proper chilli.conf with "non-dynamic" domains,
+ip addresses and chillispot configuration options. 
+

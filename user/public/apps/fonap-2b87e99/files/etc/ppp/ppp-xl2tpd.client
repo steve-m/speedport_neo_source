@@ -1,0 +1,25 @@
+plugin fon_passwordfd.so
+ipcp-accept-local
+ipcp-accept-remote
+refuse-eap
+noccp
+noauth
+crtscts
+idle #PPP_IDLE@
+nodefaultroute
+usepeerdns
+noipdefault
+debug
+lock
+proxyarp
+connect-delay 0
+hide-password
+pap-restart #PPP_PAPRESTART@
+pap-max-authreq #PPP_PAPMAXAUTHREQ@
+lcp-echo-interval #PPP_LCPECHOINTERVAL@
+lcp-echo-failure #PPP_LCPECHOFAILURE@
+connect /bin/true
+persist
+noaccomp
+default-asyncmap
+logfile /tmp/pppd_log.txt

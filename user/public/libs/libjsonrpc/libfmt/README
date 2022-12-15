@@ -1,0 +1,73 @@
+/*************************************************************************
+ * Copyright (c) <2013, 2014>  SAF TEHNIKA JSC (www.saftehnika.com)
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * For any questions or requests please contact: SW_LIC (at) SAFTEHNIKA.COM
+ */
+
+libfmt
+======
+
+High level API for jsmn JSON data parser library (http://zserge.com/jsmn.html)
+and JSON generator library written from scratch, using the same JSON
+manipulation techniques and data structures as jsmn.
+
+
+Features
+--------
+
+* Easy to use, high level API for jsmn parser
+* Key/value JSON manipulations
+* Type tests for object, array, string, bool/null or other primitive (number)
+* Load data into parser from file or buffer (with normalization, to enable
+  further JSON manipulations)
+* Dump generated/modified JSON into file or buffer, pretty dump support
+* Get/modify/generate a key containing any type
+* Get a key value by it's path
+* Iterate through arrays and objects
+* Delete a key containing any type, including by path
+* Copy a key containing any type
+* Parser/generator statistics (see fmt_stats function)
+* ezjson - libfmt extension for beautiful way to parse/generate JSON
+* Unittests for many but not all functions/situations (for now works also as
+  examples)
+* Parser has all the features (and drawbacks) of jsmn
+* Generated JSON should (theoretically) pass any JSON validation
+
+
+Documentation
+-------------
+
+Main documentation is the source, as usual.
+The API is described in doxygen style comments in libfmt.h
+Help needed for better documentation writing.
+
+
+Start using
+-----------
+
+libfmt depends on jsmn so get and compile that at first.
+jsmn should be compiled with JSMN_PARENT_LINKS enabled.
+Then just `make' if jsmn is in your library path or see Makefile.dev, change
+jsmn library path and `make -f Makefile.dev'
+
+In your source code you should include libfmt.h and then compile with -lfmt,
+setting -L and/or -I if needed.
+
+
+On number type support
+----------------------
+
+JSON numbers are actually strings anyway so, at least for now, I didn't see any
+point in converting strings into numbers inside the library itself.
+
+
+TODO
+----
+
+* Autotools based configuration (search for jsmn library and headers)
+* Number support (really?)
+* see the code here and there
+* etc tbd

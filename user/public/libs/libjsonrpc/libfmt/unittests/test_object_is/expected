@@ -1,0 +1,8 @@
+Input:
+{"group":{"other":{"dsc":"some dsc","sensors":["i2c.PVG","fiejwoi",{}],"enable":true},"default":{"dsc":"some dsc","sensors":["psu.PVG"],"enable":true}}}
+Testing object_is_object (parsed): OK
+Testing object_is_object (new): OK
+Testing object_is_string (parsed): OK
+Testing object_is_string (new): OK
+Testing object_is_array (parsed): OK
+Testing object_is_array (new): OK

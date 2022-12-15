@@ -1,0 +1,210 @@
+
+\section{Running in VMware}
+
+\begin{itemize}
+\item Install Ubuntu Desktop 10.10 from ISO CD-ROM
+\item Install additional required packages
+\item Setup VMware networking
+\item Build and install the fonap package
+\item Running the FON gateway 
+\end{itemize}
+
+\subsection{Installing Ubuntu from CD-ROM}
+
+\href{http://www.ubuntu.com/desktop/get-ubuntu/download}{Download the
+  Ubuntu Desktop 10.10} installation CD-ROM ISO file.
+
+Run VMware player and use the create new wizard to setup a new
+appliance from a CD-ROM. Find and use the Ubuntu installation ISO
+file. Proceed to install the standard Desktop into VMware. 
+
+See \href{https://help.ubuntu.com/community/VMware}{https://help.ubuntu.com/community/VMware} for more information.
+
+\subsection{Installing additional packages}
+
+Install additional required Ubuntu packages to build fonap. 
+
+\begin{verbatim}
+sudo apt-get install build-essential subversion automake libtool
+
+sudo apt-get install libdjbdns-dev libdaemon-dev
+\end{verbatim}
+
+The standard install includes a package that has to be removed,
+otherwise we will get a configuration file conflict.
+
+\begin{verbatim}
+dpkg -r dnsmasq-base
+\end{verbatim}
+
+\subsection{Setup VMware networking}
+
+Our setup:
+
+\begin{itemize}
+\item The host machine has a physical interface \texttt{eth0} which we
+  want to use as the subscriber network,
+\item VMware player on the host machine already has \texttt{vmnet8} up
+  and running a NAT network.
+\end{itemize}
+
+Shut down your VMware player if running. Then edit the virtual
+machine's \texttt{.vmx} file. In our case, our virtual machine is
+named ``Ubuntu'', so we need to edit the \texttt{Ubuntu.vmx} file
+found in the virtual machine's directory. Set the following values,
+adding them if not there already, or editing an existing entry. 
+
+{\footnotesize%
+\begin{verbatim}
+ethernet0.connectionType = "custom"
+ethernet0.vnet = "/dev/vmnet8"
+
+ethernet1.present = "TRUE"
+ethernet1.connectionType = "custom"
+ethernet1.addressType = "generated"
+ethernet1.vnet = "/dev/vmnet0"
+\end{verbatim}%
+}
+
+We have configured the guest \texttt{eth0} (ethernet0) interface to
+point to the VMware NAT interface. This will give our guest system a
+WAN connection through the host system. The guest system will use DHCP
+to configure \texttt{eth0}. We also give the guest system
+\texttt{eth1} which points to the VMware bridge interface
+\texttt{vmnet0}.
+
+Create a helper script that we can run to restart VMware services:
+
+{\footnotesize%
+\begin{verbatim}
+#!/bin/bash
+
+# Kill existing bridge 
+kill $(ps aux | grep vmnet-bridge | grep -v grep | awk '{print $2}')
+
+# Start up the bridge network including our subscriber network eth0
+vmnet-bridge -s 6 -d /var/run/vmnet-bridge-0.pid -n 0 -i eth0
+
+# Bring up vmnet0 (not done per default on our host system)
+kill $(cat /var/run/vmnet-netifup-vmnet0.pid)
+/usr/bin/vmnet-netifup -s 6 -d /var/run/vmnet-netifup-vmnet0.pid /dev/vmnet0 vmnet0
+\end{verbatim}%
+}
+
+With everything setup, our host system has the following running processes:
+
+{\footnotesize%
+\begin{verbatim}
+vmnet-netifup -s 6 -d /var/run/vmnet-netifup-vmnet0.pid /dev/vmnet0 vmnet0
+vmnet-netifup -s 6 -d /var/run/vmnet-netifup-vmnet1.pid /dev/vmnet1 vmnet1
+vmnet-netifup -s 6 -d /var/run/vmnet-netifup-vmnet8.pid /dev/vmnet8 vmnet8
+
+vmnet-dhcpd -s 6 -cf /etc/vmware/vmnet1/dhcpd/dhcpd.conf \
+  -lf /etc/vmware/vmnet1/dhcpd/dhcpd.leases \
+  -pf /var/run/vmnet-dhcpd-vmnet1.pid vmnet1
+
+vmnet-dhcpd -s 6 -cf /etc/vmware/vmnet8/dhcpd/dhcpd.conf \
+  -lf /etc/vmware/vmnet8/dhcpd/dhcpd.leases \
+  -pf /var/run/vmnet-dhcpd-vmnet8.pid vmnet8
+
+vmnet-natd -s 6 -m /etc/vmware/vmnet8/nat.mac -c /etc/vmware/vmnet8/nat/nat.conf
+
+vmnet-bridge -s 6 -d /var/run/vmnet-bridge-0.pid -n 0 -i eth0
+\end{verbatim}%
+}
+
+And the host system has the following network interfaces (not
+including the host system's WAN interface, which isn't important).
+
+{\footnotesize%
+\begin{verbatim}
+eth0      Link encap:Ethernet  HWaddr 00:1c:23:4f:46:10  
+          inet6 addr: fe80::21c:23ff:fe4f:4610/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:10939 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8923 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1397463 (1.3 MB)  TX bytes:7886491 (7.8 MB)
+          Interrupt:17 
+
+vmnet0    Link encap:Ethernet  HWaddr 00:50:56:c0:00:00  
+          inet6 addr: fe80::250:56ff:fec0:0/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3021 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:51 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+vmnet1    Link encap:Ethernet  HWaddr 00:50:56:c0:00:01  
+          inet addr:172.16.187.1  Bcast:172.16.187.255  Mask:255.255.255.0
+          inet6 addr: fe80::250:56ff:fec0:1/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:389 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+vmnet8    Link encap:Ethernet  HWaddr 00:50:56:c0:00:08  
+          inet addr:172.16.32.1  Bcast:172.16.32.255  Mask:255.255.255.0
+          inet6 addr: fe80::250:56ff:fec0:8/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:383 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:338 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+\end{verbatim}%
+}
+
+We have our subscriber test machines on the \texttt{eth0} interface.
+
+\subsection{Running the FON gateway}
+
+With your VMware guest system running, be sure to run the helper
+script mentioned above - this has to always be ran after starting
+VMware player.
+
+Inside the running guest system, we have the following network
+interfaces:
+
+{\footnotesize%
+\begin{verbatim}
+eth0      Link encap:Ethernet  HWaddr 00:0c:29:8a:a1:8f  
+          inet addr:172.16.32.130  Bcast:172.16.32.255  Mask:255.255.255.0
+          inet6 addr: fe80::20c:29ff:fe8a:a18f/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4131 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3761 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:1048064 (1.0 MB)  TX bytes:410615 (410.6 KB)
+          Interrupt:19 Base address:0x2000 
+
+eth1      Link encap:Ethernet  HWaddr 00:0c:29:8a:a1:99  
+          inet6 addr: fe80::20c:29ff:fe8a:a199/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4032 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1860 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:470777 (470.7 KB)  TX bytes:614872 (614.8 KB)
+          Interrupt:19 Base address:0x2080 
+\end{verbatim}%
+}
+
+CoovaChilli is configured with \texttt{eth1} in \texttt{/etc/default/chilli}:
+
+{\footnotesize%
+\begin{verbatim}
+START_CHILLI=1
+DHCPIF="eth1"
+CONFFILE="/etc/chilli.conf"
+\end{verbatim}%
+}
+
+View the chilli logs:
+
+{\footnotesize%
+\begin{verbatim}
+$ tail -f /var/log/messages 
+Nov 11 00:03:18 ubuntu chillispot[1661]: chilli.c: 2498: New DHCP request from MAC=00-14-5E-10-77-F3
+Nov 11 00:03:18 ubuntu chillispot[1661]: chilli.c: 2460: Client MAC=00-14-5E-10-77-F3 assigned IP 192.168.182.11
+\end{verbatim}%
+}

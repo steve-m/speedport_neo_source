@@ -1,0 +1,19 @@
+\tocsection[1]{Introduction}
+\tocsection[1]{1. L2TP in ``La Fonera''}
+\tocsection[2]{2. Elements involved in the tunnel creation and maintenance}
+\tocsection[2]{3. Tunnel creation sequence}
+\tocsection[2]{4. User logout sequence}
+\tocsection[3]{5. Xl2TP tunnel brought down sequence}
+\tocsection[3]{6. LNS address queue handling}
+\tocsection[3]{7. Data dictionary}
+\tocsubsection[3]{Static data for the xl2tp daemon (Configuration file)}
+\tocsubsection[3]{Data going from pppd to chillout}
+\tocsubsection[3]{Data going from xl2tpd to pppd (Lauch)}
+\tocsubsection[3]{Data going from ppp to chillout}
+\tocsection[3]{8. Implementation}
+\tocsubsection[3]{8.1 chilloutd}
+\tocsubsection[4]{8.2 The chillout protocol}
+\tocsubsection[4]{8.3 Chillispot modifications}
+\tocsubsection[4]{8.4 Xl2tpd modifications}
+\tocsubsection[4]{8.5 pppd modifications}
+\tocsection[5]{References}

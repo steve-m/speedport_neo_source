@@ -1,0 +1,13 @@
+Package: fonap
+Version:
+Section: net
+Priority: optional
+Architecture:
+Depends: libc6, debconf (>=  0.5), libdjbdns1, libdaemon0
+Conflicts: coova-chilli, chillispot, fonsmcd, ppp, xl2tpd
+Replaces: coova-chilli, chillispot, fonsmcd, ppp, xl2tpd
+Provides: coova-chilli, dnsmasq, fonsmcd, ppp, xl2tpd
+Installed-Size: 1036
+Maintainer: Fon Wireless Ltd. <fwteam@fon.com>
+Description: Wireless LAN Access Point Controller (captive portal, plus
+ dns and dhcp server), tuned to use the FON network with L2TP tunneling

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="24cm" height="17cm" viewBox="315 178 469 323" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffa500" x="400" y="180" width="120" height="120"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="400" y="180" width="120" height="120"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:13.5467;font-family:sanserif;font-style:normal;font-weight:700" x="460" y="227.2">
+      <tspan x="460" y="227.2">Fon Module</tspan>
+      <tspan x="460" y="244.133">(chilli)</tspan>
+      <tspan x="460" y="261.067"></tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #fddfa9" x="580" y="220" width="120" height="80"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="580" y="220" width="120" height="80"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.8;font-family:sanserif;font-style:normal;font-weight:700" x="640" y="263.9">
+      <tspan x="640" y="263.9">fonctl</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #add8e6" x="400" y="440" width="300" height="60"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="400" y="440" width="300" height="60"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.8;font-family:sanserif;font-style:normal;font-weight:700" x="550" y="465.9">
+      <tspan x="550" y="465.9">External Authenticator</tspan>
+      <tspan x="550" y="481.9">(handler)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="460" y1="300" x2="460" y2="425.264"/>
+    <polygon style="fill: #000000" points="460,432.764 455,422.764 460,425.264 465,422.764 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="460,432.764 455,422.764 460,425.264 465,422.764 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="639.929" y1="309.736" x2="639" y2="437"/>
+    <polygon style="fill: #000000" points="639.984,302.236 644.911,312.272 639.929,309.736 634.911,312.199 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="639.984,302.236 644.911,312.272 639.929,309.736 634.911,312.199 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="580" y1="240" x2="529.736" y2="240"/>
+    <polygon style="fill: #000000" points="522.236,240 532.236,235 529.736,240 532.236,245 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="522.236,240 532.236,235 529.736,240 532.236,245 "/>
+  </g>
+  <text style="fill: #000000;text-anchor:start;font-size:12.8;font-family:sanserif;font-style:normal;font-weight:normal" x="380" y="400">
+    <tspan x="380" y="400">Interface A</tspan>
+  </text>
+  <text style="fill: #000000;text-anchor:start;font-size:12.8;font-family:sanserif;font-style:normal;font-weight:normal" x="660" y="400">
+    <tspan x="660" y="400">Interface B</tspan>
+  </text>
+  <line style="fill: none; fill-opacity:0; stroke-width: 8; stroke-dasharray: 20; stroke: #ffa500" x1="320" y1="360" x2="780" y2="360"/>
+  <text style="fill: #ffa500;text-anchor:start;font-size:15.8044;font-family:sanserif;font-style:normal;font-weight:700" x="700" y="340">
+    <tspan x="700" y="340">FON API</tspan>
+  </text>
+  <g>
+    <rect style="fill: #fddfa9" x="400" y="260" width="120" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="400" y="260" width="120" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.8;font-family:sanserif;font-style:normal;font-weight:700" x="460" y="282.9">
+      <tspan x="460" y="282.9">fon-api-mod</tspan>
+    </text>
+  </g>
+</svg>

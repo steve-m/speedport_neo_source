@@ -1,0 +1,12 @@
+#
+# DynIP, a division of CanWeb Internet Services Ltd.
+#
+# This file contains the mapping between second level
+# domain names and domain passwords.
+#
+# The first entry listed in this file is considered the "default"
+# domain.
+#
+# Entries are of the form	<domain name>="<domain id>"
+#
+dynip.com="0"                   # the default domain

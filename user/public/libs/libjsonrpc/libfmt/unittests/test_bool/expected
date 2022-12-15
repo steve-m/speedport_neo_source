@@ -1,0 +1,6 @@
+Testing true (parsed): OK
+Testing true (parsed,path): OK
+Testing false (parsed): OK
+Testing not true (parsed): OK
+Testing true (new): OK
+Testing not true (new): OK

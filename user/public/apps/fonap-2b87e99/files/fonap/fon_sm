@@ -1,0 +1,334 @@
+#!/bin/sh
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+DEBUG=0
+NAME=fon_sm
+PIDFILE=/var/run/$NAME.pid
+DSLBandwidthPass=/var/run/fon_dsl_pass
+
+#Configuration parameters
+CfgEasySupport=$(/usr/sbin/cmld_client getv Device.ManagementServer.EnableCWMP) 
+CfgFonEnabled=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Enable)
+CfgFonKey=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Key)
+
+#CfgWLANEnabled=$(/usr/sbin/cmld_client getv Device.WiFi.Radio.1.Enable)
+#CfgWLAN5GHzEnabled=$(/usr/sbin/cmld_client getv Device.WiFi.Radio.2.Enable)
+
+CfgL2TPEnabled=1
+CfgLNSServer1=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.LNSServer1)
+CfgLNSServer2=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.LNSServer2)
+CfgLNSHelloDelay=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.HelloDelay)
+CfgLNSHelloRetransmissionDelay=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.HelloRetransmissionDelay)
+CfgLNSMaxRetries=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.MaxRetries)
+CfgPPPIdleTimeout=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PPPIdleTimeout)
+CfgPPPPapRestart=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PapRestart)
+CfgPPPPapMaxAuthreq=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PapMaxAuthreq)
+CfgLcpEchoInterval=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.LcpEchoInterval)
+CfgLcpEchoFailure=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.LcpEchoFailure)
+CfgProvisioningCode=$(/usr/sbin/cmld_client getv Device.DeviceInfo.ProvisioningCode)
+CfgAutoConfig=${CfgProvisioningCode:4:1}
+CfgBngConfig=${CfgProvisioningCode:5:1}
+CfgPPPUsernameDomain=$(/usr/sbin/cmld_client getv Device.PPP.Interface.1.Username | cut -d "@" -f2)
+CfgFONValidRealms=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.ValidRealms)
+
+#Other Parameters
+FonActiveStatus=0
+
+DHCPIF=brfon
+RADCONFIGFILE=/tmp/var/chilli.conf
+RADCONFIGFILERUNNING=/tmp/var/run/chilli.conf
+RADCONFIGWHITERUNNING=/tmp/var/run/whitelist
+WANONLINEFILE=/tmp/var/hsfon_wanon
+        
+#Functions
+CheckFonKey() {
+    KeyLength=$(echo $CfgFonKey | wc -c)
+    if [ $KeyLength -eq 65 ]; then
+        return 1
+    else
+        if [ "$DEBUG" = "1" ] ; then
+            echo "Fon Key's Length does not equal to 64."
+        fi
+        return 0
+    fi
+}
+
+CheckRadConfig() { 
+
+    if [ -s $RADCONFIGFILE ]; then
+        return 1
+    fi
+    if [ -s $RADCONFIGFILERUNNING ]; then
+        return 1
+    fi
+    
+    return 0
+}
+
+CheckDslBandwidth() {
+    
+    CurrentWANMODE=$(cat /proc/nvram/WAN_MODE)
+
+    if [ "$CurrentWANMODE" = "0" ]; then
+        return 1
+    else
+        CurrentDownstreamRate=$(/usr/sbin/cmld_client getv Device.DSL.Channel.1.DownstreamCurrRate)
+         
+        if [ $CurrentDownstreamRate -ge 512 ]; then
+            return 1
+        else
+            return 0
+        fi
+    fi
+}
+
+CheckFonEnable() {
+
+    if [ "$CfgEasySupport" != "1" -o "$CfgAutoConfig" == "5" ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "EasySupport Disabled."
+        fi
+        rm -f $PIDFILE
+        echo Disabled > /tmp/var/hsfon_status
+	exit 0
+    fi
+    
+    if [ "$CfgFonEnabled" != "1" ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "Fon Disabled by TR069."
+        fi
+        rm -f $PIDFILE
+        echo Disabled > /tmp/var/hsfon_status
+	exit 0
+    fi
+
+    #Check Fon Key is valid or not
+    CheckFonKey
+    if [ ! $? -eq 1 ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "Fon Key Invalid."
+        fi
+        rm -f $PIDFILE
+        echo Disabled > /tmp/var/hsfon_status
+        exit 0
+    fi
+
+#    if [ "$CfgWLANEnabled" != "1" -a "$CfgWLAN5GHzEnabled" != "1" ] ; then
+#        if [ "$DEBUG" = "1" ] ; then
+#            echo "WLAN Disabled."
+#        fi
+#        rm -f $PIDFILE
+#        echo Disabled > /tmp/var/hsfon_status
+#	exit 0
+#    fi
+    
+    # Check pppoe account is setup/default account or not
+    if [ "$CfgPPPUsernameDomain" == "setup.t-online.de" -a "$CfgBngConfig" != "4" ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "Setup or Default access account."
+        fi
+        rm -f $PIDFILE
+        echo Disabled > /tmp/var/hsfon_status
+        exit 0
+    fi
+
+    /etc/fon/fon_rc_wd check
+    if [ ! $? -eq 1 ]; then
+        /etc/fon/fon_rc_wd start&
+        sleep 20
+    fi
+
+    return 1
+}
+CheckValidRealms() {
+    #Get ValidReamls 
+    ValidRealmsTemp=$(echo $CfgFONValidRealms | tr "," " " | tr "A-Z" "a-z")
+    CfgPPPDomain=$(echo $CfgPPPUsernameDomain | tr "A-Z" "a-z")
+
+    for var in $ValidRealmsTemp; do
+        if [ "$var" = "$CfgPPPDomain" ]; then
+            return 1
+        fi
+    done
+    return 0
+}
+
+CheckFonActive() {
+
+    #Check Radius Configuration
+    CheckRadConfig
+    if [ ! $? -eq 1 ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "No valid Radius Configuration avaliable."
+        fi
+        echo Disabled > /tmp/var/hsfon_status
+        return 0
+    fi
+    #Check Valid Realms
+    CheckValidRealms
+    if [  ! $? -eq 1 ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "ValidRealms Check failed."
+        fi
+        rm -f $PIDFILE
+        echo Enabled > /tmp/var/hsfon_status
+        exit 0 
+    fi
+    #Check if CPE connected to Telekom's backend systems
+    if [ ! -f $WANONLINEFILE ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "WAN is offline."
+        fi
+        rm -f $DSLBandwidthPass
+        echo Enabled > /tmp/var/hsfon_status
+        return 0
+    fi
+    #Check DSL-line bandwidth 
+    if [ ! -f $DSLBandwidthPass ]; then
+        CheckDslBandwidth
+        if [ ! $? -eq 1 ]; then
+            if [ "$DEBUG" = "1" ] ; then
+                echo "No enough bandwidth."
+            fi
+            rm -f $PIDFILE
+            echo Enabled > /tmp/var/hsfon_status
+            exit 0
+        fi
+        echo 1 > $DSLBandwidthPass
+    fi
+    #Check wireless is up?
+    WLANIF0_STR=$(ifconfig | grep wl0.1 | cut -d "." -f 1)
+    WLANIF1_STR=$(ifconfig | grep wl1.1 | cut -d "." -f 1)
+    if [ "$WLANIF0_STR" != "wl0" -a "$WLANIF1_STR" != "wl1" ]; then
+        if [ "$DEBUG" = "1" ] ; then
+            echo "Wireless is not up yet."
+        fi
+        echo Enabled > /tmp/var/hsfon_status
+        return 0
+    fi
+
+    return 1
+}
+
+FonapActiveApp() {
+    /usr/sbin/chilloutd -r /usr/sbin/rule.sh &
+    if [ "$CfgL2TPEnabled" = "1" ]; then
+        mkdir -p /var/run/xl2tpd
+        
+        #xl2tpd config
+        cp /etc/xl2tpd.conf /var/run/xl2tpd.conf
+	sed -i "s/#LNS_SERVER1@/$CfgLNSServer1/" /var/run/xl2tpd.conf
+	sed -i "s/#LNS_SERVER2@/$CfgLNSServer2/" /var/run/xl2tpd.conf
+	sed -i "s/#LNS_HELLODELAY@/$CfgLNSHelloDelay/" /var/run/xl2tpd.conf
+	sed -i "s/#LNS_HELLORETRANSMISSIONDELAY@/$CfgLNSHelloRetransmissionDelay/" /var/run/xl2tpd.conf
+	sed -i "s/#LNS_MAXRETRIES@/$CfgLNSMaxRetries/" /var/run/xl2tpd.conf
+        
+        #pppd config
+        cp /etc/ppp/ppp-xl2tpd.client /tmp/var/ppp/ppp-xl2tpd.client
+	sed -i "s/#PPP_IDLE@/$CfgPPPIdleTimeout/" /tmp/var/ppp/ppp-xl2tpd.client
+	sed -i "s/#PPP_PAPRESTART@/$CfgPPPPapRestart/" /tmp/var/ppp/ppp-xl2tpd.client
+	sed -i "s/#PPP_PAPMAXAUTHREQ@/$CfgPPPPapMaxAuthreq/" /tmp/var/ppp/ppp-xl2tpd.client
+	sed -i "s/#PPP_LCPECHOINTERVAL@/$CfgLcpEchoInterval/" /tmp/var/ppp/ppp-xl2tpd.client
+	sed -i "s/#PPP_LCPECHOFAILURE@/$CfgLcpEchoFailure/" /tmp/var/ppp/ppp-xl2tpd.client
+         
+        /usr/sbin/xl2tpd -c /var/run/xl2tpd.conf -D &
+    fi
+    sleep 1
+    /etc/fon/fon_smcd start
+}
+
+FonapDisactiveApp() {
+    /etc/fon/fon_smcd stop
+    sleep 1
+    [ -f /var/run/xl2tpd.pid ] && kill `cat /var/run/xl2tpd.pid` >/dev/null 2>&1
+    sleep 2
+    [ -f /var/run/chilloutd.pid ] && kill `cat /var/run/chilloutd.pid` >/dev/null 2>&1
+}
+
+FonapStop() {
+    /etc/fon/fon_rc_wd stop
+#    if [ -f $RADCONFIGFILE ]; then
+#        rm -rf $RADCONFIGFILE
+#    fi
+    if [ -f $RADCONFIGFILERUNNING ]; then
+        rm -rf $RADCONFIGFILERUNNING
+    fi
+    if [ -f $RADCONFIGWHITERUNNING ]; then
+        rm -rf $RADCONFIGWHITERUNNING
+    fi
+    FonapDisactiveApp
+}
+
+FonSmDaemon() {
+
+    brctl addbr $DHCPIF > /dev/null 2>&1
+    
+    CheckFonEnable
+
+    FONSM=1
+    while [ $FONSM -eq 1 ]; do
+
+        CheckFonActive
+        if [ $? -eq 1 ]; then 
+            if [ $FonActiveStatus -eq 0 ]; then
+                FonActiveStatus=1
+                echo Active > /tmp/var/hsfon_status
+                FonapActiveApp
+            fi
+        else
+            if [ $FonActiveStatus -eq 1 ]; then
+                FonActiveStatus=0
+                FonapDisactiveApp
+            fi
+        fi
+
+        sleep 30
+
+    done
+    
+    #brctl delbr $DHCPIF > /dev/null 2>&1
+
+    return 0
+}
+
+case "$1" in
+    start)
+        if [ ! -f $PIDFILE ]; then
+            rm -f $DSLBandwidthPass
+            echo "$(pidof $NAME)" > $PIDFILE
+            FonSmDaemon
+            rm -f $PIDFILE
+        fi
+        ;;
+
+    stop)
+        if [ -f $PIDFILE ]; then
+            FonapStop
+            
+            #brctl delbr $DHCPIF > /dev/null 2>&1
+
+            kill $(cat $PIDFILE) > /dev/null 2>&1
+            rm -f $PIDFILE
+        fi
+        ;;
+
+    disactive)
+        if [ -f $PIDFILE ]; then
+            FonapDisactiveApp
+            
+            #brctl delbr $DHCPIF > /dev/null 2>&1
+
+            kill $(cat $PIDFILE) > /dev/null 2>&1
+            rm -f $PIDFILE
+        fi
+        ;;
+
+    *)
+        N=/etc/fon/$NAME
+        echo "Usage: $N {start|stop|disactive}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+

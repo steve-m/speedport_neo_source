@@ -1,0 +1,39 @@
+#!/bin/sh
+PPP_LOG_FILE="/tmp/ppp_script.log"
+
+echo "ppp-up" > $PPP_LOG_FILE
+
+/sbin/route add default gw $IPREMOTE
+/bin/iptables -D FORWARD -i br0 -o ppp1 -j LOG --log-prefix "[TRIGGER]"
+/bin/iptables -D FORWARD -i tun0 -o ppp1 -j LOG --log-prefix "[TRIGGER]"
+
+[ -n "$DEVICE" ] && echo item1 $DEVICE >> $PPP_LOG_FILE
+[ -n "$IPLOCAL" ] && echo item2 $IPLOCAL >> $PPP_LOG_FILE
+[ -n "$IPREMOTE" ] && echo item3 $IPREMOTE >> $PPP_LOG_FILE
+[ -n "$OLDIPLOCAL" ] && echo item4 $OLDIPLOCAL >> $PPP_LOG_FILE
+[ -n "$OLDIPREMOTE" ] && echo item5 $OLDIPREMOTE>> $PPP_LOG_FILE
+[ -n "$DNS1" ] && echo item6 $DNS1 >> $PPP_LOG_FILE
+[ -n "$DNS2" ] && echo item7 $DNS2 >> $PPP_LOG_FILE
+[ -n "$WANID" ] && echo item8 $WANID >> $PPP_LOG_FILE
+[ -n "$IFNAME" ] && echo item9 $IFNAME >> $PPP_LOG_FILE
+[ -n "$ACCOUNT" ] && echo item10 $ACCOUNT >> $PPP_LOG_FILE
+
+echo "end" >> $PPP_LOG_FILE
+#/usr/sbin/iproute2_config -w $WANID -i $IFNAME -d
+#/usr/sbin/iproute2_config -w $WANID -i $IFNAME -u
+
+#/usr/sbin/rc wan$WANID'_firewall' restart dns
+#/usr/sbin/rc dnrd restart
+
+if [ $ACCOUNT != "public" ]; then
+/usr/sbin/led_sound_app network_online_v4
+/bin/touch /tmp/var/hsfon_wanon
+fi
+/bin/rm -f /tmp/var/hsfon_wanidle
+#/usr/sbin/rc dns start flush_cache
+/usr/sbin/rc wanip_service start $WANID ipv4&
+/usr/sbin/rc pppoefwd start $WANID&
+
+#/usr/sbin/iptables -t nat -D PREROUTING -i br0 -p udp --dport 53 -j DNAT --to 10.10.10.10
+
+#/usr/sbin/rc wanGMP restart $WANID&

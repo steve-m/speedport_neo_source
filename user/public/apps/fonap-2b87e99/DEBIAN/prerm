@@ -1,0 +1,28 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installinit
+if [ -x "/etc/init.d/chilli" ]; then
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d chilli stop || exit $?
+	else
+		/etc/init.d/chilli stop || exit $?
+	fi
+fi
+
+if [ -x "/etc/init.d/dnsmasq" ]; then
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d dnsmasq stop || exit $?
+	else
+		/etc/init.d/dnsmasq stop || exit $?
+	fi
+fi
+
+if [ -x "/etc/init.d/fonsmcd" ]; then
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d fonsmcd stop || exit $?
+	else
+		/etc/init.d/fonsmcd stop || exit $?
+	fi
+fi
+
+# End automatically added section

@@ -1,0 +1,74 @@
+ --- Token dump ---
+ 0: start:   0   end:   833   size:    4   {"a":{"key1":"value1","key2":"value2","key3":"value3","tstarr":["test-val-0","test-val-1","test-val-2","test-val-3","test-val-4","test-val-5","test-val-6","test-val-7","test-val-8","test-val-9","test-val-10","test-val-11","test-val-12","test-val-13","test-val-14","test-val-15","test-val-16","test-val-17","test-val-18","test-val-19","test-val-20","test-val-21","test-val-22","test-val-23","test-val-24","test-val-25","test-val-26","test-val-27","test-val-28","test-val-29","test-val-30","test-val-31"],"other-key-1":"other-1","other-key-2":"other-2"},"b":{"nested1":{"null-key":null,"key-aaa":"aaa","nested1-other-key-1":"nested1-other-1","nested1-other-key-2":"nested1-other-2","nested1-other-key-3":"nested1-other-3"},"nested2":{"nested1-other-key-1":"nested2-other-1","nested1-other-key-2":null},"keyx":"valuex","keyy":"valuey"}}
+ 1: start:   2   end:     3   size:    0   a
+ 2: start:   5   end:   551   size:   12   {"key1":"value1","key2":"value2","key3":"value3","tstarr":["test-val-0","test-val-1","test-val-2","test-val-3","test-val-4","test-val-5","test-val-6","test-val-7","test-val-8","test-val-9","test-val-10","test-val-11","test-val-12","test-val-13","test-val-14","test-val-15","test-val-16","test-val-17","test-val-18","test-val-19","test-val-20","test-val-21","test-val-22","test-val-23","test-val-24","test-val-25","test-val-26","test-val-27","test-val-28","test-val-29","test-val-30","test-val-31"],"other-key-1":"other-1","other-key-2":"other-2"}
+ 3: start:   7   end:    11   size:    0   key1
+ 4: start:  14   end:    20   size:    0   value1
+ 5: start:  23   end:    27   size:    0   key2
+ 6: start:  30   end:    36   size:    0   value2
+ 7: start:  39   end:    43   size:    0   key3
+ 8: start:  46   end:    52   size:    0   value3
+ 9: start:  55   end:    61   size:    0   tstarr
+10: start:  63   end:   502   size:   32   ["test-val-0","test-val-1","test-val-2","test-val-3","test-val-4","test-val-5","test-val-6","test-val-7","test-val-8","test-val-9","test-val-10","test-val-11","test-val-12","test-val-13","test-val-14","test-val-15","test-val-16","test-val-17","test-val-18","test-val-19","test-val-20","test-val-21","test-val-22","test-val-23","test-val-24","test-val-25","test-val-26","test-val-27","test-val-28","test-val-29","test-val-30","test-val-31"]
+11: start:  65   end:    75   size:    0   test-val-0
+12: start:  78   end:    88   size:    0   test-val-1
+13: start:  91   end:   101   size:    0   test-val-2
+14: start: 104   end:   114   size:    0   test-val-3
+15: start: 117   end:   127   size:    0   test-val-4
+16: start: 130   end:   140   size:    0   test-val-5
+17: start: 143   end:   153   size:    0   test-val-6
+18: start: 156   end:   166   size:    0   test-val-7
+19: start: 169   end:   179   size:    0   test-val-8
+20: start: 182   end:   192   size:    0   test-val-9
+21: start: 195   end:   206   size:    0   test-val-10
+22: start: 209   end:   220   size:    0   test-val-11
+23: start: 223   end:   234   size:    0   test-val-12
+24: start: 237   end:   248   size:    0   test-val-13
+25: start: 251   end:   262   size:    0   test-val-14
+26: start: 265   end:   276   size:    0   test-val-15
+27: start: 279   end:   290   size:    0   test-val-16
+28: start: 293   end:   304   size:    0   test-val-17
+29: start: 307   end:   318   size:    0   test-val-18
+30: start: 321   end:   332   size:    0   test-val-19
+31: start: 335   end:   346   size:    0   test-val-20
+32: start: 349   end:   360   size:    0   test-val-21
+33: start: 363   end:   374   size:    0   test-val-22
+34: start: 377   end:   388   size:    0   test-val-23
+35: start: 391   end:   402   size:    0   test-val-24
+36: start: 405   end:   416   size:    0   test-val-25
+37: start: 419   end:   430   size:    0   test-val-26
+38: start: 433   end:   444   size:    0   test-val-27
+39: start: 447   end:   458   size:    0   test-val-28
+40: start: 461   end:   472   size:    0   test-val-29
+41: start: 475   end:   486   size:    0   test-val-30
+42: start: 489   end:   500   size:    0   test-val-31
+43: start: 504   end:   515   size:    0   other-key-1
+44: start: 518   end:   525   size:    0   other-1
+45: start: 528   end:   539   size:    0   other-key-2
+46: start: 542   end:   549   size:    0   other-2
+47: start: 553   end:   554   size:    0   b
+48: start: 556   end:   832   size:    8   {"nested1":{"null-key":null,"key-aaa":"aaa","nested1-other-key-1":"nested1-other-1","nested1-other-key-2":"nested1-other-2","nested1-other-key-3":"nested1-other-3"},"nested2":{"nested1-other-key-1":"nested2-other-1","nested1-other-key-2":null},"keyx":"valuex","keyy":"valuey"}
+49: start: 558   end:   565   size:    0   nested1
+50: start: 567   end:   720   size:   10   {"null-key":null,"key-aaa":"aaa","nested1-other-key-1":"nested1-other-1","nested1-other-key-2":"nested1-other-2","nested1-other-key-3":"nested1-other-3"}
+51: start: 569   end:   577   size:    0   null-key
+52: start: 579   end:   583   size:    0   null
+53: start: 585   end:   592   size:    0   key-aaa
+54: start: 595   end:   598   size:    0   aaa
+55: start: 601   end:   620   size:    0   nested1-other-key-1
+56: start: 623   end:   638   size:    0   nested1-other-1
+57: start: 641   end:   660   size:    0   nested1-other-key-2
+58: start: 663   end:   678   size:    0   nested1-other-2
+59: start: 681   end:   700   size:    0   nested1-other-key-3
+60: start: 703   end:   718   size:    0   nested1-other-3
+61: start: 722   end:   729   size:    0   nested2
+62: start: 731   end:   799   size:    4   {"nested1-other-key-1":"nested2-other-1","nested1-other-key-2":null}
+63: start: 733   end:   752   size:    0   nested1-other-key-1
+64: start: 755   end:   770   size:    0   nested2-other-1
+65: start: 773   end:   792   size:    0   nested1-other-key-2
+66: start: 794   end:   798   size:    0   null
+67: start: 801   end:   805   size:    0   keyx
+68: start: 808   end:   814   size:    0   valuex
+69: start: 817   end:   821   size:    0   keyy
+70: start: 824   end:   830   size:    0   valuey
+ --- JSON dump ---
+{"a":{"key1":"value1","key2":"value2","key3":"value3","tstarr":["test-val-0","test-val-1","test-val-2","test-val-3","test-val-4","test-val-5","test-val-6","test-val-7","test-val-8","test-val-9","test-val-10","test-val-11","test-val-12","test-val-13","test-val-14","test-val-15","test-val-16","test-val-17","test-val-18","test-val-19","test-val-20","test-val-21","test-val-22","test-val-23","test-val-24","test-val-25","test-val-26","test-val-27","test-val-28","test-val-29","test-val-30","test-val-31"],"other-key-1":"other-1","other-key-2":"other-2"},"b":{"nested1":{"null-key":null,"key-aaa":"aaa","nested1-other-key-1":"nested1-other-1","nested1-other-key-2":"nested1-other-2","nested1-other-key-3":"nested1-other-3"},"nested2":{"nested1-other-key-1":"nested2-other-1","nested1-other-key-2":null},"keyx":"valuex","keyy":"valuey"}}

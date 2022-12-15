@@ -1,0 +1,16 @@
+diff -Nru chillispot-1.0-coova.4_old/src/radius.h chillispot-1.0-coova.4/src/radius.h
+--- chillispot-1.0-coova.4_old/src/radius.h	2007-01-31 11:28:10.000000000 +0000
++++ chillispot-1.0-coova.4/src/radius.h	2007-09-20 14:53:11.000000000 +0000
+@@ -22,9 +22,9 @@
+ #define RADIUS_AUTHLEN 16        /* RFC 2865: Length of authenticator */
+ #define RADIUS_PWSIZE  128       /* RFC 2865: Max 128 octets in password */
+ #define RADIUS_QUEUESIZE 256     /* Same size as id address space */
+-#define RADIUS_TIMEOUT 3000000   /* Time between requests in micro seconds */
+-#define RADIUS_RETRY1 3          /* Number of times to retry primary */
+-#define RADIUS_RETRY2 6          /* Total number of retries */
++#define RADIUS_TIMEOUT 5000000   /* Time between requests in micro seconds */
++#define RADIUS_RETRY1 1          /* Number of times to retry primary */
++#define RADIUS_RETRY2 2          /* Total number of retries */
+ 
+ #define RADIUS_ATTR_VLEN 253
+ #define RADIUS_AUTHPORT 1812

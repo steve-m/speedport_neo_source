@@ -1,0 +1,138 @@
+
+DynIP(sm) Client V3.0 
+DynIP, a division of CanWeb Internet Services Ltd.
+
+Introduction 
+=============
+
+Dynip(sm) is a Dynamic IP Management System which allows Internet
+hosts with dynamic IP addresses, such as dial-up users, to have a
+permanent static Internet Name. Now, you  can register  your  own
+personal  Internet Name  that  constantly  refers to your dynamic
+IP  address, anywhere in the world!  Your Internet Name   becomes
+integrated   into   the existing Domain Name  System (DNS) on the
+Internet  within  seconds  of  your   name  registration!  People
+can  refer  to  your machine by means of a simple static Internet
+name, allowing you to make your  own unix  servers  available  to
+the  public  by publishing your Internet name.  You  never  again
+have to post your  dynamic  IP  address  to  a web page, or run a
+silly finger server  informing others of your current IP address.
+All you need to do is  run a very small client program  when  you
+connect to the Internet and for  the  duration  of  your  connec-
+tion.  It's that simple.  Try it free for 30 days!
+
+Current Pricing 
+===============
+
+Current  Pricing  for  DynIP  Services  are  available  from  our
+Web  Site  at http://www.dynip.com.  Corporate pricing and custom
+service quote requests can be send by email  to  sales@dynip.com.
+
+* Information for Corporate Customers
+
+DynIP also has corporate licensing  plans  available  for  larger
+users.  Please contact us at sales@dynip.com for details.
+
+Installation 
+============
+
+You must first build the DynIP registration  program -dynipadmin,
+and  the  actual  DynIP  client  program -dynipclient  before you
+can register and use your name.  After  extracting the files from
+the  archive,  issue  the  'Configure'  command  from  the  shell
+prompt,  then  'make  install man'. See the INSTALL file for more
+details.
+
+Operation 
+=========
+
+After the two programs have been  built, you  can  register  your
+personal Internet Name using  the dynipadmin program. To register
+your   Internet   Name,  the  following  minimum  parameters  are 
+required:
+
+dynipadmin -r <firstname> <lastname> <email address>  <host name>
+
+For example,
+
+ csh> ./dynipadmin -r Joe Bar foobar@myisp.com foobar
+
+ DynIP(sm) Domain Administration Client V3.00
+ DynIP, a division of CanWeb Internet Services Ltd.
+ Copyright (C) 1997-1998, All Rights Reserved.
+ This program may be freely copied and distributed.
+ NO WARRANTY of any kind; see man pages for additional details.
+
+ Registering domain 'foobar'
+ Registration key XXXXXXXXXX-XXXXXXXXXX
+ Resolving host 'discovery.dynip.com'...Done.
+ Connecting to discovery.dynip.com (204.225.44.10)...Connected.
+ Negotiating protocol...Handshake OK
+ Response received; closing
+ Your domain has been registered
+ You are now known to the Internet as 'foobar.dynip.com'
+
+You  can  now run the dynipclient program by typing the following
+command:
+
+ csh> ./dynipclient
+ csh>
+
+Your Internet name has now been activated and any DNS lookups on
+the domain name 'foobar.dynip.com' will automatically be resolved
+to your current IP address. In order to ensure that your Internet
+name  is  always  associated  with  your  current IP address, you 
+*MUST* run the dynipclient program every time that you connect to
+the Internet. The easiest is to include the  dynipclient  program
+as part of your PPP login script.
+
+When  you  want  to disconnect from the Internet, you need to run
+the  dynipclient  program  with  the  -k   option   *before*  you
+physically  disconnect  from  your  ISP.  You  can also issue the
+following  command to accomplish the same:
+
+     kill -HUP `cat dynipclient.pid`
+
+     or
+
+     dynipclient -k
+
+
+Registration Key 
+================
+
+The very first time that  you register an Internet name, you will
+be assigned a unique registration key. This key is  your  ``pass-
+word'' that activates your Internet name.  If you  re-install the
+DynIP client software, or change  to  another  operating  system,
+make  sure  that  you always transfer your registration key. This
+ensures     that   you  always  have access to   your  registered  
+Internet.  You can set the registration key in the dynip.cfg file
+by means  of  the  '-s'  option  in  the  dynipadmin program, but 
+normally you do not need to set this.
+
+Man Pages 
+=========
+
+To  install  the  man pages, run 'make man' from the shell prompt
+or,  copy  dynipadmin.1  and  dynipclient.1  to   your  '/usr/lo-
+cal/man/man1'  or '/usr/man/man1' directory. You will need to run
+as root in order to make the man pages.
+
+
+More Information 
+================
+
+For more information see the man pages for dynipadmin and  
+dynipclient or visit our web site at http://www.dynip.com.
+
+Feedback 
+========
+
+If you are planning on porting the DynIP client to an, as of yet,
+unsupported  operating  system,  please  let  us  know   at  
+support@dynip.com so that we can keep track.
+
+- 
+README            DynIP Client (Unix) v3.0              Dec, 1999
+

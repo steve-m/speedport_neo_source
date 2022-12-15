@@ -1,0 +1,32 @@
+BIN = dmalloc
+LIB = libdmalloc.a
+
+all: Makefile
+	make -f Makefile
+
+Makefile:
+	AR= AS= CC=/opt/toolchains/uclibc-crosstools-gcc-4.4.2-1/usr/bin/mips-linux-gcc CFLAGS= CROSS= CROSS_COMPILE= CXX= HOSTCC= LD= OBJCOPY= RANLIB= STRIP=$(CROSS_COMPILE)strip GCC_DIR= ./configure --host=mips-linux --disable-cxx --enable-threads
+
+clean:
+	make -f Makefile clean
+	rm -rf config.log config.status .deps Makefile
+
+# the is a proxy section --YY
+all-recursive: Makefile
+	make -f Makefile all-recursive
+
+# the is a proxy section --YY
+all-am: Makefile
+	make -f Makefile all-am
+
+# the is a proxy section --YY
+clean-am: Makefile
+	make -f Makefile clean-am
+
+distclean-am: Makefile
+	make -f Makefile distclean-am
+
+install:
+	cp $(BIN) $(INSTALLDIR)/usr/sbin/
+	cp $(LIB) $(INSTALLDIR)/lib/
+

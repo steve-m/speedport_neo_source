@@ -1,0 +1,10 @@
+{"A":"1","B":"2"}
+Function <del> called!
+{"B":"2"}
+Function <add> called!
+{"B":"2","A":"1"}
+Function <del> called!
+{"A":"1"}
+Function <add> called!
+{"A":"1","B":"2"}
+Alles ist gut!

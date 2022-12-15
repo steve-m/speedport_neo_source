@@ -1,0 +1,2311 @@
+REFERENCE IMPLEMENTATION
+========================
+v1.6, 2011-06-15
+
+Introduction
+------------
+
+This document describes the behavior of the FonAP Software. The FonAP Software
+is a software that allows a CPE to become a FonSpot and provide free and secure
+access to the Internet to the sharing members of the Fon Community. These
+sharing member are people that have FonSpots at home and allow other Foneros to
+use them. In exchange they get free access to the Internet at any other
+FonSpot.
+
+In the document, the FonAP software is describe in its various modules. Each
+module is explained as well as its interface with the operating system or any
+other external application that may communicate with it. These APIs are
+described so that a CPE software manufacturer can integrate the main modules of
+Fon into his OS and communicate with it through the APIs.
+
+The following diagram shows the different modules of the FonAP software.
+
+image:./images-fon/blockDiaIntro02.png["Block
+diagram",align="center",scaledwidth="75%",alt="Block diagram"]
+
+The modules in *orange* are provided by Fon and are part of the FonAP software.
+The modules in *blue* are software parts that the CPE software programmer must
+implement.
+
+Status Manager (fonsmcd)::
+
+Fonsmcd is the Fon Status Manager Client Daemon. It is in charge of sending the
+status of the hotspot to Fon (heart beat) and of checking the availability of
+the Fon service: if no answer is received from the servers, they are considered
+to be down. It is in charge of turning the Fon service up or down and for that
+it communicates with an application that has to be made by the CPE software
+manufacturer. The reason for this is that the way to turn Fon on are off and
+the actions to take at that point might vary from device to device.
+
+Hotspot Manager (CoovaChilli)::
+
+CoovaChilli is the core software of the FonAP. It is the access controller that
+decides which peers/devices are allowed to navigate to the Internet and which
+ones need to be kept inside the walled-garden (set of domains that are
+reachable prior to authentication).
++
+CoovaChilli is turned on and off by an external application (which is
+controlled by fonsmcd) and it is recommended to have a watchdog to assure it is
+always running when necessary.
++
+CoovaChilli is in charge of controlling the access to the Internet and might
+also do the authentication of the users or leave it to an external
+authenticator. When authenticating users by itself, it uses a built in Radius
+client; when using an external authenticator to check the users credentials, it
+communicates with the external authenticator or Handler through an API. This
+Handler must be implemented by the CPE software manufacturer and it must
+implement an AAA protocol. Usually it is also used to assign a unique IP
+address per authenticated user for identification purposes.
++
+CoovaChilli is also in charge of the IP address assignation on the Public
+interface of the CPE, it has its own configuration client that connects to Fon
+to get the configuration and also maintains the list of domains that are
+available for free unauthenticated access (usually login portal, payment
+systems and partner pages).
+
+Firewall::
+
+fONAP does not provide a firewall. This is something that the OS should be in
+charge of and so this document does only provide a set of commonly used rules
+to protect both the visitor and the owner of the FonSpot. These rules must be
+matched and merged with the specific requirements of the ISP that is deploying
+the Fon network.
+
+Qos and Bandwidth limitation and management::
+
+FonAp does not provide any QoS software. It does not provide any priorization
+of the traffic of the owner over the visitor's or vice-versa. Both tasks are
+assumed to be performed by the OS of the CPE and under the conditions required
+by the ISP.a
++
+Regarding the bandwidth limitation, FonAP is able to limit upstream and
+downstream bandwidth (although the latter is not highly effective for obvious
+reasons) when using its own internal authenticator. When using an external
+authenticator, CoovaChilli cannot control the bandwidth and so this task is
+left to the OS system. Again, this policy is to be agreed with the deploying
+ISP.
++
+When using an external authenticator that is able to tunnel the traffic of the
+Public interface to a network equipment (LNS, MSR...) controlled by either Fon
+or the ISP, the downstream traffic can be shapped and controlled by the network
+server.
+
+WISPr::
+
+The FonAP Software is compliant with the WISPr 1.0 recommendation of the Wi-Fi
+Alliance. This document describes the particularities of the FonAP
+implementation of the recommendation. The FonAP software does not play a main
+role in the process but it has to be compatible with it.
+
+User Interface::
+
+Usually the Web user interface of a FonSpot has a registration button to claim
+the ownership of a hotspot and also shows the status of the Fon service.
+However these are not always mandatory and usually depend on the requirements
+of each specific implementation. Each case needs to be customized to the actual
+requirements of the project as specified by Fon and the ISP.
+
+FON Software Specification
+--------------------------
+
+Status Manager
+~~~~~~~~~~~~~~
+
+The Status Manager is an application that connects periodically to Fon to
+notify that the CPE is online and at the same time, allow the CPE to detect
+whether the Fon servers are available. The notification message or heart beat
+packet (HBP) is formatted into a DNS request to make it lightweight and
+scalable. The payload is encrypted with a pre-shared key, unique to every CPE,
+in order to assure the identity of both ends of the communication.
+
+The SM is the responsible to turn off and on the FON functionality depending on
+whether the FON Servers are available. 
+
+///////////////////
+* The Status Manager (SM) should be configured at run-time by a file called
+fonsmcd.conf. The SM behavior is determined by the configuration values in
+that file. The fonsmcd.conf file is structured as a series of key and parameter
+pairings. For example:
++
+--------------------------------------------------
+suffix .sm.fon.com
+period_online 60
+period_offline 60
+rsapath "/etc/public_sm_rsa_key.pem"
+aespath "/etc/aes_key"
+host cthulhu.fon.com 54 UDP
+timeout 3000
+retries 3
+trigger 1 "true"
+trigger 2 "true"
+trigger online "online_script"
+trigger offline "offline_script"
+--------------------------------------------------
+
+* Not all parameters in the file are currently used, however, all pairings
+should be in the file to ensure the correct functioning of the SM.
+///////////////////
+
+
+* The Status Manager (SM) should be configured at booting-time by command line parameters.
++
+ For example:
+--------------------------------------------------
+./fonsmcd -v 1.2.3 -r 4 -m 00-18-84-a0-00-29 -w 7ef44706c65938ceb87c814e844679dc5edf1c9c30de4b6d5af4504b4e6a7a8d -x cthulhu.delta.fon.com --period_online 60 --period_offline 60 --timeout 3000 --retries 3 --rsapath ./public_sm_rsa_key.pem  --suffix .sm.fon.com --trigger_online /bin/true --trigger_offline /bin/true -n
+--------------------------------------------------
+
+* The Status Manager configuration options can be displayed running +./fonsmcd -h+
+
+--------------------------------------------------
+$ ./fonsmcd -h
+
+ fonsmcd
+
+ Usage: fonsmcd [OPTIONS]
+
+ -k, --kill               Kill already running daemon
+ -l, --reload             Reload an already running daemon
+ -c, --check              Check if the daemon is already running
+ -n, --nodaemon           Do not fork in the background
+ -b, --printbd            Print board data
+ -t, --test               Do a test run (and do not daemonize)
+ -m, --mac                test mac address
+ -v, --version            test version
+ -r, --revision           test revision
+ -s, --status             test status
+ -w, --keyword            test keyword
+ -p, --port               port number (default 53)
+ -x, --host               host name
+     --period_online      online period
+     --period_offline     offline period
+     --timeout            timeout
+     --retries            retries
+     --suffix             suffix
+     --aespath            aespath
+     --rsapath            rsapath
+     --trigger_online     online trigger
+     --trigger_offline    offline trigger
+ -h, --help               show this help and exit
+--------------------------------------------------
+
+NOTE: --aespath <file> and --rsapath <file> are not necessary to configure
+
+
+* The Status Manager has 2 different states: Online and Offline, reflecting
+whether the FON Service is available. The SM switches between Online and
+Offline based on the responses received, or not, from the Heart Beat server.
+
+Online State
+^^^^^^^^^^^^
+
+* In the Online state the FON services must be enabled.
+
+* After any valid heart beat response, the SM should always be in Online state.
+If it has switched from Offline state to Online state, it will run the
++trigger_online+ binary.
+
+* The +trigger_online+ binary must:
+
+1. Enable the Public SSID of the CPE
+2. Enable the Hot Spot Manager (HM) functionality
+
+* If +retries+ number of heart beats are invalid or lost in a row, the SM will
+switch to Offline state.
+
+Offline State
+^^^^^^^^^^^^^
+
+* In the Offline state the FON services must be disabled.
+
+* In this state, after an invalid or lost heart beat, the SM will remain in
+Offline mode. If this heart beat has caused to switch from Online state to
+Offline state, the SM will run the +trigger_offline+ binary.
+
+* The +trigger_offline+ binary must:
+
+1. Disable the Public SSID
+2. Disable the Hot Spot Manager (HM) functionality
+
+* On the first valid heart beat response received while in Offline state, the
+SM will switch to Online state.
+
+Heart beat period
+^^^^^^^^^^^^^^^^^
+
+* Every time the Status Manager receives a valid response from the Server, it
+will send another one after +period_online+
+
+* If an invalid or no heart beat is received, next try will be after
++period_offline+
+
+Heart beat failure
+^^^^^^^^^^^^^^^^^^
+
+* A failure on the Heartbeat response (a received SERVFAIL) can be due to the
+  any following reasons:
+
+.. The MAC / Key combination not match and the FON server was unable to decode
+the heartbeat
+
+.. The HBP was incorrect or malformed
+
+.. The MAC / Key combination cannot be found in the database
+
+.. The server actually had a failure processing an otherwise legit query. The
+least likely in the integration environment.
+
+System implementation details
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NOTE: This section is informative and provided for completion. 
+No details on this section are needed to port the fonsmcd client
+
+The status manager client, fonsmcd, is a daemon running in the CPE
+that periodically sends heartbeats to our server. The client is a
+daemon written using ANSI C. 
+
+This heartbeats are packed inside regular DNS queries, both to make the
+protocol lightweight, and to make it work even on partial network
+connectivity, as most firewalls do not block DNS queries. An added
+advantage is that even in the case of DNS queries being redirected to
+other DNS servers than our own, the query will get to it, due to the
+queries being replied - proxied - by the servers to the top most domain
+on the query, that happens to be sm.fon.com.
+
+The heartbeats are encrypted using an AES key 32 bytes long. The key is
+generated randomly and preloaded on the routers upon manufacturing
+them. The Status Manager Server uses this key both to decrypt the query
+coming from the router, and to encrypt the answer.
+
+The queries are then coded into a dns TXT query, by converting the query
+to base32, and adding to it the suffix .sm.fon.com. The query is sent to
+cthulhu.fon.com, the domain name of our balanced status manager servers.
+
+NOTE: The servers are not usable as regular DNS servers. Even as the 
+status manager server is implemented on top of the DNS
+infraestructure, the servers are not fully compliant DNS servers, and 
+any query that doesn't conform to the protocol described here, for example,
+a regular 'A' DNS query, will be rejected, being answered with SERVFAIL.
+
+Hot Spot Manager - CoovaChilli
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Hot Spot Manager is the core part of the FonAP Software 
+for CPEs. It is in charge of forcing the users to 
+authenticate before they can browse the Internet.
+While not authenticated, the users are always redirected
+to the Fon Login page.
+
+The main application of the HM is called chilli or CoovaChilli. It has three
+major interfaces: A downlink interface for accepting connections from clients,
+an authentication interface (internal or external) for authenticating clients
+and an uplink network interface for forwarding traffic to other networks.
+
+The downlink interface accepts DHCP and ARP requests from clients. The client
+can be in two states: Unauthenticated and authenticated. In unauthenticated
+state, web requests from the client are redirected to an authentication web
+server - the captive portal.
+
+In a typical application unauthenticated clients will be forwarded to a web
+server and prompted for username and password. The web server forwards the user
+credentials to chilli by means of web browser redirects. On the chilli side,
+authentication requests are forwarded to the authentication module (internal or
+external). If authentication is successful the state of the client is changed
+to authenticated. This authentication method is known as Universal Access
+Method (UAM).
+
+Configuration
+^^^^^^^^^^^^^
+
+Configuration file - chilli.conf
+++++++++++++++++++++++++++++++++
+
+The Hotspot Manager (HM) is be configured at run-time by a file called
+chilli.conf. This file is structured as a series of key and parameter pairings.
+
+CoovaChilli's main configuration file, chilli.conf, can take the following parameters:
+
+[options="header", cols="5,3,14,14"]
+|===================================================================
+|Parameter Name |Repeat|Example|Description
+|radiusserver1  |No    |radiusserver1 radiusext01.fon.com|Primary RADIUS Sever (only
+used with internal authenticator but always mandatory)
+|radiusserver2  |No    |radiusserver2 radiusext02.fon.com|Secondary RADIUS Sever
+(only used with internal authenticator but always mandatory)
+|radiussecret   |No    |radiussecret secretofon|RADIUS preshared secret
+|uamsecret      |No    |uamsecret secretofon|Web authentication preshared secret
+|dhcpif         |No    |dhcpif eth1|Interface on which CoovaChilli will control user access
+|uamanydns      |No    |uamanydns|If present, DNS traffic to remote DNS servers before
+authentication is allowed. If not, all DNS traffic needs to go to the hotspot.
+Needs to be implemented but will not necessarily be present.
+|uamallowed     |Yes   |uamallowed www.domain.com, 192.168.1.1, 192.168.2.0/24|Each
+line contains one or various TLDs, IP addresses or subnets. Corresponds to
+whitelisted domains that are required. It can appear more than once.
+|uamserver      |No    |uamserver https://portal.fon.com/FONDEV01/FONNET/hash/|This is
+the Captive Portal where the unauthenticated browsers will be redirected to.
+|uamdomain      |Yes   |uamdomain __^(.*\.)?domain.com$__|Specify a regexp
+based domain in chilli.conf
+|uamdomainfile  |No    |uamdomainfile /tmp/whitelist|Specify regexp based
+domain configuration file
+|interval       |No    |interval 100          |Set an interval to reload the
+configuration file periodically. Set to 0 for disabling it (default)
+|net            |No    |net 192.168.2.0/24    |Network address of the uplink
+interface default = 192.168.182.0/24. The network address is set during
+initialisation when chilli establishes a tun device for the uplink interface.
+The network address is specified as either 192.168.182.0/255.255.255.0 or
+192.168.182.0/24.
+|lease          |No    |lease 900             |Use a DHCP lease of seconds
+(default 600).
+|dhcpstart      |No    |dhcpstart 10          |Where to start assigning IP
+addresses (default 10).
+|dhcpend        |No    |dhcpend 32            |Where to stop assigning IP
+addresses (default 254).
+|===================================================================
+
+NOTE: Not all parameters are mandatory
+
+NOTE: CoovaChilli can take these parameters from the chilli.conf file or from
+the command line. The command line has precedence over the configuration file.
+
+The CPE must keep 2 configuration files simultaneously:
+
+* a default/backup chilli.conf containing the values of the last valid
+  configuration. This will be used in case the runtime chilli.conf file is
+corrupt or missing. 
+
+* a runtime chilli.conf file that is used by the CoovaChilli on runtime.
+
+Remote Configuration - chilli_radconfig
++++++++++++++++++++++++++++++++++++++++
+
+The configuration of the FonSpot might change eventualy and Fon provides a
+remote configuration tool for CoovaChilli: the chilli_radconfig. This is a
+simple utility to fetch the configuration specific to the CPE from Fon's
+central Configuration Servers.
+
+The configuration is retrieved using a built in RADIUS client inside the
+CoovaChilli Hotspot Manager. The tool is named radconfig (this name will be
+used now on).
+
+Fon's Configuration Server might not send all necessary parameters for a
+specific implementation and others might necessarily be managed locally or
+using other remote configuration systems (DOCSIS, TR-069...). Hence the CPE
+must be able to handle both sources of configuration parameters simultaneously.
+This can be done by having a local_chilli.conf and merging it with the
+remote_chilli.conf received configuration.
+
+The chilli_radconfig utility takes the same arguments as chilli so the same
+configuration file can be used to invoke it, even though it only uses a few of
+the options. However this is not recommendable because a corrupt configuration
+file received form the server can leave chilli_radconfig unusable. It is
+recommendable to invoke chilli_radconfig with either a separate configuration
+file (using the -c command line option of chilli_radconfig) or by using a
+specific command line set of options. Below an example of the chilli_radconfig
+configuration file:
+
+----------------------------------------------------------------------------
+	radiusserver1 radconfigext01.fon.com
+	radiusserver2 radconfigext02.fon.com
+	radiussecret Project_Specific
+	uamserver https://www.fon.com/login/gateway/sec
+	uamsecret Project_Specific
+	adminuser XXXYYY01-version
+	adminpasswd Project_Specific
+	radiusnasid Fon_Identifier_MAC
+----------------------------------------------------------------------------
+
+WARNING: Those values are only for reference. The actual radconfig.conf file
+values are project specific and should be requested to Fon during the
+integration process.
+
+
+Radconfig Format Request format
++++++++++++++++++++++++++++++++
+
+NOTE: The packet is built by radconfig and requires no modification from the
+integrator. This is only an informational section
+
+The radconfig tool will build a standard RADIUS Access-Request. The following
+parameters show the actual content of the Access-Request packet:
+
+* UserName: provided user name.
+
+* User-Password: provided password.
+
+* NAS-IP-Address: the WAN interface IP address. Ignored.
+
+* Service-Type: set to Administrative-User.
+
+* NAS-Identifier: The FON identifier of the CPE. It is the MAC that is used to
+  identify the CPE in all Fon services (heartbeat, registration, etc.) Usually
+it is written in capital letters separated by dashes (e.g NAS-Identifier =
+"00-18-84-5B-CD-91"). It is the recommended format because this will be used to
+calculate the hash sent by the captive portal from the web.
+
+* NAS-Port-Type: value set to 19 (Wireless-IEEE-802-11).
+
+* Message-Authenticator: Must be present. Generated internally.
+
+Radconfig Reply Parsing
++++++++++++++++++++++++
+
+The RADIUS Configuration Server will respond with a RADIUS Access-Accept
+response packet. The response will contain configuration pairings in
+Chillispot-Config Vendor Specific RADIUS Attributes, one per line of
+configuration. The radconfig application will write each line to stdout.
+
+The parameters received using chilli_radconfig must be combined with those
+maintained locally to form the chilli.conf file.
+
+WARNING: Some Radius responses to the chilli_radconfig may exceed the MTU of
+the network. In this scenario they will arrive fragmented to the CPE and they
+need to be reassembled. It is a common problem in many CPEs that they cannot
+reasseble the Radius packets so special attention needs to be payed to this
+topic.
+
+In some specific cases, the Configuration Server can include a type of
+parameter that is not valid for the chilli.conf configuration file. The lines
+containing these parameters start with the +newdomain+ string. They are a
+legacy format for the uamdomain type of whitelists that need to be converted
+into the new format.
+
+When a line starting with +newdomain+ followed by a set of comma separated
+values is received, they need to be parsed as follows:
+
+. remove the 'newdomain' string and following blank spaces
+
+. each domain (they come separated by commas) is converted into a regexp (an
+  example on how to do this is provided in the init script provided with the
+FonAP software)
+
+. the regexp formatted domains are put into either chilli.conf as uamdomain
+  parameters or into the uamdomainfile
+
+NOTE: uamdomain type parameters use the +uamdomain+ string when specified in
+chilli.conf but they have no such a string when inside the uamdomainfile
+
+
+Radconfig request policy
+++++++++++++++++++++++++
+
+The following diagram shows the decision tree to be used for invoking
+chilli_radconfig. This diagram can be a basis for the script that manages the
+CoovaChilli.
+
+image::./images-fon/radconfig_diagram.png["Radconfig Diagram",align="center",scaledwidth="75%"]
+
+NOTE: The green arrows represent usual and acceptable paths.
+
+NOTE: The red arrows represent problematic situations.
+
+Some remarks on the diagram:
+
+* There should always be a saved valid chilli.conf file containing the last
+configuration that worked fine. When a new configuration is downloaded and
+merged with the locally maintained parameters, and it results in a corrupt
+configuration (meaning chilli can not run with it and exits or refuses to
+start); then the last valid configuration must be reloaded.
+
+* In regular behavior, if the chilli_radconfig obtains a valid configuratio file, it will request for configuration refresh every 24h.
+
+* The second radconfig request should happen at a random second between the
+  initial one and the next 24h. This is a way to prevent all requests to
+synchronize in case of a massive black out.
+
+.Retry policy
+
+NOTE: This policy is built into the code of radconfig. Only the timers and
+retry options can be changed in radius.c but the policy of the code must not be
+modified.
+
+For the first attempt to send Packets to the Fon Radius Configuration
+Servers, the Packet should be sent to the Primary Radius Configuration Server.
+If no response is received, within 7 seconds then a second attempt should be
+made to the Secondary Radius Server. If after a further 7 seconds a response
+has not been received, the previous Radius configuration received should be
+used, until next Radius configuration call is done, following protocol
+described in 8.2. 
+
+[[AccessControl]]
+Access Control
+^^^^^^^^^^^^^^
+
+The core of the FON functionality in a CPE is the Hotspot Manager (HM). The HM
+controls the access of the users by sending all unauthenticated access attempts
+through an authentication process which, if successful, will determine how long a
+user can connect to the network.
+
+Before the authentication process happens, the user is allowed to navigate,
+using the HTTP protocol, to some controlled domains, known as
+“whitelisted domains”. 
+
+All attempts to connect to non-whitelisted domains will either be  discarded
+(for non HTTP traffic) or redirected to the FON authentication servers at
+fon.com, where they will be guided through a series of web pages validating
+their credentials and credit.
+
+Once successfully authenticated on FON servers, the user will be allowed to
+connect freely to the Internet for a certain amount of time (if  they are
+paying for the service) or unlimited (if they are a sharing FON member). 
+
+
+Non authenticated users
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The HM records the MAC address and assigned private IP address of
+devices connected to the Public SSID. Initially each pairing of MAC address and
+private IP address is considered as Unauthenticated until it has been
+Authenticated via the Authentication Process as described below.
+
+. At all times, for devices connected to the Public SSID, the HM acts as
+a firewall and HTTP redirect-proxy.
+
+. For Unauthenticated MAC / IP pairings, the HM at all times:
+
+.. Discards all non-HTTP traffic to IPs or domains not in the whitslit.
+For example, FTP or HTTPS traffic to a non-authorized destination will be dropped.
+
+.. Allow full and unrestricted traffic between the device and any domain on the
+Whitelist.
+
+.. All HTTP traffic to domains not on the Whitelist will cause the HM to
+redirect the HTTP client to the uamserver specified in the configuration file.
+
+.Whitelists
+
+There whitelists are list of domains, IPs or networks that are reachable in the
+unauthenticated state. They are used for various purposes, such as allowing
+connection to external payment systems or for allowing partners to advertise or
+show content to the visitors.
+
+The CoovaChilli application treats the whitelists as IP addresses that are
+loaded into the runtime memory. However, some domains might change their IP
+after they have been loaded into the memory. Since it is sometimes necessary to
+whitelists domains, regardless their IP address, those specified with the
++uamdomain+ parameter are treated in a way that permits dynamic loading of the
+IP address.
+
+The whitelists can be of different types:
+
+* IP whitelists: these are IP addresses that are loaded to the walled-garden
+  list. These are usually specified as +uamallowed+ parameters.
+
+* Networks: similar but specified using a CIDR format. Usually specified as
+  +uamallowed+ parameters.
+
+* Domains: these are domains that, when resolved on a DNS request, chilli will
+  take the response and add the IP address to the walled-garden. Thise permits
+to permantenly whitelist a domain regardless its possible IP changes over time.
+Usually specified as +uamdomain+ parameters. Exceptionally also as +newdomain+
+parameters (in this case they need to be reformatted as explained above).
+
+The Domain based whitelists can be provided as regular TLD domains or they can
+be provided using regular expressions so any domain matching the regular
+expression will be whitelisted.
+
+[[Authenticationprocess]]
+Authentication process
+^^^^^^^^^^^^^^^^^^^^^^
+
+The reference implementation FonAP can work using two different modes of
+authentication:
+
+. Standalone authentication (internal authenticator)
++
+The user authentication is done directly between the FON HM and a RADIUS
+server. In this mode, chilli (the main module of the HM) uses an internal
+RADIUS client to authenticate the users.
++
+The following chapter Authentication process will describe the process of
+authentication handled internally by Chilli.
++
+Chilli will also provide session accounting to the RADIUS servers. The
+format and attributes to be used need to be compatible with FON RADIUS servers.
+
+. External authenticator
++
+The user authentication is handled by an external application. This application
+will be usually defined and developed following ISP requirement, depending on
+authentication methods and connection architecture.
++
+Chilli will not take part in this process, and will only provide the
+necessary information to the external authenticator through the FON API. The
+external authenticator will be able to request certain parameters by using the
+fonctl command line utility.
+
+
+Standalone authentication
++++++++++++++++++++++++++
+
+For Authenticated MAC / IP pairings, the HM should allow full and
+unrestricted access to the Internet.
+
+The authentication of a user occurs in two stages, Web authentication and
+the RADIUS authentication. Web Authentication gives access to the User Zone
+which allows the user to change their configuration and purchase credit if
+necessary. RADIUS authentication opens the access, if available, to the
+network. This process happens by a combination of messages between the browser
+or a WISPr application on the device connected to the Public SSID, the
+HM, and FON's Web and the RADIUS servers.
+
+During the User Authentication Process, the HM builds a RADIUS request and
+sends it to the RADIUS server. This packet should be formed as per RFC2865. The
+Code of the Packet is an Access-Request. The following attributes are used on
+the FON implementation:
+
+* User-Name: user name
+
+* User-Password: password
+
+* NAS-IP-Address: Public IP where the connection with FON servers take place
+  from
+
+* Called-Station-Id: MAC of the CPE used for FON services.
+
+* Calling-Station-Id: MAC of device used to connected to the CPE.
+
+* NAS-Identifier: MAC of the CPE used for FON services. It should be the same
+  as Called-Station-Id.
+
+* WISPr-Logoff-URL: URL used to logout the user from RADIUS session.
+
+The following figures summarise this process.
+
+NOTE: during the Authentication Process there can be many more HTTPS and HTTP
+Requests and Responses messages exchanged between the device and domains on the
+Whitelist these are not displayed and described for clarity. The
+HM should allow all of these Requests and Responses.
+
+ Login Succeeded
+
+This diagram and the following description outline the process for a
+successful Authentication of a MAC / IP address pairing.
+
+image:./images-fon/Standalone_Login.png["Standalone
+Authentication",align="center",scaledwidth="75%",alt="Authentication"]
+
+. The user device requests an IP address via DHCP.
+
+. The user device gets and IP address.
+
+. The device connected to the Public SSID sends a HTTP Request to a domain not
+contained in the Whitelist.
+
+. The HM returns a HTTP Redirect message to the device redirecting its browser
+  to the Captive Portal (uamserver)
+
+. The browser will connect to the Captive Portal using HTTPs.
+
+. The FON Web Server sends the Captive Portal page to the device. 
+
+. The user of the device submits her authentication credentials.
+
+. The FON Web Server validates the user credentials with a Radius Server.
+
+. The Radius server replies with an Access-Accept.
+
+. The FON Web Server returns a HTTPs Redirect message containing the
+Associated User Name and One Time Password (OTP).
+
+. The device connects to the URL addressed in the Redirect message (which has
+  the address of the HM). This HTTP Request contains the encrypted password and
+the User Name in the query-string.
+
+. The HM sends a RADIUS Access-Request to the Radius server incorporating the
+  password (now unencrypted following the inverse algorithm) and the Associated
+User Name.
+
+. The FON RADIUS Server validates the RADIUS Request and returns an
+  Access-Accept.
+
+. The MAC / IP pairing is Authorised, granted full access to the Internet. The
+  following Attributes of the Packet are used to configure the user’s
+connection.
+
+** Session-timeout: The length in seconds that the MAC/IP pairing should be
+viewed as Authorised by the HM.
+
+** Acct-Interim-Interval: The time in seconds in between RADIUS accounting
+type Alive packets.
+
+** Class: An attribute used to link Authentication and Accounting
+sessions. The RADIUS Accounting Request should include the same value given in
+the Authentication response.
+
+. The HM should then send a HTTP Redirect to the device directing to the
+Personal Welcome Page.
+
+. The device connects to the new URL.
+
+. The FON Web Server constructs the Personal Welcome Page and returns it to
+the browser over HTTPS.
+
+
+ Login Failed
+
+This diagram and the following description outline the authentication process
+in case of a failed login.
+
+image:./images-fon/login_failed_standalone.png["Login
+failed Standalone",scaledwidth="75%",align="center",alt="Login failed Standalone"]
+
+. The user device requests an IP address via DHCP.
+
+. The user device gets and IP address.
+
+. The device connected to the Public SSID sends a HTTP Request to a domain not
+contained in the Whitelist.
+
+. The HM returns a HTTP Redirect message to the device redirecting its browser
+  to the Captive Portal (uamserver)
+
+. The browser will connect to the Captive Portal using HTTPs.
+
+. The FON Web Server sends the Captive Portal page to the device. 
+
+. The user of the device submits her authentication credentials.
+
+. The FON Web Server validates the user credentials with a Radius Server.
+
+. The Radius server replies with an Access-Accept.
+
+. The FON Web Server returns a HTTPs Redirect message containing the
+Associated User Name and One Time Password (OTP).
+
+. The device connects to the URL addressed in the Redirect message (which has
+  the address of the HM). This HTTP Request contains the encrypted password and
+the User Name in the query-string.
+
+. The HM sends a RADIUS Access-Request to the Radius server incorporating the
+  password (now unencrypted following the inverse algorithm) and the Associated
+User Name.
+
+. Radius sends an Access Reject. The Reply-Message will contain any of the
+  following:
+
+** NOT_ENOUGH_CREDIT: when the user logged in has no credit.
+
+** NO_SUCH_USER: user not register as FON user account.
+
+** BAD_PASSWORD: Password incorrect.
+
+** SESSION_LIMIT_EXEEDED: too many logins with the same account.
+
+** Any other error message will be treated the same way.
+
+. The HM will forward the error message on the querystring.
+
+. The device’s browser sends a HTTP request get Captive Portal.
+
+. The FON Web Server returns the Captive Portal with message 200 OK
+Success.
+
+
+External authenticator
+++++++++++++++++++++++
+
+In this case the external authenticator will be the responsible for
+authentication.
+
+FON API defines the mechanism to implement a 'handler'/'external-authenticator'
+to receive asynchronous notification callbacks from CoovaChilli and the
+mechanism to query data from CoovaChilli and to change dynamically its
+configuration, called fonctl.
+
+Each callback to the handler and call to fonctl is described in the section of
+<<Interfaces>>.
+
+ Login Succeeded
+
+image:./images-fon/login_success.png["Login
+succeeded",align="center",scaledwidth="75%",alt="Login succeeded"]
+
+ Login Failed
+
+image:./images-fon/login_failed.png["Login
+failed",scaledwidth="75%",align="center",alt="Login failed"]
+
+
+Authenticated users
+^^^^^^^^^^^^^^^^^^^
+
+Internal Authenticator
+++++++++++++++++++++++
+
+[float]
+Logout
+++++++
+
+A MAC / IP pairing is disconnected and switched to the Unauthorized state
+whenever either of the following occurs:
+
+[loweralpha]
+. When the user manually clicks (or is redirected) to the logoff URL:
+  "http://192.168.182.1:3990/logoff" (Where the IP address and the port depend
+on the configuration of the FonAP).
+
+. When the user exeeds the +Idle-Timeout+ timer without generating any traffic
+  on the FonAP interface. The +Idle-Timeout+ can be specified on the
+configuration file or on the Access-Accept from the Radius server.
+
+. When the connection time has exeeded the +Session-Timeout+, which is the
+  maximum time the user is allowed to remain connected. This parameter is
+received in the Access-Accept from the Radius server.
+
+[float]
+Accounting
+++++++++++
+
+The accounting is only managed by FonAP when using the internal authenticator.
+Otherwise wither the network or the external authenticator must handle the
+accounting.
+
+ Start
+
+Once the user authentication is done the CPE will send a RADIUS
+Accounting-Request packet with type Start. This starts the accounting of the
+session for the authenticated fon user. This packet is constructed as
+per RFC2865. The following attributes are used in the FON implementation:
+
+[width="40%",options="header",align="center"]
+|=========================================================
+|Parameter Name        |Value
+|Acct-Status-Type      |Type Start
+|User-Name             |user name
+|Class                 |same as in the Access-Request
+|Calling-Station-Id    |MAC of the client device
+|Called-Station-Id     |Fon identifier MAC
+|NAS-Identifier        |Type 19
+|Framed-IP-Address     |IP address of the client peer
+|Acct-Session-Id       |Accounting session identifier
+|WISPr-Location-Name   |Empty unless specified in the config
+|Acct-Delay-Time       |0
+|=========================================================
+
+ Interim
+
+While a peer is in authorized state, periodical accounting updates are sent to
+the Radius server. The period is defined by either a parameter on chilli.conf
+or on the Access-Accept of the specific peer.
+
+This packet should be constructed as an Accounting-Request as per RFC2865. The
+following attributes are used in the FON implementation:
+
+[width="40%",options="header",align="center"]
+|=========================================================
+|Parameter Name                 |Value
+|Acct-Status-Type               |Type Alive
+|User-Name                      |user name
+|Class                          |same as in the Access-Request
+|Calling-Station-Id             |MAC of the client device
+|Called-Station-Id              |Fon identifier MAC
+|NAS-Identifier                 |Type 19
+|Acct-Session-Id                |Accounting session identifier
+|Acct-Input-Octets              |Received data in bytes
+|Acct-Output-Octets             |Sent data in bytes
+|Acct-Input-Gigawords           |Received data in Gigawords
+|Acct-Output-Gigawords          |Sent data in Gigawords
+|Acct-Input-Packets             |Number of received packets
+|Acct-Output-Packets            |Number of sent packets
+|Acct-Session-Time              |Session since the accounting started
+|FON-User-ConnectedNetwork-Name |Fon internal (name of the network connected to)
+|FON-User-HomeNetwork-Name      |Fon internal (name of the User's Network)
+|=========================================================
+
+ Stop
+
+When the user session ends the HM should send the FON RADIUS Server an
+Accounting Stop. This should be structured as per RFC2865 with as a Stop type
+of Accounting-Request. The following attributes are used in the FON
+implementation:
+
+[width="40%",options="header",align="center"]
+|=========================================================
+|Parameter Name                 |Value
+|Acct-Status-Type               |Type Alive
+|User-Name                      |user name
+|Class                          |same as in the Access-Request
+|Calling-Station-Id             |MAC of the client device
+|Called-Station-Id              |Fon identifier MAC
+|NAS-Identifier                 |Type 19
+|Acct-Session-Id                |Accounting session identifier
+|Acct-Input-Octets              |Received data in bytes
+|Acct-Output-Octets             |Sent data in bytes
+|Acct-Input-Gigawords           |Received data in Gigawords
+|Acct-Output-Gigawords          |Sent data in Gigawords
+|Acct-Input-Packets             |Number of received packets
+|Acct-Output-Packets            |Number of sent packets
+|Acct-Session-Time              |Session since the accounting started
+|FON-User-ConnectedNetwork-Name |Fon internal (name of the network connected to)
+|FON-User-HomeNetwork-Name      |Fon internal (name of the User's Network)
+|Acct-Terminate-Cause           |Reason for the termination according to the termination process
+|=========================================================
+
+
+IMPORTANT: The values for queries to the RADIUS servers, number of retries,
+time-out periods before retransmission, master and secondary servers etc. are
+critical to the functioning of the FON Network. These parameters are subject to
+change to ensure the efficient operation of the network. FON will provide CPE
+manufacturers with the current network parameters, but the following parameters
+should be used as defaults:
+
+
+With external authenticator
++++++++++++++++++++++++++++
+
+[float]
+Logout
+++++++
+
+ Logout started by client
+
+image:./images-fon/logout_started_by_client.png["Logout started by
+client",align="center",scaledwidth="75%",alt="Logout started by client"]
+
+ Logout started by CoovaChilli
+
+image:./images-fon/logout_started_by_chilli.png["Logout started by
+chilli",align="center",scaledwidth="75%",alt="Logout started by chilli"]
+
+ Logout started by Authenticator
+
+image:./images-fon/logout_started_by_authenticator.png["Logout started by
+Authenticator",align="center",scaledwidth="75%",alt="Logout started by
+Authenticator"]
+
+[float]
+Accounting
+++++++++++
+
+When the internal authenticator is OFF Chilli is not responsible of the
+accounting messages. However, Chilli will report session-update to the External
+Authenticator with an Interim-Update.
+
+[[Interfaces]]
+Interfaces:
+~~~~~~~~~~
+
+Status Manager(Fonsmcd) - Chilli
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The file fonsmcd.conf has configured the actions to do when the Status Manager changes
+From online to offline and vice versa.
+--------------------------------------------------
+trigger 1 "true"
+trigger 2 "true"
+trigger online "true"
+trigger offline "true"
+--------------------------------------------------
+
+The trigger online and trigger offline must contain the path of an executable with
+parameters whose roles are defined in the "Status Manager" title
+
+The trigger 1 and 2 are not to be used by any CPE manufacturer, so they are by
+default set to the command true(1) wich on UNIX systems do nothing, succesfully.
+
+IMPORTANT: The CPEM will be responsible to configure the trigger to drop the
+chilli and the public signal and to launch them when the Status Manager
+receives the reply from the Heart Beat.  Chilli will use a ready-up interface
+so it's important that the CPE configure the public signal up/down when
+corresponds. 
+
+Chilli - External Handler Authentication
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When invoking an External Authenticator (or handler), +chilli+ is
+configured to use the API handler on the command line with
++--module:fon-api:<handler>+. This +handler+ must be a program on the
+Host Machine that is able to receive a set of commands from +chilli+.
+
+The handler receives the API command as the first parameter (main argv
+vector) and the data for the call is passed through environment
+variables that can be retrieved either with getenv(2) in case the
+handler is a binary written in C, or referencing them with
+$VARIABLE_NAME in case the handler is written in shell script.
+
+IMPORTANT: All callbacks are non-blocking (i.e. coova does not wait
+for the handler process to exit to go on), except of the 'login' call,
+for which the forked +chilli+ process that handles it blocks until the
+handler returns or until it's timeout (see below) is reached.
+
+.Status Diagram
+image::./images-fon/fon-api_state_machine.png["Status Diagram",align="center",scaledwidth="75%",alt="Status Diagram"]
+
+FON API callbacks from chilli to the Authenticator (Interface A)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+IMPORTANT: All callbacks are non-blocking (i.e. coova does not wait for the
+handler process to exit to go on), except of the 'login' call, for wich the
+chilli process that handles it blocks until the handler returns or until it's
+timeout (see below) is reached.
+
+.login
+
+The login call sets the following parameters
+
+.Login environment variables
+|================================================
+| USER_NAME | Username of client
+| PASSWORD | Password for login
+| ACCT_SESSION_ID | Session ID
+| FRAMED_IP_ADDRESS | IP address of Client
+| CALLING_STATION_ID | MAC address of client
+| CALLED_STATION_ID | MAC address of Access Point
+| NAS_ID | NAS Identifier
+| WISPR_LOCATION_ID | WISPr Location Name
+| WISPR_LOCATION_NAME | WISPr Location
+|================================================
+
+A forked process waits for an answer to report back to the +chilli+
+server. The handler exit code is used as a return value. The return
+value is 0 when the login was successful, greater than 0 in the event
+of an error, and less than 0 if 'pending'.
+
+Valid chilli login response codes can be found in the +redir.h+ header
+file in the coova source. When an error is returned, the standard
+output of the handler program is taken as the 'reply message'.
+
+A return code less than 0 tells +chilli+ to redirect the user to the wait
+(polling) page. In this case, the standard output of the handler is
+taken to be the URL of the wait page.  If the page is not provided, it
+defaults to the internal polling page.
+
+.dhcp-lease
+
+Issued when a DHCP lease is granted (IP address assigned) by +chilli+
+for the user device.
+
+.dhcp-release
+
+Issued when chilli releases a DHCP lease. This event can be generated
+by a DHCP release from the client device or due to a timeout. The
+timeout is based on the lease time and the time since the last traffic
+from the client device.  The DHCP lease time defaults to 600 seconds.
+
+dhcp-release is issued when chilli has not gotten a DHCP Request/Renew
+for the IP after the DHCP lease time has passed. DHCP lease time
+defaults to 600 seconds.
+
+Also, a DHCP release is issued when the client device sends a
+release, i.e. before shutting down or when disconnecting from the network.
+
+.session-start
+
+Issued when an authorized user session begins in +chilli+. A session
+may begin from either a successful RADIUS authentication (when being 
+used), a zero exit code from the login handler, or the result of a
+call to +fonctl authorize+.
+
+.session-update
+
+ssued periodically throughout the duration of an authorized user
+session.  The period, or interval, depends on the 'Interim-Interval',
+which can be set by RADIUS, +fonctl+, or configured globally as a  
+default. When called, information about the session is given to the   
+handler (see below for environment variables sent).
+
+.session-stop
+
+Issued when an authenticated user session stops. This can be the
+result of a 'Session-Timeout', an 'Idle-Timeout', or an explicit call
+to +fonctl logout+. The Session-Timeout is when a session has exceeded
+it's max allowed time. An Idle-Timeout is when the user device hasn't
+generated network traffic in a configurable amount of time. Both the
+Session-Timeout and Idle-Timeout are configurable on a per session   
+basis with RADIUS or +fonctl+.
+
+.fon-startup
+
+Issued when chilli starts. Informative.
+
+.fon-shutdown
+
+Issued when chilli stops. Informative.
+
+.Variables updated by callbacks
+
+The handler is able to take advantage of a set of environment
+variables set by the daemon. Below the variables and a short
+description:
+
+.Variables
+|================================================
+|USER_NAME | Username of client
+|FRAMED_IP_ADDRESS | IP address of client
+|SESSION_TIMEOUT | Session timeout (max time)
+|IDLE_TIMEOUT | Idle timeout
+|CALLING_STATION_ID | MAC address of client
+|CALLED_STATION_ID | MAC address of Access Point
+|NAS_ID | NAS Identifier
+|ACCT_SESSION_ID | Session ID
+|ACCT_INTERIM_INTERVAL | Accounting Interval
+|WISPR_LOCATION_ID | WISPr Location Name
+|WISPR_LOCATION_NAME | WISPr Location
+|WISPR_BANDWIDTH_MAX_UP | WISPr Limitation
+|WISPR_BANDWIDTH_MAX_DOWN | WISPr Limitation
+|CHILLISPOT_MAX_INPUT_OCTETS | Data Limit
+|CHILLISPOT_MAX_OUTPUT_OCTETS | Data Limit
+|CHILLISPOT_MAX_TOTAL_OCTETS | Data Limit
+|INPUT_OCTETS | Octets sent up
+|OUTPUT_OCTETS | Octets sent down
+|SESSION_TIME | Session duration
+|IDLE_TIME | Idle time of client
+|CUI | Chargable-User-Identity RADIUS attribute
+|TERMINATE_CAUSE | Reason for session stop
+|=================================================
+
+The variables pertinent to each caller, which are updated before each
+call, are described in the next table:
+
+.Environment variables per callback
+[options="header", cols="20,3,3,3,3,3,3"]
+|===================================================================
+|                   Variable |lease|release|login|start|update|stop
+|USER_NAME                   |     |       |  X  |  X  |   X  | X
+|PASSWORD                    |     |       |  X  |     |      |
+|FRAMED_IP_ADDRESS           |  X  |   X   |  X  |  X  |   X  | X
+|SESSION_TIMEOUT             |     |       |     |  X  |   X  | X
+|IDLE_TIMEOUT                |     |       |     |  X  |   X  | X
+|CALLING_STATION_ID          |  X  |   X   |  X  |  X  |   X  | X
+|CALLED_STATION_ID           |  X  |   X   |  X  |  X  |   X  | X
+|NAS_ID                      |  X  |   X   |  X  |  X  |   X  | X
+|ACCT_SESSION_ID             |     |       |  X  |  X  |   X  | X
+|ACCT_INTERIM_INTERVAL       |     |       |     |  X  |   X  | X
+|WISPR_LOCATION_ID           |     |       |     |  X  |   X  | X
+|WISPR_LOCATION_NAME         |     |       |     |  X  |   X  | X
+|WISPR_BANDWIDTH_MAX_UP      |     |       |     |  X  |   X  | X
+|WISPR_BANDWIDTH_MAX_DOWN    |     |       |     |  X  |   X  | X
+|CHILLISPOT_MAX_INPUT_OCTETS |     |       |     |  X  |   X  | X
+|CHILLISPOT_MAX_OUTPUT_OCTETS|     |       |     |  X  |   X  | X
+|CHILLISPOT_MAX_TOTAL_OCTETS |     |       |     |  X  |   X  | X
+|INPUT_OCTETS                |     |       |     |     |   X  | X
+|OUTPUT_OCTETS               |     |       |     |     |   X  | X
+|SESSION_TIME                |     |       |     |     |   X  | X
+|IDLE_TIME                   |     |       |     |     |   X  | X
+|CUI                         |     |       |     |  X  |   X  | X
+|TERMINATE_CAUSE             |     |       |     |     |   X  | X
+|===================================================================
+
+
+External Handler Authentication - FONCTL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+FON API Command Line Utility (Interface B)
+++++++++++++++++++++++++++++++++++++++++++
+
+Basic Usage:
+
+----------------------------
+  /usr/sbin/fonctl <command> [<arguments>...]
+----------------------------
+
+Commands:
+
+----------------------------
+    list, listip, listmac, listgarden,
+    authorize, login, update, logout, block, procs
+----------------------------
+
+list::
+    Shows a listing of all sessions and their login status
+    and accounting information.
+
+listip <ip-address>::
+listmac <mac-address>::
+    Same as list, but for only one session based on ip or mac address.
+
+listgarden::
+    Shows the current status of the walled garden access rules.
+
+authorize ip <ip-address> <session-options>::
+authorize mac <mac-address> <session-options>::
+authorize sessionid <session-id> <session-options>::
+    Authorize a session with no RADIUS login based on the session options.
+
+login ip <ip-address> <session-options>::
+login mac <mac-address> <session-options>::
+login sessionid <session-id> <session-options>::
+    Attempt to authorize a session using RADIUS based on the session options.
+
+update ip <ip-address> <session-options>::
+update mac <mac-address> <session-options>::
+update sessionid <session-id> <session-options>::
+    Update the session options for a current session.
+    When updating sessions, unspecified options will be reset to zero,
+    so use the same options (with your changes) as those used in
+    authorize or login.
+
+logout ip <ip-address>::
+logout mac <mac-address>::
+logout sessionid <session-id>::
+    Logout and stop an authorized session.
+
+block <mac-address>::
+    Drop all traffic from the MAC address.
+
+dhcp-release <mac-address>::
+  Logout and release DHCP lease completely.
+
+procs::
+  Show the processes controlled by chilli, showing number of
+  processes, memory usage, and number of open file descriptors.
+
+.Session Options
+|==============================================================================
+|    username          <value> | string(256)  | Username to use in RADIUS 'login' or authorization
+|    password          <value> | string(256)  | Password to be used for 'login' command
+|    sessiontimeout    <value> | integer(8)   | Max session time (in seconds)
+|    idletimeout       <value> | integer(4)   | Max idle time (in seconds)
+|    interiminterval   <value> | integer(2)   | Accounting interim interval
+|    maxoctets         <value> | integer(8)   | Max input + output octets (bytes)
+|    maxinputoctets    <value> | integer(8)   | Max input octets (bytes)
+|    maxoutputoctets   <value> | integer(8)   | Max output octets (bytes)
+|    maxbwup           <value> | integer(8)   | Max bandwidth up
+|    maxbwdown         <value> | integer(8)   | Max bandwidth down
+|    splash            <value> | string(2048) | Set splash page
+|    url               <value> | string(2048) | Set redirect url
+|    routeidx          <value> | integer(1)   | Route interface index
+|    noacct                    | flag         | No accounting flag
+|==============================================================================
+
+Compiling fonap
+~~~~~~~~~~~~~~~
+
+Source code overview
+^^^^^^^^^^^^^^^^^^^^
+
+fonap source code tree is organized as follows: 
+----------- 
+src/ - Source code for the programs that comprise fonap
+	chillout-mod/ - Source code for an interface between chilli and a
+			handler daemon (obsolete)
+	chillout/     - Source code for FON's own API handler to setup
+			tunnels using xl2tpd and pppd. (does not need to
+			be integrated)
+	coova/	      - Source code for the coova captive portal gateway
+	dnsmasq/      - Source code for the dnsmasq dns forwarder
+	fon-api/      - Source code for the fonctl/handler interface defined
+			in 2.3.2 and 2.3.4 (a coova extension)
+	fonsmcd/      - Source code for the status manager client
+	ppp/	      - Source code for pppd with fon patches (does not need
+			to be integrated)
+	xl2tpd/	      - Source code of xl2tpd with fon patches (does not need
+			to be integrated)
+patches/	      - Patches of the derived packages from the original
+			source tarballs
+files/                - configuration files and init scripts
+tools/                - tools/scripts needed for compilation
+
+Makefile	      - fonap's Makefile (script for the GNU make utility)
+doc/                  - Source for this documentation
+-----------
+
+The dependencies to compile it in a debian distribution are:
+-----------
+make autoconf automake libtool dpkg-dev dev devscripts libdjbdns1-dev libdaemon-dev
+libpcap0.8-dev 
+-----------
+There are dependencies installed along with those, as autotools-dev, binutils
+build-essential, bzip2, cpp, g++, gcc, libc-dev and others. Installing
+those with apt-get will install all the dependencies.
+
+WARNING: On recent debian releases (squeeze) the package libdjbdns1 and
+libdjbdns1-dev are missing. They must be installed manually from the previous
+(lenny) repositories as follows:
+
+-----------
+wget http://ftp.es.debian.org/debian/pool/main/libd/libdjbdns/libdjbdns1_1.05-5_i386.deb
+wget http://ftp.es.debian.org/debian/pool/main/libd/libdjbdns/libdjbdns1-dev_1.05-5_i386.deb
+sudo dpkg -i libdjbdns1_1.05-5_i386.deb
+sudo dpkg -i libdjbdns1-dev_1.05-5_i386.deb
+-----------
+
+In order to build it, uncompress it and run make. It will create a .dot deb
+file fonap-<version>.deb
+
+To install it, check the dependencies in the debian/control file or install it
+with a package util capable of resolving dependencies.
+
+scripts:
+------------
+/usr/sbin/chilli_radconfig : does the radconfig call
+/etc/firewall.fonap : firewall configuration for the hotspot, isolate hotspot,
+permit basic services (chilli/dns/nat), drop everything else.
+
+config files:
+/etc/chilli.conf   :  chillispot config file. Includes chillispot necesary config
+                      parameters, like uamserver, uamsecret, etc.
+/etc/fon_keyword   :  cthulhu key for heartbeat protocol
+/etc/fon_version
+/etc/fon_revision  : used both for radconfig string id
+/etc/fon_mac       : hotspot mac for cthulu heartbeat protocol
+/etc/fonsmcd.conf  : cthulu client config file. Has cthulu server, timeout, etc
+                     config parameters.
+/etc/dnsmasq.conf  : dnsmasq config
+/etc/default/fonap : used to activate/deactivate fonap and set overall
+options for coova-chilli
+-------------
+
+Compiling fonsmcd apart from the rest
++++++++++++++++++++++++++++++++++++++
+
+Once installed the global dependencies, 
+issue the usual configure && make sequence:
+
+------------------------------------
+  cd src/fonsmcd/
+  ../configure --enable-maintainer-mode --enable-debug --prefix=$(pwd)
+  make
+------------------------------------
+
+Debugging options ('enable-maintainer-mode', 'enable-debug')
+should be removed once included in the native toolchain.
+
+To try the software against the FON Server you should request access to the
+Heart Beat server contacting with FON.
+
+djbdns client library
++++++++++++++++++++++
+The djbdns client library by D.J. Bernstein http://cr.yp.to/djbdns.html
+
+The uClibc (c library used in La Fonera) doesn't implement any resolver
+function other than gethostbyname(), so I used this. The client library code
+was put on the public domain by Bernstein.
+
+Getting rid of the dependencies of djbdns and using other resolver library
+would be a medium effort.
+
+Dependencies
+^^^^^^^^^^^^
+libdaemon
++++++++++
+libdaemon is a lightweight C library that eases the writing of
+UNIX daemons, by Lennart Poettering
+ http://0pointer.de/lennart/projects/libdaemon/
+
+This library uses some mechanisms that are very UNIX-specific, and probably
+isn't needed in your OS. The code doesn't depend on it except for some
+initialization boilerplate.
+
+libfonrsa
++++++++++
+This is a library made taking parts of axTLS (the bignum
+implementation), and a RIPMEMD160 implementation (used as the signature hash for
+upgrade files and not used by fonsmcd). The parts needed are already included
+in the distribution tarball.
+
+libc
+++++
+The code doesn't use any GNU libc specific functions, as it runs over uClibc on
+La Fonera, and on GNU libc on x86. If porting to a platform using newlib,
+differences between uClibc and newlib should be taken in account, probably the
+getopt() implementations.
+
+Part of the protocol code also uses an implementation of AES, and several base
+conversion routines, as the protocol uses base32 and base64 on queries and
+answers. This is also included in the source distribution tarball.  
+
+fonsmcd source code overview (in src/fonsmcd)
++++++++++++++++++++++++++++++++++++++++++++++
+
+On the fonap distribution tarball, in the directory 'src/fonsmcd', apart from 
+the regular configure and autotools stuff, the source code can be divided as
+follows:
+
+-------------------
+ aes.h
+ aes.c           AES implementation
+ protocol.c      Protocol library
+ protocol.h
+
+ urandom.c       Some utility functions
+ urandom.h
+ log.h
+ log.c
+ poption.c
+ poption.h
+
+ base*.[ch]     Base converting routines
+ rmd160.c       Ripemd 160 implementation
+ rmd160.h
+ fonrsa.c       FONRSA bundle library
+ fonrsa.h
+ bigint.h       axTLS bigint implementation
+ bigint.c
+ bigint_impl.h
+ Makefile.am    Makefile template for automake
+-------------------
+
+Running fonap
+~~~~~~~~~~~~~
+
+Fonap is started once installed through the init script at '/etc/init.d/fonap'
+This is called automatically upon start and can be stoped and started manually
+issuing 'invoke-rc.d fonap stop' and 'invoke-rc.d fonap start' respectivelly. 
+
+Interaction with the CPE
+-------------------------
+
+SSIDs
+~~~~~
+
+The CPE should broadcast two SSIDs, one for public access and one for private
+access.
+
+Fon or FonAP do no force any restrictions or configurations on the rest of the SSIDs of the box.
+
+IP Pools
+~~~~~~~~
+
+The FonAP acts as the DHCP server for the Public SSID. The pool of IPs should
+be non-conflicting with any of the networks already known to the CPE. By
+default the FonAP software will use the subnet 192.168.182.0/24
+
+Firewall
+~~~~~~~~
+
+There should be a firewall separating the devices connected to the public
+and private SSIDs. In no way should terminals on the FON SSID be able to access
+any form of traffic or device on the Private SSID and vice versa.
+
+Whenever the Wi-Fi driver of the CPE permits it, it is recommendable to use
+link layer isolation between peers connected to the FON SSID.
+
+The devices connected to the FON SSID should not have access to any service
+or server connected to the CPE except for the FON HM itself. This means all
+ports should be filtered to be accessed from the FON SSID to any of the IP
+addresses of the CPE except for the HM port using TCP and only on the IP of the
+Public Wi-Fi interface.
+
+User Interface
+~~~~~~~~~~~~~~
+
+The CPE should provide at least one page in its GUI dedicated to FON related
+configuration options.
+
+This page will have likely some branded elements for both FON and the ISP.
+
+The page should support at least the following user configurable options:
+
+. FON Status: Online/Offline. This should indicate whether the Public SSID is available and the SM and HM services are functioning correctly.
+
+. Key: Should display OK if the CPE's unique key is present or ERROR if the key is not present. The value of the key should not be displayed.
+
+. Disable/Enable FON Hotspot button: If Disabled is selected, the SM and HM services should be stopped and the Public SSID disabled. If enabled the SM and HM services should be enabled and the Public SSID enabled.
+
+Eventually the GUI can have a registration button. This will depend on each implementation.
+
+When a registration button is required, it will be formed as follows:
+
+----------------------------------------------------------------
+https://${uamserver}/main/standaloneLogin?h=${hash}&m=${Fon_Mac}
+----------------------------------------------------------------
+
+Where the parameters in brackets mean:
+
+* uamserver: the TLD part from the uamserver received with the last configuration from Fon.
+
+* hash: the hash of the uamserver received with the last configuration from Fon.
+
+* Fon_Mac: the Mac that identifies the CPE at Fon.
+
+An example:
+
+-----------------------------------------------------------------------------------------------
+https://www.fon.com/main/standaloneLogin?h=f7f642b126e52f31fe22629e7166baa3&m=00-18-84-d0-00-cd
+-----------------------------------------------------------------------------------------------
+
+WISPr
+-----
+
+The Authentication Process is described in terms of a user of the
+device entering their Authorisation Credentials via a web browser. In order to
+support automatic login where the Authorisation Credentials that have been
+pre-stored on the device, the CPE should implement a modified version of the
+WISPr 1.0 Specification as published by the WiFi Alliance.
+
+The modifications take into account the specifics of the Authorisation Process.
+The WISPr Specification offers a general recommendation and specification for
+connection management between a Client and a Hotspot Operator. It talks a about
+an Universal Access Method (UAM) to perform roaming between WiFi hotspots.
+However, the non-interactive login method performed by the FON Client described
+in this this document is based on a subset of the complete WISPr
+recommendation. The subset is called "The Smart Client to Access Gateway
+Interface Protocol" described in Appendix D of the WISPr Specification, a
+so-called UAM HTTP Interface.
+
+The Protocol allows non-interactive Authentication of a Smart Client using an
+existing infrastructure built for interactive login. To this purpose, the
+Client sends requests to the CPE Landing Page by means of HTTP GET/POST
+messages. The CPE replies by returning a standard HTML page with embedded XML
+code. In addition, the protocol allows the CPE to send pure XML messages by
+redirecting the client to a dedicated server.  The following requirements will
+use Appendix D of the WISPr Specification as a reference and comment on each
+section to explain the modifications required to support the Authorisation
+Process.
+
+[appendix]
+WISPr
+-----
+"Client Integration"
+~~~~~~~~~~~~~~~~~~~~
+. The Protocol is Client Initiated
+. Messages are exchanged via HTTPS. Initial messages are exchanged via HTTP.
+. TCP ports 80 (HTTP) and 443 (HTTPS) are used for the connection
+. Instead of HTTP 1.0 (RFC1945), HTTP 1.1 are used by the servers. However, none of the specific HTTP 1.1 features will be su
+pported by the WISPr implementation.
+
+"Login Request: Successful Case"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. For FON, this interaction is distinct. It is therefore called "FON Login Request: Successful Case".
+
+image:./images-fon/login_process.png["Login Request: Successful Case",align="center",alt="Login Request: Successful Case"]
+
+. The login process interacts at the UAM level (Universal Access Method, usually during the communication between the client
+and the CPE) and the CPC level (the back end servers at FON). For client implementations, it is not relevant to know what goe
+s on at which level. For completeness and future purposes however, the acronyms are included in the message descriptions and
+will be mentioned in the further discussion.
+
+"Login Request: Successful Case With Proxy Reply"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. This interaction is not implemented.
+
+"Login Request: Successful Case With Polling"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. This interaction is not implemented.
+
+"Login Request: Reject"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. There are two kinds of login rejections in the case of FON, each one corresponding to the UAM and the CPC level. A the mome
+nt, only the UAM level login rejection is relevant. It is referred to as "FON Login Request: UAM Reject".
+. FON Login Request: UAM Reject. The same diagram applies as that for a successful Login Request. The WISPr codes will indica
+te failure in this case.
+. FON Login Request: CPC Reject. Not applicable.
+
+"Login Request: Reject With Polling"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. This interaction is not implemented.
+
+"Protocol Specifics"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. The protocol is based on URL redirection.
+. The protocol exchanges XML data and supports XML in only one way, the XML data is embedded as HTML comments during the whol
+e lifetime of the session.
+. The protocol initiates by the Client issuing an HTTP GET request to "http://wifi.fon.com"
+. The exchange of sensitive messages takes place over an HTTPs link. This is to prevent snooping of sensitive information dur
+ing the authentication phase.
+. Proxies are not supported by FON.
+. All messages will contain both response codes and message types.
+. Message types. As specified.
+. Response code. As specified.
+. Clients should follow HTTP redirects (“HTTP 302” response codes) even if they entail switching from HTTPs to HTTP and vice-
+versa. The process already takes care that there is no sensitive information sent over insecure HTTP.
+
+"Smart Client HTTP GET to ORIGIN SERVER"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. The Client will connect to a valid roaming site to initialize access. The specifics are captured in 11.8.3
+. If the Client is already Connected, the Access Point passes the HTTP GET through the Internet ("Public network")
+. 11.9.2 also applies when the Client already is Connected and accepts any intermediate local Terms and Conditions page.
+. When Connected, and the Client accesses the Landing Page the authorization will be rejected.
+. When not Connected and the Client accesses the Landing Page it will:
+.. Return an “HTTP 302 Moved” redirect message.
+.. The “HTTP 200 OK” with a META HTTP-EQUIV-"REFRESH" message is not supported.
+.. Proxies are not supported.
+
+"Redirect"
+~~~~~~~~~~
+. In the "FON Login Request: Successful Case" scenario, two kinds of redirect are used, each one reflecting an interaction at
+ the UAM and the CPC level. From the implementation point of view, requirements are the same for both. They will be described
+ combined as the "FON CPC Redirect And UAM Redirect". All attributes mentioned in the table are required.
+. <LoginResultsURL> is not implemented.
+. Access Procedure will be "1.0"
+. Location Identifier is not implemented.
+. Location Name is is not implemented.
+. Login URL. This is the URL of the Landing Page
+. Abort Login URL. The client will use this URL in the "Abort Login" message
+.. Message Type shall be as specified in 11.8.7
+.. Response shall be as specified in 11.8.8
+
+
+"Proxy"
+~~~~~~~
+. Not implemented.
+
+"Authentication"
+~~~~~~~~~~~~~~~~
+. Follows the "FON Login Request: Successful Case" scenario. More details are described in the next sections.
+
+"Authentication Request"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. In the "FON Login Request: Successful Case" scenario, two kinds of Authentication messages are used, reflecting the UAM and
+ the CPC layer. For implementation purposes, only the UAM layer request is relevant and will be known as the "FON UAM Authent
+ication Request". The CPC Authentication request is a mere redirect message that has to be followed.
+
+"FON UAM Authentication Request"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. The Client will send an HTTP POST over a secure connection for Authentication
+. The HTTPS port 443 will be used, unless another port is specified in the LoginURL
+. The Username will be the user email address registered with FON.
+. The Username length will have a maximum size of 128 characters
+. The Password will be the FON password
+. The Password length will have a maximum size of 128 characters
+. The form button identifier will be as specified.
+. The OriginatingServer will contain the URL specified in 11.8.3 An example is the following request:
+POST /login/gateway/sec/57e4eb3509edbf1e1272ce32a2a6e390/?hash=57e4eb3509edbf1e1272ce32a2a6e390&res=smartclient&uamip=192.168
+.182.1&uamport=3990&challenge=82b69b3a4f33721a36f4812e29e67c12&mac=00-22-F3-A5-B1-66&nasid=00-18-84-AA-00-75 HTTP 1.1 <CR><LF
+><CR><LF>
+UserName=user@fon.com&Password=mypassword
+. Extra information that is not captured by the standard protocol must be included due to internal processing requirements. T
+he extra information attributes will be sent as HTTP POST attributes. A full list of attributes can be found in 11.22.1.
+
+"FON CPC Authentication Request"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. Not applicable. The redirection must be followed.
+
+"Authentication Reply"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. The authentication reply applies to the final authentication reply in the "FON Login Request: Successful Case" scenario.
+. The Access Point will return HTTP status 200 or HTTP status 302. In case of status 302, the redirection must be followed. T
+he next requirements only apply when receiving HTTP status 200.
+. The XML section is embedded in an HTML request
+. Reply Message is a human readable text describing why the login failed. It is optional.
+. The Logoff URL must be present if the ResponseCode is 50 ("Login succeeded")
+. Login Results URL must be present if the ResponseCode is 201. This will indicate to the Client that it must start polling.
+Polling is not implemented.
+
+"Authentication Results Polling”
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. Not implemented.
+
+"Authentication Poll”
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. Not implemented.
+
+"Response to Authentication Poll"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+. Not implemented.
+
+"Abort Login"
+~~~~~~~~~~~~~
+. Not Mandatory. Two scenarios are possible. The common scenario is when a login is in progress as illustrated below.
+
+image:./images-fon/login_abort.png["Abort Login",align="center",alt="Abort Login"]
+
+It is also possible that an Abort Login takes place while the client is already logged in correctly. In this case, the connec
+tion must be terminated by the "Logoff Request".
+
+image:./images-fon/logoff_request.png["Logoff Request",align="center",alt="Logoff Request"]
+
+"Abort Login Request"
+~~~~~~~~~~~~~~~~~~~~~
+. Not mandatory.
+. The client shall send an HTTP GET request to the AbortLoginURL returned in the "Redirect" message.
+. "Abort Login Reply". Not mandatory.
+. The LogoffURL must be present if the ResponseCode is 50 (succeed).
+. "Logoff". Logoff takes place for FON as described in the diagram below. It will be called "FON Logoff".
+
+image:./images-fon/logoff_abort_req.png["FON Logoff",align="center",alt="FON Logoff"]
+
+. "Logoff Request". The client shall send an HTTP GET operation to the LogoffURL returned in the "Authentication Reply" messa
+ge.
+. "Logoff Reply". As specified.
+. "XML Schema". As described in the original WISPr documentation.
+
+FON Attributes
+~~~~~~~~~~~~~~
+. Attributes sent to the Authentication Server. The following is the existing table updated with the new attributes. The attr
+ibutes marked in italic are standard attributes that form part of the specification, as taken from WISPr Specification sectio
+n "Authentication Request" on line 1316.
+
+[options="header", cols="10,10,10"]
+|===================================================================
+|Field Name|Field naming - Format specification|Comments
+|User name input field|name="UserName" max size="128"|The username. This will be the FON
+username followed by the Provider ID in the following format:
+username#providername where
+username is a valid e-mail address and providername a valid provider name.
+See Table 2: Provider ID's for a list of valid Provider ID's and their names
+|Password input|name="Password" max size="128"|The FON password.
+|===================================================================
+
+
+.. Provider ID's. The following table describes the suggested valid Provider ID's and the string to be displayed in the user
+interface. FON will specify a final list of valid Provider ID's. The connection manager will at a later stage be able to down
+load new Provider ID's.
+
+[options="header", cols="10,10"]
+|===================================================================
+|Provider ID|Provider Name
+|0|Reserved
+|1|FON
+|2|RomaWireless
+|3|Neuf
+|===================================================================
+
+... Device ID
+The Device ID determines the device from which the connection was made.
+[options="header", cols="10,10"]
+|===================================================================
+|Device ID|Comments
+|pc|IBM PC
+|nokiaN80|Nokia N80
+|pccKX-WPA100|Panasonic KX-WPA100 Skype Phon
+|===================================================================
+
+.. Device OS. The Device OS determines on which operating system the client runs.
+[options="header", cols="10,10"]
+|===================================================================
+|Device OS|Comments
+|win2000|Windows 2000
+|winxp|Windows XP
+|symbian|Symbian (For the Nokia N80 this is S60 Release 3)
+|linux|Linux
+|===================================================================
+
+.. Attributes received from the Authentication Server. The WISPr standard does not include specific information in the XML fo
+rmatted messages that is needed by FON. Therefore, an extra attribute called <FONResponseCode> is introduced, carrying extra
+information and whose semantics vary based on the WISPr Response Code. So if necessary, after the <ResponseCode> attribute, F
+ON can add an additional <FONResponseCode> attribute.The table below describes the WISPr Response Code and suggests additiona
+l response codes for FON. The WISPr client will look for the presence of the FON Response Code and inform the user interface
+accordingly. Please see the WISPr Specification page 26 for the standard table.
+
+[options="header", cols="10,10,10,10"]
+|===================================================================
+|WISPr Response Code|WISPr Response Meaning|Additional FON Response Code|FON Response Meaning
+|0|No Error|–|–
+|50|Login succeeded|–|–
+||(Access ACCEPT)||
+|100|Login failed (Access|900|NOT_AUTHORIZED
+||REJECT)||– Invalid Login
+|||901|NOT_ENOUGH_CREDIT . The user has no credit to access the network.
+|||902|USER_NOT_FOUND
+|||903|USER_IN_THE_BLACKLIST
+|102|RADIUS server|–|–
+||error/timeout||
+|150|Logoff succeeded|–|–
+|255|Access gateway|–|–
+||internal error||
+|===================================================================
+
+.. Validation Schema. The XML namespace validation schema is officially located athttp://www.acmewisp.com/WISPAccessGatewayPa
+ram.xsd. The WISPr parser does not (yet) do strict XML validation, so it will not use the URL. For now, we have replaced it w
+ith www.fon.com/WISPr.xsd, but it is not necessary for FON to have it reachable.
+
+. Sample Exchanges. Appendix 1 contains a series of sample exchanges based on the above requirements. Whilst these exchanges
+are as accurate as possible their purpose is mainly illustrative. The FON servers, URLs, nature of user names and passwords,
+etc., reflect the situation at the time of writing, but may have changed when reading this document.
+
+. Session Maintenance. This section describes the mechanism that is employed to maintain sessions during temporary connection
+ breaks. Once a user has established a connection to the Internet after associating to a FON Access Point and logging in usin
+g WISPr, FON allows a user to disassociate from the Access Point, while internally maintaining the connection for a limited t
+ime until the user re-associates to the Access Point. This means that at once reconnected, there will be no need to log in ag
+ain and any Internet access can be resumed using the existing connection. The WISPr specification does not support this kind
+of session maintenance, as it is limited to the initial establishment and termination of a connection. The next section descr
+ibes how FON and supported Wireless Connection Managers handle the situation. After association, the Connection Manager will
+perform a HTTP GET to pre-established Internet location. The location must not be a FON 'allowed' location that can be reache
+d even if no connection exists, such as google.com or any potential generic location FON may decide to open. If the HTTP GET
+is successful, it means a connection exists, and no further effort will be made for an automatic login. Otherwise, the normal
+ automatic login sequence will be started.
+
+----------------------------------------------------------------------------------------------------------
+WISPr 1.0 Process
+
+Client              Chilli            Portal      RADIUS
+  |Initial Req        |                 |           |     * Original request is hijacked.
+  |------------------>|                 |           |
+  |                   |                 |           |
+  |   Redirect w/WISPr|                 |           |     * LoginURL = https://www.fon.com/....
+  |<------------------|                 |           |
+  |                   |                 |           |
+  |Portal Login Req   |                 |           |     * Sends username, password, challenge, etc.
+  |-------------------|---------------->|           |
+  |                   |                 |           |
+  |                   |   Login Redirect|           |     * Redirect browser, sending username and
+  |<------------------|-----------------|           |       password or CHAP response.
+  |                   |                 |           |
+  |Login Request      |                 |           |     * Browser immediately redirects to login
+  |------------------>|                 |           |       user through chilli, which in turn has chilli
+  |                   |-----------------|---------->|       sending RADIUS. The RADIUS response status is
+  |    Redirect Status|<----------------|-----------|       sent back to the browser in a redirect back to
+  |<------------------|                 |           |       the portal.
+  |                   |                 |           |
+  |Portal Status Req  |                 |           |     * The portal is able to inform the user of their
+  |-------------------|---------------->|           |       login status, given any errors, or can also go
+  |                   |                 |           |       ahead and redirect to the original URL.
+----------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------
+WISPr 2.0 Process
+
+Client              Chilli            Portal      RADIUS
+  |Initial Req        |                 |           |     * Original request is hijacked.
+  |------------------>|                 |           |
+  |                   |                 |           |
+  |   Redirect w/WISPr|                 |           |     * LoginURL = https://www.fon.com/....
+  |<------------------|                 |           |       WISPrEAPMsg = EAP-Identity
+  |                   |                 |           |
+  |Portal Login Req   |                 |           |     * Sends username and WISPrEAPMsg. EAP message
+  |-------------------|---------------->|           |       content is EAP method specific.
+  |                   |                 |           |
+  |                   |   Login Redirect|           |     * Without processing WISPrEAPMsg, bounce the user
+  |<------------------|-----------------|           |       browser back to the chilli login URL with WISPrEAPMsg.
+  |                   |                 |           |
+  |Login Request      |                 |           |     * Browser immediately redirects to login
+  |------------------>|                 |           |       user through chilli, which in turn has chilli
+  |                   |-----------------|---------->|       sending EAP over RADIUS. The RADIUS status is
+  |    Redirect Status|<----------------|-----------|       sent back to the browser along with any EAP message
+  |<------------------|                 |           |       found in the RADIUS Challenge.
+  |                   |                 |           |
+  /                   /                 /           /
+  |                   |                 |           |
+  |Portal Login Req   |                 |           |     * This process continues until the EAP protocol is complete.
+  |-------------------|---------------->|           |       The Client keeps sending WISPrEAPMsg through to the Portal.
+  |                   |                 |           |       The Portal redirects back to chilli, to put the EAP into RADIUS.
+  |                   |   Login Redirect|           |       The EAP response in RADIUS is then put into the WISPr XML for
+  |<------------------|-----------------|           |       the Client to pick-up and process.
+  |                   |                 |           |
+  |Login Request      |                 |           |
+  |------------------>|                 |           |
+  |                   |-----------------|---------->|
+  |    Redirect Status|<----------------|-----------|     * Upon success completion of EAP, the RADIUS server will
+  |<------------------|                 |           |       stop repling with a Challenge and will issue either an
+  |                   |                 |           |       RADIUS Accept or Reject.
+  /                   /                 /           /
+  |                   |                 |           |
+  |Portal Status Req  |                 |           |     * The portal is able to inform the user of their
+  |-------------------|---------------->|           |       login status, given any errors, or can also go
+  |                   |                 |           |       ahead and redirect to the original URL.
+----------------------------------------------------------------------------------------------------------
+
+Sample WISPr Exchanges
+~~~~~~~~~~~~~~~~~~~~~~
+
+. FON Successful login.
+The numbering scheme for the exchange refers to the Figure in 11.3.1.
+
+"1. Smart Client HTTP GET to ORIGIN SERVER"
+The following request is issued to wifi.fon.com:
+-------------------------------------------------------------------------------------------
+GET / HTTP/1.1<CR><LF><CR><LF>
+-------------------------------------------------------------------------------------------
+
+"2. UAM Redirect"
+Will return a new URL to use. In this example:
+-----------------------------------------------------------------------------------------------------------------------
+https://www.fon.com/login/gateway/sec/91f109e25954c1b51ec3caddef63ae03?res=notyet&uamip=192.168.182.1&uamport=3990&challenge=
+faf6325f2dbf4957b564cae5ceb3944f&userurl=&nasid=AA-BB-CC-DD-EE-FF&mac=00-11-22-33-44-55
+-----------------------------------------------------------------------------------------------------------------------
+
+"3. Retrieve the redirected UAM page"
+Issue a GET to the new URL obtained in step 2.
+-------------------------------------------------------------------------------------------
+GET login/.etc./.etc./ HTTP/1.0<CR><LF><CR><LF> to www.fon.com.
+-------------------------------------------------------------------------------------------
+
+"4. UAM Redirected"
+The obtained data will contain the WISPr redirect URL:
+-------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?> <WISPAccessGatewayParam
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+xsi:noNamespaceSchemaLocation="http://www.acmewisp.com/WISPAccessGatewayParam.xsd ">
+<Redirect> <AccessProcedure>1.0</AccessProcedure>
+<LoginURL>
+https://www.fon.com/login/gateway?res=smartclient&uamip=192.168.182.1&uamport=3990&challe nge=faf6325f2dbf4957b564cae5ceb3944
+f
+
+</LoginURL> <AbortLoginURL>
+http://192.168.182.1:3990/abort </AbortLoginURL> <MessageType>100</MessageType> <ResponseCode>0</ResponseCode>
+</Redirect> </WISPAccessGatewayParam>
+-------------------------------------------------------------------------------------------
+
+"5. UAM Authentication Request"
+The request, together with the user data, will be posted to the WISPr login URL. Thus the following POST is sent to www.fon.c
+om:
+-----------------------------------------------------------------------------------------------------------------------------
+-------------------
+POST /login/gateway/sec/57e4eb3509edbf1e1272ce32a2a6e390/?hash=57e4eb3509edbf1e1272ce32a2a6e390&res=smartclient&uamip=192.168
+.182.1&uamport=3990&challenge=82b69b3a4f33721a36f4812e29e67c12&mac=00-22-F3-A5-B1-66&nasid=00-18-84-AA-00-75 HTTP 1.1 <CR><LF
+><CR><LF>
+UserName=user@fon.com#fon&Password=mypassword
+-----------------------------------------------------------------------------------------------------------------------------
+-------------------
+
+"6. CPC Redirect"
+Will redirect to a new URL.
+-------------------------------------------------------------------------------------------------------
+http://192.168.182.1:3990/logon?username=user@fon.com#fon&password=8079ff7e3fd786a7ea687b 9b11599177
+-------------------------------------------------------------------------------------------------------
+
+"7. CPC Authentication Request"
+The request will be a GET to the redirection URL, to http://192.168.182.1:3990, as follows:
+GET
+-----------------------------------------------------------------------------------------------
+/logon?username=user@fon.com#fon&password=8079ff7e3fd786a7ea687b9b11599177 HTTP/1.1 HTTP 1.0
+<CR><LF><CR><LF>
+-----------------------------------------------------------------------------------------------
+
+"8. Authentication Reply"
+Will contain a redirect page to a new URL with the actual WISPr authorization reply.
+-----------------------------------------------------------------------------------------------------------
+https://www.fon.com/login/gateway/sec/91f109e25954c1b51ec3caddef63ae03?res=success&uamip= 192.168.182.1&uamport=3990&uid=user
+%40fon.com%23fon&userurl=&nasid=AA-BB-CC-DD-EE-FF&mac=00-11-22-33-44-55
+-----------------------------------------------------------------------------------------------------------
+
+"9. Retrieve the redirected Authentication Reply"
+A GET request will be issued to the redirect URL at https://www.fon.com
+---------------------------------------------------------------------------------------------------------------------------  
+GET /login/gateway/sec/91f109e25954c1b51ec3caddef63ae03?res=success&uamip=192.168.182.1& uamport=3990&uid=user%40fon.com%23fo
+n&userurl=&nasid=AA-BB-CC-DD-EE-FF&mac=00-11-22-
+33-44-55 HTTP/1.1 from www.fon.com.
+---------------------------------------------------------------------------------------------------------------------------  
+
+"10. Redirected Authentication Reply"
+The final page will contain the WISPr authentication reply. In case of success, a connection is established.
+-------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<WISPAccessGatewayParam
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://www.acmewisp.com/WISPAccessGatewayParam.xsd ">
+<AuthenticationReply> <MessageType>120</MessageType> <ResponseCode>50</ResponseCode>
+<LogoffURL>http://192.168.182.1:3990/logoff</LogoffURL> </AuthenticationReply>
+</WISPAccessGatewayParam>
+-------------------------------------------------------------------------------------------
+
+. Login failure UAM Reject
+The same scenario applies as above, except the results in step 10 will be different.
+
+"10. Redirected Authentication Reply"
+The final page will contain the WISPr authentication reply, which in this case will be a notification about incorrect credent
+ials with the inclusion a FON Specific response code.
+-------------------------------------------------------------------------------------------
+<WISPAccessGatewayParam xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://www.acmewisp.com/WISPAccessGatewayParam.xsd ">
+<AuthenticationReply> <MessageType>120</MessageType> <ResponseCode>100</ResponseCode>
+<ReplyMessage>Request Denied</ReplyMessage>
+<FONResponseCode>900</FONResponseCode>
+</AuthenticationReply> </WISPAccessGatewayParam>
+-------------------------------------------------------------------------------------------
+
+. FON Logoff
+In this example, it is assumed that the Logoff URL obtained from a previous successful login is http://192.168.182.1:3990/log
+off.
+
+"1. Logoff Request"
+-------------------------------------------------------------------------------------------
+GET /logoff HTTP/1.0<CR><LF><CR><LF> at http://192.168.182.1:3990
+-------------------------------------------------------------------------------------------
+
+"2. Logoff Reply"
+Redirection to:
+-------------------------------------------------------------------------------------------
+https://www.fon.com/login/gateway/sec/91f109e25954c1b51ec3caddef63ae03?res=logoff&uamip= 192.168.182.1&uamport=3990&challenge
+=0bec4f78643bef1cd21a609b401d0f1f&nasid=AA-BB-CC-DD-EE-FF&mac=00-11-22-33-44-55
+-------------------------------------------------------------------------------------------
+
+"3. Retrieve Redirected Logoff Result"
+---------------------------------------------------------------------------------------------------------------------
+GET /login/gateway/sec/91f109e25954c1b51ec3caddef63ae03?res=logoff&uamip=192.168
+.182.1&uamport=3990&challenge=0bec4f78643bef1cd21a609b401d0f1f&nasid=AA-BB-CC-DD-EE-FF&mac=00-11-50-DD-77-65 HTTP/1.1 at www.
+fon.com
+---------------------------------------------------------------------------------------------------------------------
+
+"4. Logoff Reply"
+Contains the WISPr logoff result.
+-------------------------------------------------------------------------------------------
+<WISPAccessGatewayParam xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://www.acmewisp.com/WISPAccessGatewayParam.xsd ">
+<LogoffReply>
+<MessageType>130</MessageType>
+<ResponseCode>150</ResponseCode>
+</LogoffReply> </WISPAccessGatewayParam>
+-------------------------------------------------------------------------------------------
+
+
+[appendix]
+CONFIGURATION PARAMETERS
+------------------------
+
+[options="header", cols="9,7,7,3,3,14,14"]
+|===================================================================
+|Parameter Name |Save in|Configurable by|Manda-tory |Repeat|Example|Description
+|radiusserver1  |chilli.conf|radconfig| Yes|No    |radiusserver1 a.<profile>.ra.fon.com	|Primary RADIUS Sever (only used with internal authenticator but always mandatory)
+|radiusserver2  |chilli.conf|radconfig|Yes|No    |radiusserver2 b.<profile>.ra.fon.com	|Secondary RADIUS Sever (only used with internal authenticator but always mandatory)
+|radiussecret   |chilli.conf|radconfig|Yes|No    |radiussecret secretofon|RADIUS preshared secret 
+|uamsecret      |chilli.conf|radconfig|Yes|No    |uamsecret secretofon|Web authentication preshared secret
+|uamallowed     |chilli.conf|radconfig|Yes|Yes   |uamallowed www.domain.com, 192.168.1.1, 192.168.2.0/24|Eachline contains one or various TLDs, IP addresses or subnets. Corresponds to whitelisted domains that are required. It can appear more than once.
+|uamserver      |chilli.conf|radconfig|Yes|No    |uamserver https://portal.fon.com/FONDEV01/FONNET/hash/|This is
+the Captive Portal where the unauthenticated browsers will be redirected to.
+|uamdomain      |chilli.conf|radconfig||Yes   |uamdomain __^(.*\.)?domain.com$__|Specify a regexp
+based domain in chilli.conf
+|newdomain |whitelist|radconfig||Yes|newdomain *.fon.com,ssl.google-analytics.com,!wifi.fon.com,paypal.112.2o7.net|
+|||||||
+|dhcpif         |chilli.conf|No|Yes|No    |dhcpif eth1|Interface on which CoovaChilli will control user access
+|uamanydns      |chilli.conf|TR-069/DOCSIS/Equivalent|Yes|No    |uamanydns|If present, DNS traffic to remote DNS servers before authentication is allowed. If not, all DNS traffic needs to go to the hotspot. Needs to be implemented but will not necessarily be present.
+|interval       |chilli.conf|TR-069/DOCSIS/Equivalent|Yes|No    |interval 100          |Set an interval to reload the
+configuration file periodically. Set to 0 for disabling it (default)
+|swapoctets|chilli.conf|No|Yes|No||Swap the meaning of "input octets" and "output octets" as it related to RADIUS attribtues. 
+|l2tp-enable|chilli.conf|TR-069/DOCSIS/Equivalent	|No|No||Only if used L2TP-PPP (Version of fonap with tunneling)
+|lnsserver1|chilli.conf|TR-069/DOCSIS/Equivalent	|No|No|lns01.fon.com|Only if used L2TP-PPP
+|lnsserver2|chilli.conf|TR-069/DOCSIS/Equivalent	|No|No|lns02.fon.com|Only if used L2TP-PPP
+|||||||
+|radiusserver1|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|a.<profile>.rc.fon.com|Attribute used for radconfig call
+|radiusserver2|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|b.<profile>.rc.fon.com|Attribute used for radconfig call
+|radiussecret|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|garrafon|Attribute used for radconfig call
+|adminuser|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|FON02-fonap-2.1.0.1 RADIUSADMUSR=FON02-DEVICE-VERSION.REVISION |Attribute used for radconfig call. Device Profile given by FON when Delta Access is requested
+|adminpasswd|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|chillispot|Attribute used for radconfig call
+|dhcpif|chilli.init.in|No|Yes|No|eth5|Attribute used for radconfig call
+|radiusretry|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|1|Attribute used for radconfig call
+|radiusretrysec|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|1|Attribute used for radconfig call
+|radiustimeout|chilli.init.in|TR-069/DOCSIS/Equivalent|Yes|No|7|Attribute used for radconfig call
+|idletimeout|chilli.init.in|TR-069/DOCSIS/Equivalent|||IDLETIMEOUT=600|
+|dhcp-lease-time|chilli.init.in|TR-069/DOCSIS/Equivalent||||
+|device|/etc/fon_device|No|Yes|No|DEVICE=$(cat /etc/fon_device)|Used in the adminuser of radconfig call and on the HeartBeat query
+|version|/etc/fon_version|No|Yes|No|3 integers separated by "." x.y.z|Used in the adminuser of radconfig call and on the HeartBeat query
+|revision| /etc/fon_revision|No|Yes|No|Integer|Used in the adminuser of radconfig call and on the HeartBeat query
+|radiusnasid|/etc/fon_mac|No|Yes|No|/etc/fon_mac, NASID=AC-DE-48-00-00-03|Attribute used for radconfig call. MUST be with capital letters and separeted by "-" (NOT ":")
+|||||||
+|suffix |fonsmcd.conf|TR-069/DOCSIS/Equivalent|Yes|No|.sm.fon.com|Suffix of Hearbeat query (DNS)
+|period_online |fonsmcd.conf|TR-069/DOCSIS/Equivalent|Yes|No|60|Time between heartbeat queries when the hotspot is online
+|period_offline |fonsmcd.conf|TR-069/DOCSIS/Equivalent|Yes|No|5|Time between heartbeat queries when the hotspot is offline
+|rsapath |fonsmcd.conf|No|No|No|"/etc/public_sm_rsa_key.pem"|
+|aespath |fonsmcd.conf|No|No||"/etc/aes_key"|
+|host |fonsmcd.conf|TR-069/DOCSIS/Equivalent.ONLY the domain can change|Yes|No|a.<profile>.hb.fon.com 54 UDP /a.<profile>.hb.delta.fon.com 54 UDP|Domain name of Heartbeat server
+|timeout |fonsmcd.conf|No|Yes|No|3000|
+|retries |fonsmcd.conf|TR-069/DOCSIS/Equivalent|Yes|No|5|Number of retries when there is no answered from heatbeat server, before changing to offline mode (trigger offline)
+|trigger 1 |fonsmcd.conf|No|Yes|No|"true"|
+|trigger 2 |fonsmcd.conf|No|Yes|No|"true"|
+|trigger online |fonsmcd.conf|No|Yes|No|"true" / path to binary/script implemented by the CPEM|
+|trigger offline |fonsmcd.conf|No|Yes|No|"true" / path to binary/script implemented by the CPEM|
+|===================================================================
+
+
+[appendix]
+PARAMETERS CONFIGURABLE BY TR-069/DOCSIS/Equivalent
+---------------------------------------------------
+
+[options="header", cols="7,14,9,11,14"]
+|===================================================================
+|Mapping	|Description	|Type / Length	|	Location				|Fon Ready Value
+|uamanydns      |If present, DNS traffic to remote DNS servers before authentication is allowed. If not, all DNS traffic needs to go to the hotspot. Needs to be implemented but will not necessarily be present|boolean|hotspot manager command line option (usually on init script)   |
+|interval       |Set an interval to reload the configuration file periodically. Set to 0 for disabling it (default)|integer|hotspot manager command line option (usually on init script) |100   
+|defidletimeout|Default idle timeout (max idle time) unless otherwise set by RADIUS (defaults to 0, meaning unlimited)|integer|hotspot manager command line option (usually on init script)|600
+|lease|dhcp-lease-time, use a DHCP lease of seconds (default 600)|integer|hotspot manager command line option (usually on init script)|900
+|l2tp-enable|Only when L2TP/PPP is used|boolean|xl2tpd.conf - authenticator (outchillout)	|
+|lnsserver1|Only when L2TP/PPP is used. Primary server|string (IP or domain)|xl2tpd.conf, authenticator (outchillout)|lns01.fon.com
+|lnsserver2|Only when L2TP/PPP is used. Secondary server|string (IP or domain)|xl2tpd.conf,	authenticator (outchillout)|lns02.fon.com
+|radiusserver1| Primary server to request hotspot manager configuration using radius |string (IP or domain)|command line option (usually on init script)|a.<profile>.rc.fon.com
+|radiusserver2|Secondary server to request hotspot manager configuration using radius |string (IP or domain)|command line option (usually on init script)|b.<profile>.rc.fon.com
+|radiussecret| Radius preshared secret for both servers. This secret should be changed in order not to compromise security|string|command line option (usually on init script)|garrafon
+|adminuser|Attribute used for radconfig call. Device Profile given by FON when Delta Access is requested|string|command line option (usually on init script)|adminuser=<profile>-device-version.revision 
+|adminpasswd| Password to use for Administrative-User authentication in order to pick up hotspot manager configurations and establish a device 'system' session. Attribute used for radconfig call|string|command line option (usually on init script)|chillispot
+|radiusretry|Attribute used for radconfig call. Number of retries|integer|command line option (usually on init script)|1
+|radiusretrysec|Attribute used for radconfig call. Time between retries|integer|command line option (usually on init script)|1
+|radiustimeout|Attribute used for radconfig call|integer|command line option (usually on init script)|7
+|suffix |Suffix of Hearbeat query (DNS)|string|fonsmcd.conf, Heartbeat system|.sm.fon.com
+|period_online |Time between heartbeat queries when the hotspot is online|integer|fonsmcd.conf, Heartbeat system|60
+|period_offline |Time between heartbeat queries when the hotspot is offline|integer|fonsmcd.conf, Heartbeat system|60
+|host |Domain name of Heartbeat server|string (IP or domain)|fonsmcd.conf, Heartbeat system|a.<profile>.hb.fon.com 54 UDP /a.<profile>.hb.delta.fon.com 54 UDP
+|retries |Number of retries when there is no answered from heatbeat server, before changing to offline mode (trigger offline)|integer|fonsmcd.conf, Heartbeat system|3
+|===================================================================
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[options="header", cols="7,7,9,11,14"]
+|===================================================================
+|Name		|Usage	|Type / Length	|	Location				|Fon Ready Value
+|uamanydns      |chilli|boolean|command line option (usually on init script)   |
+|interval       |chilli|integer|command line option (usually on init script) |100   
+|idletimeout|chilli|integer|command line option (usually on init script)|600
+|dhcp-lease-time|chilli|integer|command line option (usually on init script)|900
+|l2tp-enable|authenticator (outchillout)|boolean|xl2tpd.conf	|
+|lnsserver1|authenticator (outchillout)|string (IP or domain)|xl2tpd.conf	|lns01.fon.com
+|lnsserver2|authenticator (outchillout)|string (IP or domain)|xl2tpd.conf	|lns02.fon.com
+|radiusserver1|radconfig|string (IP or domain)|command line option (usually on init script)|a.<profile>.rc.fon.com
+|radiusserver2|radconfig|string (IP or domain)|command line option (usually on init script)|b.<profile>.rc.fon.com
+|radiussecret|radconfig|string|command line option (usually on init script)|garrafon
+|adminuser|radconfig|string|command line option (usually on init script)|FON02-fonap-2.1.0.1 RADIUSADMUSR=FON02-DEVICE-VERSION.REVISION 
+|adminpasswd|radconfig|string|command line option (usually on init script)|chillispot
+|radiusretry|radconfig|integer|command line option (usually on init script)|1
+|radiusretrysec|radconfig|integer|command line option (usually on init script)|1
+|radiustimeout|radconfig|integer|command line option (usually on init script)|7
+|suffix |Heartbeat system|string|fonsmcd.conf|.sm.fon.com
+|period_online |Heartbeat system|integer|fonsmcd.conf|60
+|period_offline |Heartbeat system|integer|fonsmcd.conf|60
+|host |Heartbeat system|string (IP or domain)|fonsmcd.conf|a.<profile>.hb.fon.com 54 UDP /a.<profile>.hb.delta.fon.com 54 UDP
+|retries |Heartbeat system|integer|fonsmcd.conf|3
+|===================================================================
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[appendix]
+CONFIGURATION PARAMETERS FONAP WITH TUNNELING (XL2TP and PPP)
+-------------------------------------------------------------
+
+[options="header", cols="10,14,7,14"]
+|===================================================================
+|Parameter Name |Save in|Configurable by|Example
+|port|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= 1701
+|auth file|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= /etc/xl2tp-secrets
+|lns|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= lns01.fon.com
+|redial|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= no
+|redial timeout|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent| = 5
+|require authentication|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= no
+|pppoptfile|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= /etc/ppp/ppp-xl2tpd.client
+|redial timeout|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent| = 15
+|max redials|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= 5
+|hidden bit|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= yes
+|length bit|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= no
+|call rws|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= 10
+|tunnel rws|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= 4
+|flow bit|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= yes
+|challenge|etc/xl2tpd.conf|TR-069/DOCSIS/Equivalent|= no
+||||
+|plugin|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|passwordfd.so
+|ipcp-accept-local|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|ipcp-accept-remote|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|refuse-eap|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|noccp|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|noauth|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|crtscts|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|idle|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|1800
+|nodefaultroute|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|usepeerdns|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|noipdefault|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|debug|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|lock|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|proxyarp|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|connect-delay|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent| 0
+|hide-password|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|lcp-echo-interval|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent| 20
+|lcp-echo-failure|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent| 3
+|connect|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent| /bin/true
+|persist|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|noaccomp|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|default-asyncmap|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|
+|logfile|etc/ppp/ppp-xl2tpd.client|TR-069/DOCSIS/Equivalent|/tmp/pppd_log.txt
+|===================================================================
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+[appendix]
+FON API
+-------
+
+Examples
+~~~~~~~~
+
+Example authenticator skeleton using shell script
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is a shell script example of what a handler could look like.
+The code in the script is only to enrich the understanding and
+is not necessarily written with a correct syntax.
+
+-----------------------
+  case "$1" in
+    login)
+        # Login Redirect Handler
+        # The Handler must authenticate the user and
+        # establish any tunnel, interface, session...
+        # that is required
+        # Ater logging the user in, the required firewall
+        # and NAT-ting rules, if any, need to be set in place as well.
+        # Finally, the Handler also needs to notify about
+        # the successful establishment through the Interface B
+        # using an authorize command.
+        status = start_ppp_session();
+        if status != 0; then exit(status);
+        status = set_firewall_rules();
+        # This should be a call to the OS firewall
+        exit(status);
+        ;;
+
+    dhcp-lease)
+        # DHCP Lease Handler
+        ;;
+
+    dhcp-release)
+        # DHCP Release Handler
+        ;;
+
+    session-start)
+        # Session Start Handler
+        ;;
+
+    session-update)
+        # Session Update (Interim) Handler
+        ;;
+
+    session-stop)
+        # Session Stop Handler
+        ;;
+
+    fon-startup)
+        # Daemon Startup
+        ;;
+
+    fon-shutdown)
+        # Daemon Shutdown
+        ;;
+  esac
+---------------
+
+Example calls to fonctl
+^^^^^^^^^^^^^^^^^^^^^^^
+
+List current sessions:
+
+  # fonctl list
+  00-1C-23-4F-46-10 192.168.182.3 dnat 4d5e8e1600000003 0 - 0/0 0/0 0/0 0/0 0 1 0/0 0/0 -
+
+Authorize a session, setting username and "No Accounting" option:
+
+  # fonctl authorize mac 00-1C-23-4F-46-10 username UserName noacct
+
+List sessions to see authorized user:
+
+  # fonctl list
+  00-1C-23-4F-46-10 192.168.182.3 pass 4d5e8e1600000003 1 UserName 4/0 4/0 0/0 0/0 0 1 0/0 0/0 -
+
+List garden domains:
+
+  # fonctl listgarden
+  main garden:   
+  host=212.113.174.13   proto=0   port=0
+  host=93.189.32.84     proto=0   port=0
+  host=213.134.44.0     proto=0   port=0
+  host=122.50.125.118   proto=0   port=0
+  [...]
+  dhcp(dns) garden:
+  host=209.85.146.139   proto=0   port=0
+  host=209.85.146.101   proto=0   port=0
+  host=209.85.146.100   proto=0   port=0
+
+Log out session, this time based on the IP address (could also use mac or sessionid):
+
+  # fonctl logout ip 192.168.182.3
+
+List sessions to get current status:
+
+  # fonctl list
+  00-1C-23-4F-46-10 192.168.182.3 dnat 4d5e8f6c00000003 0 UserName 0/0 0/0 0/0 0/0 0 1 0/0 0/0 -
+
+Update a session to use an alternate redirect URL (be sure it's in the walled garden!):
+
+  # fonctl update ip 192.168.182.3 url http://www.fon.com/
+
+To reset:
+
+  # fonctl update ip 192.168.182.3 url ""
+
+///////////////////
+Appendix 3: STATUS MANAGER
+---------------------------
+
+include::./Porting_Fonsmcd.txt[]
+
+[bibliography]
+.References
+- [[[RFC1035]]] P.Mockapetris. 'RFC1035 - Domain Names, Implementation and Specification'. Internet Engineering Task Force. November 1987.
+- [[[RFC1945]]] T Berners-Lee et al. 'RFC1945 - Hypertext Transfer Protocol -- HTTP/1.0'. Internet Engineering Task Force. May 1996.
+- [[[RFC2865]]] C. Rigney et al. 'RFC2865 - Remote Authentication Dial In User Service (RADIUS)'.  Internet Engineering Task Force. June 2000.
+- [[[WISPr]]] B. Anton et al. 'Best Current Practices for Wireless Internet Service Provider (WISP) Roaming, Version 1.0'. Wi-Fi Alliance. February 2003.
+///////////////////

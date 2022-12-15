@@ -1,0 +1,375 @@
+#! /bin/sh
+# zonap start/stop script
+### BEGIN INIT INFO
+# Provides:          zonap
+# Required-Start:    $remote_fs $syslog $network
+# Required-Stop:     $remote_fs $syslog $network
+# Default-Start:     3 4 5
+# Default-Stop:      0 2 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+DAEMON=/usr/sbin/chilli
+RADCONFIG=/usr/sbin/chilli_radconfig
+IPTABLES="iptables"
+
+DEBUG=0
+NAME=chilli
+DESC=chilli
+PIDFILE=/var/run/$NAME.pid
+
+CONFFILE=/tmp/var/run/chilli.conf
+CONFFILEBAK=/tmp/var/run/chilli.conf.old
+WHITELIST=/tmp/var/run/whitelist
+WHITELISTNEW=/tmp/var/run/whitelist.new
+WHITELISTBAK=/tmp/var/run/whitelist.old
+TEMPORAL_WHITELIST=/tmp/var/whitelist
+TEMPORAL_CONFFILE=/tmp/var/chilli.conf
+WANMODE=$(/usr/sbin/cmld_client getv Device.Ethernet.Link.1.LowerLayers)
+WANIPIF=ppp1
+INTIF="tun0"
+DHCPIF=brfon
+WLANIF0=$(ifconfig | grep wl0.1 | cut -d "." -f 1)
+if [ "$WLANIF0" = "wl0" ]; then
+    DHCPIFMAC=$(ifconfig wl0.1 | head -n1 | awk '{print $5}'|sed s/:/-/g)
+else
+    DHCPIFMAC=$(ifconfig wl1.1 | head -n1 | awk '{print $5}'|sed s/:/-/g)
+fi
+NASID=$(ifconfig eth0 | head -n1 | awk '{print $5}'|sed s/:/-/g)
+NASIP=$(ifconfig "$WANIPIF" | grep "inet addr" | awk '{print $2}'|tr -d "addr:")
+WANDNS=8.8.8.8
+#DNS_SERVER1=$(cat /etc/resolv.conf |sed -n 's/nameserver/&/p'|head -n1|awk '{printf $2}')
+#DNS_SERVER2=$(cat /etc/resolv.conf |sed -n 's/nameserver/&/p'|tail -n1|awk '{printf $2}')
+RADIUSSERVER1=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.RadiusServer1)
+RADIUSSERVER2=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.RadiusServer2)
+RADIUSSECRET=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.RadiusSecret)
+RADIUSRETRYITERATION=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.RadiusRetryIteration)
+RADIUSRETRYSERVER=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.RadiusRetryServer)
+RADIUSTIMEOUT=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.RadiusTimeout)
+RADIUSRETRYITERATION=`expr $RADIUSRETRYITERATION + 1`
+RADIUSRETRYSERVER=`expr $RADIUSRETRYSERVER + 1`
+DEVICE=$(cat /etc/fon_device)
+FWVERSION=$(cat /tmp/fw_info/fw_ver)
+VERSION=${FWVERSION:7:1}.${FWVERSION:10:1}.${FWVERSION:13:2}
+REVISION=${FWVERSION:12:1}
+RADIUSADMUSR=SRCDTA02-${DEVICE}-${VERSION}.${REVISION}
+RADIUSADMPWD=password
+
+NET=172.17.2.0/24
+UAMLISTEN=172.17.2.1
+UAMSECRET=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Uamsecret)
+DHCPSTART=2
+DHCPEND=18
+DNS_SERVER1=$UAMLISTEN
+DNS_SERVER2=$UAMLISTEN
+
+LEASE=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Lease)
+USING_CMDSOCK=1
+FONAP_NORADAUTH=1
+FONAP_NORADACCT=1
+WWWDIR=/etc/fon/www
+MAXCLIENTS=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.MaxUsersAllowed)
+INTERVAL=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Interval)
+IDLETIMEOUT=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.PPPIdleTimeout)
+LANIPADD=$(/usr/sbin/cmld_client getv Device.IP.Interface.3.IPv4Address.1.IPAddress)
+LANIPRANGE=${LANIPADD%.*}.0/24
+FONAP_TUNNELS=1 
+FONAP_FONAPI=1
+
+CHILLOUT_OPTS=""
+#if [ "$FONAP_TUNNELS" = "true" ]; then
+#	CHILLOUT_OPTS="--module=chillout:/tmp/chillout:"
+#	# To use RADIUS for auth + acct (leave blank)
+#	# To use RADIUS for acct, but not auth
+#	if [ $FONAP_NORADAUTH -eq 1 ]; then
+#		CHILLOUT_OPTS="$CHILLOUT_OPTS:noradauth"
+#		if [ $FONAP_NORADACCT -eq 1 ]; then
+#			CHILLOUT_OPTS="$CHILLOUT_OPTS:noradacct"
+#		fi
+#	fi
+#fi
+
+if [ $FONAP_FONAPI -eq 1 ]; then
+	CHILLOUT_OPTS="--module=fon-api:/usr/sbin/api-example.sh"
+fi
+
+# get the mac address used for this FONAP
+#if [ -f /etc/fon_mac ] ; then
+#   NASID=`cat /etc/fon_mac`
+#fi
+
+OPTS="-c $CONFFILE --dns1=$DNS_SERVER1 --dns2=$DNS_SERVER2 --uamuiport=3989 \
+--radiusserver1=127.0.0.1 --radiusserver2=127.0.0.1 --radiussecret=$RADIUSSECRET \
+--radiusnasid=$NASID --nasip=$NASIP --nasmac=$NASID --uamsecret=$UAMSECRET --uamanydns --swapoctets \
+--dhcpif=$DHCPIF --dhcpmac=$DHCPIFMAC --dhcpmacset --net=$NET --dhcpstart=$DHCPSTART --dhcpend=$DHCPEND --lease=$LEASE --uamlisten=$UAMLISTEN \
+--papalwaysok --pidfile=/var/run/$NAME.pid --maxclients=$MAXCLIENTS \
+--challengetimeout=0 --challengetimeout2=0 --defidletimeout=$IDLETIMEOUT \
+--uamdomainfile=$WHITELISTNEW --redirdnsreq "
+
+# [ "$USING_CHILLOUT" = "1" ] && 
+OPTS="$OPTS $CHILLOUT_OPTS"
+[ "$USING_CMDSOCK" = "1" ] && OPTS="$OPTS --cmdsock=/var/run/chilli.sock"
+[ "$WWWDIR" != "" ] && OPTS="$OPTS --wwwdir=$WWWDIR"
+
+test -f $DAEMON || exit 0
+
+# check_required
+do_reload() {
+    [ -f $PIDFILE ] && kill -HUP $(cat $PIDFILE) >/dev/null 2>&1
+}
+
+check_alive() {
+    if [ ! -f $PIDFILE ]; then
+        return 0
+    fi
+    TEST_PID=$(cat $PIDFILE)
+    if [ ! -d /proc/$TEST_PID ]; then
+        rm $PIDFILE
+        return 0
+    fi
+    CANDIDATE=$(cat /proc/$TEST_PID/status | grep Name: | awk '{ print $2 }')
+    if [ "$CANDIDATE" = "chilli" ]; then
+        return 1
+    else
+        rm $PIDFILE
+        return 0
+    fi
+}
+
+parse_whitelist() {
+        if [ -s $TEMPORAL_CONFFILE ]; then
+		awk '
+		BEGIN { buf="" }
+		  /^newdomain/ {
+		    s=$0
+		    sub(/^newdomain /,"",s)
+		    n=split(s,array,",");
+		    for (i=1;i<=n;i++) {
+		      d=array[i]
+		      not=0
+		      dom=""
+		      if (d ~ /^!/) {
+		        not = 1
+		        d = substr(d,2)
+		      }
+		      if (d ~ /^\*\./) {
+		        dom = "^(.*\\.)?" substr(d,3) "$\n"
+		      } else {
+		        dom = "^" d "$\n"
+		      }
+		      if (not) {
+		        printf("!%s", dom)
+		      } else {
+		        buf = buf dom
+		      }
+		    }
+ 		 }
+		END { printf("%s", buf) }
+		' $TEMPORAL_CONFFILE > $TEMPORAL_WHITELIST
+                sed /^newdomain/d -i $TEMPORAL_CONFFILE
+        fi
+}
+
+radiusconfig() {
+        rm -rf $TEMPORAL_CONFFILE
+        $RADCONFIG -c /dev/null \
+		--radiusserver1="$RADIUSSERVER1" \
+                --radiusserver2="$RADIUSSERVER2" \
+                --radiussecret="$RADIUSSECRET" \
+                --adminuser="$RADIUSADMUSR" \
+                --adminpasswd="$RADIUSADMPWD" \
+                --radiusnasid="$NASID" \
+                --nasmac="$NASID" \
+                --nasip="$NASIP" \
+                --dhcpif=$DHCPIF \
+                --uamanydns \
+                --swapoctets \
+                --radiusretry="$RADIUSRETRYITERATION" \
+                --radiusretrysec="$RADIUSRETRYSERVER" \
+                --radiustimeout="$RADIUSTIMEOUT" \
+                > $TEMPORAL_CONFFILE
+
+        if [ ! -s $TEMPORAL_CONFFILE ]; then
+            return 0
+        fi
+
+        parse_whitelist
+
+	# Strip some options that this version of chilli
+	# will not understand (fix with profiles)
+	diff $TEMPORAL_CONFFILE $CONFFILE > /dev/null
+        if [ $? -eq 1 ]; then
+            return 1
+        fi
+    
+	diff $TEMPORAL_WHITELIST $WHITELIST > /dev/null
+	return $?
+}
+
+HmConfigRestore() {
+    if [ -f $CONFFILEBAK ]; then
+        cp $CONFFILEBAK $CONFFILE
+    fi
+
+    if [ -f $WHITELISTBAK ]; then
+        cp $WHITELISTBAK $WHITELIST
+    fi
+    return 0
+}
+
+HmConfigBackup() {
+    if [ -f $CONFFILE ]; then
+        cp $CONFFILE $CONFFILEBAK
+    fi
+
+    if [ -f $WHITELIST ]; then
+        cp $WHITELIST $WHITELISTBAK
+    fi
+    return 0
+}
+
+HmConfigLoad() {
+    HmConfigBackup
+    cp $TEMPORAL_CONFFILE $CONFFILE
+    cp $TEMPORAL_WHITELIST $WHITELIST
+    cp $TEMPORAL_WHITELIST $WHITELISTNEW
+    sed -i 's///' $WHITELISTNEW
+    echo -en "\n" >> $WHITELISTNEW
+    cat $CONFFILE | grep "uamdomain" | awk {'print $2'} >> $WHITELISTNEW
+    sed -i 's/\*\./\^(\.\*\\\.)\?/g' $WHITELISTNEW
+    return 0
+}
+
+firewall_set() {
+    rc fw start 0 ipv4 fon $NET $UAMLISTEN $DHCPIF
+    return 0
+    # Following rule move into rc/wan/firewall_cfg.c
+
+    #Block any access to private ip
+    $IPTABLES -A INPUT_FON -d $LANIPADD -p udp --dport 53 -j ACCEPT
+    $IPTABLES -A INPUT_FON -d $LANIPADD -p tcp --dport 53 -j ACCEPT
+    $IPTABLES -A INPUT_FON -d $LANIPADD -j DROP
+
+    #Allow related and established
+    $IPTABLES -A INPUT_FON -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+    #Allow 3990 (chilli) & 53 (dns)
+    $IPTABLES -A INPUT_FON -p tcp -m tcp --dport 3989 --syn -j ACCEPT
+    $IPTABLES -A INPUT_FON -p tcp -m tcp --dport 3990 --syn -j ACCEPT
+    $IPTABLES -A INPUT_FON -p tcp -m tcp --dport 80 -j ACCEPT
+    $IPTABLES -A INPUT_FON -p tcp -m tcp --dport 53 -j ACCEPT
+    $IPTABLES -A INPUT_FON -p udp -m udp --dport 53 -j ACCEPT
+    $IPTABLES -A INPUT_FON -p udp -m udp --dport 67 -j ACCEPT
+    $IPTABLES -A INPUT_FON -j DROP
+    #Block some access to public port 
+    $IPTABLES -I INPUT -s $LANIPRANGE -d $NET -j DROP
+    $IPTABLES -I FORWARD -s $LANIPRANGE -d $NET -j DROP
+
+    # Drop everything to and from eth0 (forward)
+    # This means that access points can only be managed from ChilliSpot
+    $IPTABLES -A FWD_FON -j ACCEPT
+    
+    # Set TCPMSS    
+    $IPTABLES -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+    # Forward DNS request to wandns server
+    $IPTABLES -t nat -I PREROUTING -i tun0 --dst $UAMLISTEN -p udp --dport 53 -j DNAT --to-destination $LANIPADD
+    $IPTABLES -t nat -I PREROUTING -i tun0 --dst $UAMLISTEN -p tcp --dport 53 -j DNAT --to-destination $LANIPADD
+
+    # Drop mdns
+    $IPTABLES -t mangle -I PREROUTING -p udp --dport 5353 -j DROP
+    
+    # Drop pakcet from brfon
+    $IPTABLES -I FORWARD -i $DHCPIF -j DROP
+    return 0
+}
+
+firewall_clear() {
+    rc fw stop 0 ipv4 fon $NET $UAMLISTEN $DHCPIF
+    return 0
+    # Following rule move into rc/wan/firewall_cfg.c
+    $IPTABLES -F INPUT_FON
+    $IPTABLES -F FWD_FON
+    $IPTABLES -D FORWARD -i $DHCPIF -j DROP
+    $IPTABLES -D FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+    $IPTABLES -t nat -D PREROUTING -i tun0 --dst $UAMLISTEN -p udp --dport 53 -j DNAT --to-destination $LANIPADD
+    $IPTABLES -t nat -D PREROUTING -i tun0 --dst $UAMLISTEN -p tcp --dport 53 -j DNAT --to-destination $LANIPADD
+    $IPTABLES -t mangle -D PREROUTING -p udp --dport 5353 -j DROP
+    $IPTABLES -D INPUT -s $LANIPRANGE -d $NET -j DROP
+    $IPTABLES -D FORWARD -s $LANIPRANGE -d $NET -j DROP
+    return 0
+}
+
+RETVAL=0
+
+case "$1" in
+    start)
+        echo "Starting $NAME."
+        /usr/bin/killall $NAME  > /dev/null 2>&1
+        firewall_set
+
+        if [ "$DEBUG" = "1" ] ; then
+            echo $OPTS
+            $DAEMON $OPTS --debug --fg &
+        else
+            $DAEMON $OPTS &
+        fi
+        sleep 2
+        /etc/fon/fon_wifi start
+        ;;
+
+     stop)
+	echo "Stopping $NAME."
+        check_alive
+        if [ $? -eq 1 ] ; then
+            /etc/fon/fon_wifi stop
+            /usr/bin/killall $NAME > /dev/null 2>&1
+            /usr/bin/killall fon_pppd > /dev/null 2>&1
+            rm -f $PIDFILE
+            rm -f /tmp/var/run/$NAME.*.cfg.bin > /dev/null 2>&1
+        fi
+
+        firewall_clear
+	;;
+
+    restart)
+	$0 stop
+	sleep 2
+	$0 start
+	;;
+   
+    checkrunning)
+        check_alive
+        RETVAL=$?
+	;;
+    
+    radconfig)
+	radiusconfig
+        RETVAL=$?
+	;;
+
+    loadconfig)
+        HmConfigLoad
+        ;;
+
+    restoreconfig)
+        HmConfigRestore
+        ;;
+
+    wifion)
+        ;;
+
+    wifioff)
+        ;; 
+
+    *)
+	N=/etc/fon/$NAME
+	echo "Usage: $N {start|stop|restart|radconfig|loadconfig|restoreconfig|checkrunning|wifion|wifioff}" >&2
+	exit 1
+	;;
+esac
+
+exit $RETVAL
+

@@ -1,0 +1,34 @@
+#!/bin/sh
+
+PPP_LOG_FILE="/tmp/ppp_script.log"
+
+echo "ppp-down" >> $PPP_LOG_FILE
+
+[ -n "$DEMAND" ] && echo item10 $DEMAND >> $PPP_LOG_FILE
+[ -n "$IDLE" ] && echo item11 $IDLE >> $PPP_LOG_FILE
+
+echo "end" >> $PPP_LOG_FILE
+/bin/fc flush
+/bin/iptables -D FORWARD -i br0 -o ppp1 -j LOG --log-prefix "[TRIGGER]"
+/bin/iptables -A FORWARD -i br0 -o ppp1 -j LOG --log-prefix "[TRIGGER]"
+/bin/iptables -D FORWARD -i tun0 -o ppp1 -j LOG --log-prefix "[TRIGGER]"
+/bin/iptables -A FORWARD -i tun0 -o ppp1 -j LOG --log-prefix "[TRIGGER]"
+
+#/usr/sbin/led_app off 20
+#/usr/sbin/rc wanGMP stop $WANID&
+#/usr/sbin/iproute2_config -w $WANID -i $IFNAME -d
+#/usr/sbin/rc wan$WANID'_firewall' restart dns
+/usr/sbin/rc wanip_service stop $WANID ipv4&
+
+if [ $IDLE == 0 ]; then
+    /bin/rm -f /tmp/var/hsfon_wanon
+else
+    /bin/touch /tmp/var/hsfon_wanidle
+fi
+#/usr/sbin/iptables -t nat -D PREROUTING -i br0 -p udp --dport 53 -j DNAT --to 10.10.10.10
+#/usr/sbin/iptables -t nat -I PREROUTING -i br0 -p udp --dport 53 -j DNAT --to 10.10.10.10
+
+if [ $DEMAND == 0 ]; then
+/sbin/route del default gw 0.0.0.0
+fi
+

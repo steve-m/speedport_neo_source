@@ -1,0 +1,124 @@
+#!/bin/sh
+
+if [ "$#" == "1" -a "$1" == "release" ]; then
+    RELEASE_VER=1
+else
+    RELEASE_VER=0
+fi
+
+if [ "${SC_NAND_FLASH_SIZE}m" == "128m" ]; then
+    if [ "${SC_FBIMAGE}" == "1" ]; then
+        ROOTFS_FILE=rootfs_fb.jffs2
+        CFERAM_FILE=cferam.jffs2.128.fb.img
+    else
+        ROOTFS_FILE=rootfs.jffs2
+        CFERAM_FILE=cferam.jffs2.128.img
+    fi
+elif [ "${SC_NAND_FLASH_SIZE}m" == "64m" ]; then
+        ROOTFS_FILE=rootfs.jffs2
+        CFERAM_FILE=cferam.jffs2
+fi
+
+COLOR_GREEN='\E[32;40m'
+COLOR_RED='\E[31;40m'
+
+
+echo "========== MAKE DEFAULT PROTECTED =========="
+if [ "${SC_NAND_FLASH_SIZE}m" == "128m" ]; then
+    ${HOSTTOOLS_DIR}/mkfs.jffs2 -e 131072 -b -p -n -r protected -o protected.jffs2
+elif [ "${SC_NAND_FLASH_SIZE}m" == "64m" ]; then
+    ${HOSTTOOLS_DIR}/mkfs.jffs2 -e 16384 -b -p -n -r protected -o protected.jffs2
+else
+    echo "SC_NAND_FLASH_SIZE not defined"
+    exit 1
+fi
+
+echo "========== MAKE BOOTFLAG =========="
+if [ "${SC_FBIMAGE}" == "1" ]; then
+        BOOTFLAG=bootflag_fb
+        RUNFLAG=eRcOmM.002
+else
+        BOOTFLAG=bootflag
+        RUNFLAG=eRcOmM.001
+fi
+if [ "${SC_NAND_FLASH_SIZE}m" == "128m" ]; then
+    echo -n "${RUNFLAG}" | dd of=${BOOTFLAG}
+    echo -n "kernel_rootfs" | dd of=${BOOTFLAG} bs=32 seek=64
+    echo -n `stat -c %s ${ROOTFS_FILE}` | dd of=${BOOTFLAG} bs=32 seek=65
+    echo -n "09${NatCo}${ModelType}${FW_VERSION}" | dd of=${BOOTFLAG} bs=32 seek=66
+    echo -n "bootloader" | dd of=${BOOTFLAG} bs=32 seek=128
+    echo -n `stat -c %s ${CFERAM_FILE}` | dd of=${BOOTFLAG} bs=32 seek=129
+    echo -n "${FW_BOOT_VERSION}" | dd of=${BOOTFLAG} bs=32 seek=130
+elif [ "${SC_NAND_FLASH_SIZE}m" == "64m" ]; then
+    echo -n "${RUNFLAG}" | dd of=${BOOTFLAG}
+    echo -n "kernel_rootfs" | dd of=${BOOTFLAG} bs=32 seek=16
+    echo -n `stat -c %s ${ROOTFS_FILE}` | dd of=${BOOTFLAG} bs=32 seek=17
+    echo -n "09${NatCo}${ModelType}${FW_VERSION}" | dd of=${BOOTFLAG} bs=32 seek=18
+    echo -n "bootloader" | dd of=${BOOTFLAG} bs=32 seek=32
+    echo -n `stat -c %s ${CFERAM_FILE}` | dd of=${BOOTFLAG} bs=32 seek=33
+    echo -n "${FW_BOOT_VERSION}" | dd of=${BOOTFLAG} bs=32 seek=34
+else
+    echo "SC_NAND_FLASH_SIZE not defined"
+fi
+
+bin_name="09${NatCo}${ModelType}${FW_VERSION}.bin"
+img_name="09${NatCo}${ModelType}${FW_VERSION}.img"
+
+PAR_FILE="dual_128m.par"
+PID_FILE="F1.pid"
+
+if [ "${HW_STARTER}" == "1" ]; then
+    cp -v F1_Starter_${SC_ANNEX}.pid ${PID_FILE}
+else
+    cp -v F1_All_${SC_ANNEX}.pid ${PID_FILE}
+fi
+
+if [ "${SC_FBIMAGE}" == "1" ]; then
+    PAR_FILE="dual_128m_fb.par"
+    PID_FILE="F1_FB.pid"
+    rm -rf For_FT
+    tar jxvf For_FT_09${NatCo}${ModelType}.*.tar.bz2
+    cp -af For_FT/* .
+fi
+
+echo "PAR_FILE=${PAR_FILE}"
+if [ "${SC_NAND_FLASH_SIZE}m" == "128m" ]; then
+    if [ "${RELEASE_VER}" == "1" -o "${SC_FBIMAGE}" == "1" ]; then
+        ./scBind -i ${PAR_FILE} -o "tmp_${bin_name}" > /dev/null
+        ./scEcc ${bin_name} "tmp_${bin_name}" bcm963xx 128 2048 1 0 > /dev/null
+        rm -rf "tmp_${bin_name}"
+    fi
+elif [ "${SC_NAND_FLASH_SIZE}m" == "64m" ]; then
+    ./scBind -i dual.par -o $bin_name > /dev/null
+else
+    echo "SC_NAND_FLASH_SIZE not defined"
+fi
+
+echo -e "${ROOTFS_FILE}\t09${NatCo}${ModelType}${FW_VERSION}" > ver_info
+echo -e "${CFERAM_FILE}\t${FW_BOOT_VERSION}" >> ver_info
+echo -e "dectmodel.bin \t V03.22" >> ver_info
+./make_img -b ${CFERAM_FILE} -r ${ROOTFS_FILE} -t dectmodel.bin -p ${PID_FILE} -v ver_info -o vd168_unencrypted.img
+./make_img -e -i vd168_unencrypted.img -o $img_name
+rm -f vd168_unencrypted.img
+
+if [ "${RELEASE_VER}" == "1" ]; then
+mkdir -p For_FT
+cp cfe_rom_128m.bin For_FT
+cp cferam.jffs2.128.img For_FT
+cp protected.jffs2 For_FT
+cp rootfs.jffs2 For_FT
+cp bootflag For_FT
+cp xml_cfg.jffs2 For_FT
+cp app_dat.jffs2 For_FT
+cp ${PID_FILE} For_FT
+cp dual_128m.par For_FT 
+tar cjvf For_FT_09${NatCo}${ModelType}${FW_VERSION}.tar.bz2 For_FT
+fi
+
+echo "========== IMAGE FILE INFORMATION =========="
+echo "PRODUCT_NAME  = ${PRODUCT_NAME}"
+echo "VENDOR_CODE   = ${VENDOR_CODE}"
+echo "FW_VERSION    = ${FW_VERSION}"
+echo "BL_VERSION    = ${FW_BOOT_VERSION}"
+echo "BIN file name = ${bin_name}"
+echo "IMG file name = ${img_name}"

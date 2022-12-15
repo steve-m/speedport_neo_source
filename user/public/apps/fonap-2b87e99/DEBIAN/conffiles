@@ -1,0 +1,14 @@
+/etc/fon_mac
+/etc/fon_keyword
+/etc/fon_device
+/etc/fon_version
+/etc/fon_revision
+/etc/fonsmcd.conf
+/etc/xl2tpd.conf
+/etc/default/fonap
+/etc/default/chilli
+/etc/firewall.fonap
+/etc/dnsmasq.conf
+/etc/chilli.conf
+/etc/init.d/chilli
+/etc/cron.daily/chilli

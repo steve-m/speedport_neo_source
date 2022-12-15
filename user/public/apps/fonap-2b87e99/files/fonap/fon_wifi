@@ -1,0 +1,118 @@
+#!/bin/sh
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+DEBUG=0
+NAME=fon_wifi
+
+#Configuration parameters
+CfgSSID=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.SSID) 
+CfgMaxUsersAllowed=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.MaxUsersAllowed)
+
+#System Information
+WLANIF0=$(ifconfig | grep wl0.1 | cut -d "." -f 1)
+WLANIF1=$(ifconfig | grep wl1.1 | cut -d "." -f 1)
+
+FONBR=brfon
+WLANIF=wl0
+BSSINDEX=1
+
+wifi_start() {
+    
+    #wifi interface down
+    wlctl -i $WLANIF bss -C $BSSINDEX down > /dev/null 2>&1
+    
+    #configuration
+    wlctl -i $WLANIF ssid -C $BSSINDEX $CfgSSID > /dev/null 2>&1
+    wlctl -i $WLANIF.$BSSINDEX closed 0 > /dev/null 2>&1
+    wlctl -i $WLANIF.$BSSINDEX bss_maxassoc $CfgMaxUsersAllowed > /dev/null 2>&1
+    wlctl -i $WLANIF bss_maxassoc 24
+    wlctl -i $WLANIF.$BSSINDEX ap_isolate 1 > /dev/null 2>&1
+    wlctl -i $WLANIF.$BSSINDEX mac none > /dev/null 2>&1
+    wlctl -i $WLANIF.$BSSINDEX macmode 0 > /dev/null 2>&1
+#    wlctl -i $WLANIF rmwep -C $BSSINDEX 0 > /dev/null 2>&1
+#    wlctl -i $WLANIF rmwep -C $BSSINDEX 1 > /dev/null 2>&1
+#    wlctl -i $WLANIF rmwep -C $BSSINDEX 2 > /dev/null 2>&1
+#    wlctl -i $WLANIF rmwep -C $BSSINDEX 3 > /dev/null 2>&1
+    wlctl -i $WLANIF wsec -C $BSSINDEX 0 > /dev/null 2>&1
+    wlctl -i $WLANIF wsec_restrict -C $BSSINDEX 0 > /dev/null 2>&1
+    wlctl -i $WLANIF wpa_auth -C $BSSINDEX 0 > /dev/null 2>&1
+    wlctl -i $WLANIF auth -C $BSSINDEX 0 > /dev/null 2>&1
+
+    #wifi interface up
+    wlctl -i $WLANIF bss -C $BSSINDEX up > /dev/null 2>&1
+    brctl addif $FONBR $WLANIF.$BSSINDEX > /dev/null 2>&1
+
+    #Disable brfon's forwarding
+    echo 0 > /proc/sys/net/ipv4/conf/$FONBR/forwarding
+    echo 0 > /proc/sys/net/ipv6/conf/$FONBR/forwarding
+    
+    return 0
+}
+
+wifi_stop() {
+    
+    brctl delif $FONBR $WLANIF.$BSSINDEX > /dev/null 2>&1
+    wlctl -i $WLANIF bss -C $BSSINDEX down > /dev/null 2>&1
+    wlctl -i $WLANIF bss_maxassoc 32 
+
+    return 0
+}
+
+stats_save() {
+
+    CfgTotalSessions=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Stats.Total.Sessions) 
+    CfgTotalUsers=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Stats.Total.Users) 
+    CfgTotalNAU=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Stats.Total.NAU) 
+    CfgTotalAF=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Stats.Total.AF)
+    CfgTotalBytesSent=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Stats.Total.TotalBytesSent)
+    CfgTotalBytesReceived=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Stats.Total.TotalBytesReceived)
+
+    echo $CfgTotalSessions,$CfgTotalUsers,$CfgTotalNAU,$CfgTotalAF,$CfgTotalBytesSent,$CfgTotalBytesReceived, > /tmp/var/hsfon_stats_total 
+
+    return 0
+}
+
+case "$1" in
+    start)
+        if [ $WLANIF0 != "" ]; then
+            WLANIF=$WLANIF0
+            wifi_start
+        fi
+        if [ $WLANIF1 != "" ]; then
+            WLANIF=$WLANIF1
+            wifi_start
+        fi
+        
+        #Marked FON is active
+        cat /proc/uptime | cut -d "." -f 1 > /tmp/var/hsfon
+        echo Online > /tmp/var/hsfon_status
+        while [ ! -f /proc/sys/net/ipv4/conf/tun0/forwarding ]; do sleep 1; done;
+        echo 1 > /proc/sys/net/ipv4/conf/tun0/forwarding
+        ;;
+
+    stop)
+        #Save current session stats into total
+        stats_save
+
+        if [ $WLANIF0 != "" ]; then
+            WLANIF=$WLANIF0
+            wifi_stop
+        fi
+
+        if [ $WLANIF1 != "" ]; then
+            WLANIF=$WLANIF1
+            wifi_stop
+        fi
+        rm /tmp/var/hsfon > /dev/null 2>&1
+        rm /tmp/var/hsfon_stats > /dev/null 2>&1
+        ;;
+
+    *)
+        N=/etc/fon/$NAME
+        echo "Usage: $N {start|stop}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+

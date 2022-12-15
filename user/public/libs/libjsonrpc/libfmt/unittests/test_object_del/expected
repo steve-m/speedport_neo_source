@@ -1,0 +1,11 @@
+Input:
+{"group":{"other":{"dsc":"some dsc","sensors":["i2c.PVG","fiejwoi",{}],"enable":true},"default":{"dsc":"some dsc","sensors":["psu.PVG"],"sensors1":{"aa":"bb","cc":"dd"},"enable":true}}}
+Trying to delete 'sensors' from 'other': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true},"default":{"dsc":"some dsc","sensors":["psu.PVG"],"sensors1":{"aa":"bb","cc":"dd"},"enable":true}}}
+Trying to delete 'sensors' from 'default': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true},"default":{"dsc":"some dsc","sensors1":{"aa":"bb","cc":"dd"},"enable":true}}}
+Trying to delete 'sensors1' from 'default': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true},"default":{"dsc":"some dsc","enable":true}}}

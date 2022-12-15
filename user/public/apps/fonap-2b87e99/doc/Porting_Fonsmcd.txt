@@ -1,0 +1,223 @@
+Porting the status manager client
+=================================
+Pablo Martín <pablo@fon.com>
+v1.0, 2008-06-04
+
+// About this file: This is an asciidoc file, it can be converted to
+// pdf using asciidoc as follows:
+// a2x -f pdf Porting_Fonsmcd.txt 
+
+Disclaimer
+----------
+This material contains information which is proprietary and confidential
+to Fon Wireless Ltd. It is not allowed to reproduce, copy, divulge or
+sell all or any part thereof without prior written consent of an
+authorized representative of Fon Wireless Ltd.
+
+Introduction
+------------
+This are with some guidelines on porting the Status Manager client
+(fonsmcd) to another platform.
+
+The first step to get up and running is to compile the code and get it
+running in a Linux workstation.
+
+The second step would be to study the dependencies, to see wether they
+can be compiled in the target architecture.
+
+The third would be to actually build the code with your toolchain, and
+test it on the device.
+
+Status Manager System overview
+------------------------------
+
+The status manager client, fonsmcd, is a daemon running in La Fonera
+that periodically sends heartbeats to our server. The server is
+implemented as a backend for PowerDNS (http://www.powerdns.com/), and
+the client is a daemon written using ANSI C.
+
+This heartbeats are packed inside regular DNS queries, both to make the
+protocol lightweight, and to make it work even on partial network
+connectivity, as most firewalls do not block DNS queries. An added
+advantage is that even in the case of DNS queries being redirected to
+other DNS servers than our own, the query will get to it, due to the
+queries being replied - proxied - by the servers to the top most domain
+on the query, that happens to be sm.fon.com.
+
+The heartbeats are encrypted using an AES key 32 bytes long. The key is
+generated randomly and preloaded on the routers upon manufacturing
+them. The Status Manager Server uses this key both to decrypt the query
+coming from the router, and to encrypt the answer.
+
+The queries are then coded into a dns TXT query, by converting the query
+to base32, and adding to it the suffix .sm.fon.com. The query is sent to
+cthulhu.fon.com, the domain name of our balanced PowerDNS servers.
+
+Even as the status manager server is implemented on top of PowerDNS,
+those servers are not fully compliant DNS servers, and any query that
+doesn't conform to the protocol described here (a reguar "A" DNS query)
+will be rejected (answered with SERVFAIL)
+
+The answer to the heartbeats can contain one of three responses:
+
+- "Do nothing"
+  The server realices there are no configuration changes pending for
+  the router, nor upgrades avaliable for it, so it just acknowledges
+  the query with this answer. This acknowledge is used by the router to
+  check it's connectivity. After certain queries unanswered, fonsmcd
+  gets 'offline' and shuts down the public ESSID signal. The server
+  updates the status for the router in the FON databases, so it appears
+  as "ON" both for drawing the hotspot on Google maps as on, and for
+  acounting purposes.
+
+- "Execute the configuration manager client"
+  The server has verified that a configuration change is awaiting for
+  the router (configuration changes are performed by the user on the
+  "User Zone", where they log to change configuration parameters).
+  fonsmcd executes the command assigned to this answer in it's
+  configuration file.
+
+- "Execute the upgrade manager client"
+   The server has verified that an upgrade is pending for this router.
+   fonsmcd executes the command assigned to this answer in it's
+   configuration file. A voucher (cookie) is generated and stored on the
+   database to track and sent back by this command The first answer is
+   just encrypted using the symmetric key. The other two are also signed
+   using an RSA key and verified by the client daemon.  If your routers
+   are only sending this queries for reporting the "ON" status of the
+   router (most likely), the last two types of answers and this upgrade
+   and configuration mechanism will not be used.
+
+The upgrade manager script and the upgrade manager server
+---------------------------------------------------------
+
+Both the upgrade and the configuration changes are performed by the same
+mechanism. A shell script in La Fonera is used to form a query in a
+simple plaintext protocol, with the MAC address of the router, it's
+version and some other data, and send it to our servers
+(download.fon.com), using dropbear, an SSH client.
+
+On the server end, a process is spawned by an OpenSSH server for each
+connection, parses the input coming from the router and output some
+shell script lines that are sent to the router. Those lines, when
+executed on the router, perform the upgrade or configuration-changing
+tasks.
+
+On current implementations (Fonera SIMPL devices) the OpenSSH setup have
+been replaced by HTTPS
+
+The upgrade mechanism involves downloading packages signed with RSA and
+installing them keeping track of dependencies, but that is out of the
+scope of this document.
+
+Portability of fonsmcd
+----------------------
+
+The tarball I am sending comes from the repositories of both the server
+software (Upgrade Manager and Status Manager) and the La Fonera's
+repository.  Some of the code is shared between server and client.
+
+The aproach on developing the client software was to make it run on a
+conventional computer with Debian GNU/Linux, so it can be easily
+debugged.  Hopefully this will make it easily portable as well.
+
+Testing framework
+-----------------
+The compilation of the client in a Debian workstation is itself included
+into a more wide compilation of the server and client software, with
+it's own testsuite. I have included a custom Makefile to compile the
+client code on Debian Etch, so you can try the software first. In the
+future we can prepare some unit tests for the client implementation,
+taking them from this framework.
+
+Dependencies
+------------
+
+- djbdns client library - The djbdns client library by D.J. Bernstein
+  http://cr.yp.to/djbdns.html The uClibc (c library used in La Fonera)
+  doesn't implement any resolver function other than gethostbyname(), so
+  I used this. The client library code was put on the public domain by
+  Bernstein.  Getting rid of the dependencies of djbdns and using other
+  resolver library would be a medium effort.
+
+- libdaemon - libdaemon is a lightweight C library that eases the
+  writing of UNIX daemons, by Lennart Poettering
+  http://0pointer.de/lennart/projects/libdaemon/ This library uses some
+  mechanisms that are very UNIX-specific, and probably isn't needed in
+  eCos. The code doesn't depend on it except for some initialization
+  boilerplate.
+
+- libfonrsa - This is a library made taking parts of axTLS (the bignum
+  implementation), and a RIPMEMD160 implementation (used as the
+  signature hash for upgrade files and not used by fonsmcd)
+
+- libc - The code doesn't use any GNU libc specific functions, as it
+  runs over uClibc. Differences between uClibc and newlib should be
+  taken in account, probably the getopt() implementations.
+
+Part of the protocol code also uses an implementation of AES, and
+several base conversion routines, as the protocol uses base32 and base64
+on queries and answers.
+
+Source code overview
+--------------------
+
+ .
+ ./bootstrap
+ ./common
+ ./common/fonsm
+ ./common/fonsm/aes.h
+ ./common/fonsm/aes.c		AES implementation
+ ./common/fonsm/protocol.c	Protocol library
+ ./common/fonsm/protocol.h
+
+ ./common/fonsm/urandom.c	Some utility functions
+ ./common/fonsm/urandom.h
+ ./common/fonsm/log.h
+ ./common/fonsm/log.c
+ ./common/poption.c
+ ./common/poption.h
+
+ ./common/base/*.[ch]		Base converting routines
+ ./common/fonrsa
+ ./common/fonrsa/rmd160.c	Ripemd 160 implementation
+ ./common/fonrsa/rmd160.h
+ ./common/fonrsa/fonrsa.c	FONRSA bundle library
+ ./common/fonrsa/fonrsa.h
+ ./common/fonrsa/bigint.h	axTLS bigint implementation
+ ./common/fonrsa/bigint.c
+ ./common/fonrsa/bigint_impl.h
+ ./Makefile.am                   Makefile template for automake
+ ./README                        This file
+ ./configure.in                  Configure template
+ ./client/fonsmcd/fonsmcd.c
+ ./client/scripts/thinclient.in  Template scripts used on tests
+ ./client/scripts/hotspot.in
+ ./client/etc
+ ./client/etc/fonsmcd.conf	Configuration used on tests
+ ./client/etc/fonsmcd.conf.in	Configuration template
+ ./client/etc/fonsmcd.init	/etc/init.d init script on La Fonera
+ ./client/etc/fake_thinclient
+ ./client/etc/public_sm_rsa_key.pem Public key used on the fon servers. A new
+                                    private/public keypar will be generated
+ 				   for testing
+
+Any other files in this package where generated automatically by autoconf,
+automake and configure
+
+Compiling
+---------
+
+On a Debian 4.0 "Etch" distribution, apart from the usual autoconf, automake,
+GNU make, GNU gcc and the rest of common tools on development, the next
+libraries should be installed (apt-get):
+
+  libdjbdns1, libdjbdns1-dev, libdaemon0, libdaemon-dev, openssl
+
+To compile, issue the usual configure && make sequence:
+------------------------------------
+  cd build
+  ../configure --enable-maintainer-mode --enable-debug --prefix=$(pwd)
+  make
+------------------------------------
+

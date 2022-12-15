@@ -1,0 +1,1556 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ACTION_ADD	./src/dnsmasq.h	439;"	d
+ACTION_DEL	./src/dnsmasq.h	436;"	d
+ACTION_OLD	./src/dnsmasq.h	438;"	d
+ACTION_OLD_HOSTNAME	./src/dnsmasq.h	437;"	d
+ADDRSTRLEN	./src/config.h	259;"	d
+ADDRSTRLEN	./src/config.h	262;"	d
+ADDRSTRLEN	./src/config.h	265;"	d
+ADD_RDLEN	./src/rfc1035.c	27;"	d	file:
+AH_DIR	./src/dnsmasq.h	407;"	d
+AH_INACTIVE	./src/dnsmasq.h	408;"	d
+ALL_HOSTS	./src/radv-protocol.h	17;"	d
+ALL_RELAY_AGENTS_AND_SERVERS	./src/dhcp6-protocol.h	21;"	d
+ALL_ROUTERS	./src/radv-protocol.h	18;"	d
+ALL_SERVERS	./src/dhcp6-protocol.h	20;"	d
+ARG_DUP	./src/option.c	242;"	d	file:
+ARG_ONE	./src/option.c	243;"	d	file:
+ARG_USED_CL	./src/option.c	244;"	d	file:
+ARG_USED_FILE	./src/option.c	245;"	d	file:
+BINDIR	./Makefile	/^BINDIR        = $(PREFIX)\/sbin$/;"	m
+BOOTREPLY	./src/dhcp-protocol.h	23;"	d
+BOOTREQUEST	./contrib/wrt/dhcp_lease_time.c	43;"	d	file:
+BOOTREQUEST	./contrib/wrt/dhcp_release.c	53;"	d	file:
+BOOTREQUEST	./src/dhcp-protocol.h	22;"	d
+BRDBAND_FORUM_IANA	./src/dhcp-protocol.h	85;"	d
+BUILDDIR	./Makefile	/^BUILDDIR      = $(SRC)$/;"	m
+CACHESIZ	./src/config.h	26;"	d
+CFLAGS	./Makefile	/^CFLAGS        = -Wall -W -O2$/;"	m
+CFLAGS	./contrib/wrt/Makefile	/^CFLAGS?= -O2 -Wall -W$/;"	m
+CHECK_LEN	./src/rfc1035.c	24;"	d	file:
+CHGRP	./src/config.h	38;"	d
+CHILD_LIFETIME	./src/config.h	19;"	d
+CHUSER	./src/config.h	37;"	d
+CONFFILE	./src/config.h	146;"	d
+CONFFILE	./src/config.h	148;"	d
+CONFIG_ADDR	./src/dnsmasq.h	513;"	d
+CONFIG_ADDR6	./src/dnsmasq.h	519;"	d
+CONFIG_ADDR_HOSTS	./src/dnsmasq.h	516;"	d
+CONFIG_BANK	./src/dnsmasq.h	518;"	d
+CONFIG_CLID	./src/dnsmasq.h	510;"	d
+CONFIG_DECLINED	./src/dnsmasq.h	517;"	d
+CONFIG_DISABLE	./src/dnsmasq.h	509;"	d
+CONFIG_FROM_ETHERS	./src/dnsmasq.h	515;"	d
+CONFIG_NAME	./src/dnsmasq.h	512;"	d
+CONFIG_NOCLID	./src/dnsmasq.h	514;"	d
+CONFIG_TIME	./src/dnsmasq.h	511;"	d
+CONTEXT_BRDCAST	./src/dnsmasq.h	620;"	d
+CONTEXT_NETMASK	./src/dnsmasq.h	619;"	d
+CONTEXT_PROXY	./src/dnsmasq.h	621;"	d
+CONTEXT_RA_DONE	./src/dnsmasq.h	623;"	d
+CONTEXT_RA_ONLY	./src/dnsmasq.h	622;"	d
+CONTEXT_STATIC	./src/dnsmasq.h	618;"	d
+COPTS	./Makefile	/^COPTS         = $/;"	m
+COPYRIGHT	./src/dnsmasq.h	17;"	d
+CSA	./src/dnsmasq.h	/^  unsigned short CSA, type; $/;"	m	struct:pxe_service
+C_ANY	./src/dns-protocol.h	39;"	d
+C_CHAOS	./src/dns-protocol.h	38;"	d
+C_IN	./src/dns-protocol.h	37;"	d
+DECLINE_BACKOFF	./src/config.h	30;"	d
+DEFAULT_ID	./src/dnsmasq.h	676;"	d
+DEFLEASE	./src/config.h	36;"	d
+DESTDIR	./Makefile	/^DESTDIR       = $/;"	m
+DHCP6ADVERTISE	./src/dhcp6-protocol.h	24;"	d
+DHCP6CONFIRM	./src/dhcp6-protocol.h	26;"	d
+DHCP6DECLINE	./src/dhcp6-protocol.h	31;"	d
+DHCP6IREQ	./src/dhcp6-protocol.h	33;"	d
+DHCP6NOADDRS	./src/dhcp6-protocol.h	63;"	d
+DHCP6NOBINDING	./src/dhcp6-protocol.h	64;"	d
+DHCP6NOTONLINK	./src/dhcp6-protocol.h	65;"	d
+DHCP6REBIND	./src/dhcp6-protocol.h	28;"	d
+DHCP6RECONFIGURE	./src/dhcp6-protocol.h	32;"	d
+DHCP6RELAYFORW	./src/dhcp6-protocol.h	34;"	d
+DHCP6RELAYREPL	./src/dhcp6-protocol.h	35;"	d
+DHCP6RELEASE	./src/dhcp6-protocol.h	30;"	d
+DHCP6RENEW	./src/dhcp6-protocol.h	27;"	d
+DHCP6REPLY	./src/dhcp6-protocol.h	29;"	d
+DHCP6REQUEST	./src/dhcp6-protocol.h	25;"	d
+DHCP6SOLICIT	./src/dhcp6-protocol.h	23;"	d
+DHCP6SUCCESS	./src/dhcp6-protocol.h	61;"	d
+DHCP6UNSPEC	./src/dhcp6-protocol.h	62;"	d
+DHCP6USEMULTI	./src/dhcp6-protocol.h	66;"	d
+DHCPACK	./src/dhcp-protocol.h	80;"	d
+DHCPDECLINE	./src/dhcp-protocol.h	79;"	d
+DHCPDISCOVER	./src/dhcp-protocol.h	76;"	d
+DHCPINFORM	./contrib/wrt/dhcp_lease_time.c	50;"	d	file:
+DHCPINFORM	./src/dhcp-protocol.h	83;"	d
+DHCPNAK	./src/dhcp-protocol.h	81;"	d
+DHCPOFFER	./src/dhcp-protocol.h	77;"	d
+DHCPRELEASE	./contrib/wrt/dhcp_release.c	59;"	d	file:
+DHCPRELEASE	./src/dhcp-protocol.h	82;"	d
+DHCPREQUEST	./src/dhcp-protocol.h	78;"	d
+DHCPV6_CLIENT_PORT	./src/dhcp6-protocol.h	18;"	d
+DHCPV6_SERVER_PORT	./src/dhcp6-protocol.h	17;"	d
+DHCP_CHADDR_MAX	./contrib/wrt/dhcp_lease_time.c	42;"	d	file:
+DHCP_CHADDR_MAX	./contrib/wrt/dhcp_release.c	52;"	d	file:
+DHCP_CHADDR_MAX	./src/dhcp-protocol.h	87;"	d
+DHCP_CLIENT_ALTPORT	./src/dhcp-protocol.h	19;"	d
+DHCP_CLIENT_PORT	./src/dhcp-protocol.h	17;"	d
+DHCP_COOKIE	./contrib/wrt/dhcp_lease_time.c	44;"	d	file:
+DHCP_COOKIE	./contrib/wrt/dhcp_release.c	54;"	d	file:
+DHCP_COOKIE	./src/dhcp-protocol.h	24;"	d
+DHCP_PACKET_MAX	./src/config.h	31;"	d
+DHCP_SERVER_ALTPORT	./src/dhcp-protocol.h	18;"	d
+DHCP_SERVER_PORT	./contrib/wrt/dhcp_lease_time.c	51;"	d	file:
+DHCP_SERVER_PORT	./contrib/wrt/dhcp_release.c	60;"	d	file:
+DHCP_SERVER_PORT	./src/dhcp-protocol.h	16;"	d
+DHOPT_ADDR	./src/dnsmasq.h	533;"	d
+DHOPT_ADDR6	./src/dnsmasq.h	546;"	d
+DHOPT_BANK	./src/dnsmasq.h	538;"	d
+DHOPT_ENCAPSULATE	./src/dnsmasq.h	535;"	d
+DHOPT_ENCAP_DONE	./src/dnsmasq.h	539;"	d
+DHOPT_ENCAP_MATCH	./src/dnsmasq.h	536;"	d
+DHOPT_FORCE	./src/dnsmasq.h	537;"	d
+DHOPT_HEX	./src/dnsmasq.h	542;"	d
+DHOPT_MATCH	./src/dnsmasq.h	540;"	d
+DHOPT_RFC3925	./src/dnsmasq.h	544;"	d
+DHOPT_STRING	./src/dnsmasq.h	534;"	d
+DHOPT_TAGOK	./src/dnsmasq.h	545;"	d
+DHOPT_VENDOR	./src/dnsmasq.h	541;"	d
+DHOPT_VENDOR_MATCH	./src/dnsmasq.h	543;"	d
+DNSMASQ_COMPILE_OPTS	./src/dnsmasq.c	18;"	d	file:
+DNSMASQ_PACKETSZ	./src/dnsmasq.h	177;"	d
+DNSMASQ_PATH	./src/config.h	44;"	d
+DNSMASQ_SERVICE	./src/config.h	43;"	d
+EC_BADCONF	./src/dnsmasq.h	165;"	d
+EC_BADNET	./src/dnsmasq.h	166;"	d
+EC_FILE	./src/dnsmasq.h	167;"	d
+EC_GOOD	./src/dnsmasq.h	164;"	d
+EC_INIT_OFFSET	./src/dnsmasq.h	170;"	d
+EC_MISC	./src/dnsmasq.h	169;"	d
+EC_NOMEM	./src/dnsmasq.h	168;"	d
+EDNS0_OPTION_MAC	./src/config.h	42;"	d
+EDNS_PKTSZ	./src/config.h	20;"	d
+ERR_FNF	./src/tftp.c	36;"	d	file:
+ERR_FULL	./src/tftp.c	38;"	d	file:
+ERR_ILL	./src/tftp.c	39;"	d	file:
+ERR_NOTDEF	./src/tftp.c	35;"	d	file:
+ERR_PERM	./src/tftp.c	37;"	d	file:
+ETHERSFILE	./src/config.h	34;"	d
+ETHER_ADDR_LEN	./src/config.h	249;"	d
+EVENT_ALARM	./src/dnsmasq.h	145;"	d
+EVENT_CAP_ERR	./src/dnsmasq.h	154;"	d
+EVENT_CHILD	./src/dnsmasq.h	147;"	d
+EVENT_DIE	./src/dnsmasq.h	158;"	d
+EVENT_DUMP	./src/dnsmasq.h	144;"	d
+EVENT_EXEC_ERR	./src/dnsmasq.h	151;"	d
+EVENT_EXITED	./src/dnsmasq.h	149;"	d
+EVENT_FORK_ERR	./src/dnsmasq.h	160;"	d
+EVENT_GROUP_ERR	./src/dnsmasq.h	157;"	d
+EVENT_HUSER_ERR	./src/dnsmasq.h	156;"	d
+EVENT_KILLED	./src/dnsmasq.h	150;"	d
+EVENT_LOG_ERR	./src/dnsmasq.h	159;"	d
+EVENT_LUA_ERR	./src/dnsmasq.h	161;"	d
+EVENT_PIDFILE	./src/dnsmasq.h	155;"	d
+EVENT_PIPE_ERR	./src/dnsmasq.h	152;"	d
+EVENT_RELOAD	./src/dnsmasq.h	143;"	d
+EVENT_REOPEN	./src/dnsmasq.h	148;"	d
+EVENT_TERM	./src/dnsmasq.h	146;"	d
+EVENT_USER_ERR	./src/dnsmasq.h	153;"	d
+FORMERR	./src/dns-protocol.h	29;"	d
+FORWARD_TEST	./src/config.h	22;"	d
+FORWARD_TIME	./src/config.h	23;"	d
+FREC_CHECKING_DISABLED	./src/dnsmasq.h	417;"	d
+FREC_NOREBIND	./src/dnsmasq.h	416;"	d
+FTABSIZ	./src/config.h	17;"	d
+F_BIGNAME	./src/dnsmasq.h	316;"	d
+F_CNAME	./src/dnsmasq.h	318;"	d
+F_CONFIG	./src/dnsmasq.h	320;"	d
+F_DHCP	./src/dnsmasq.h	311;"	d
+F_FORWARD	./src/dnsmasq.h	310;"	d
+F_HOSTS	./src/dnsmasq.h	313;"	d
+F_IMMORTAL	./src/dnsmasq.h	307;"	d
+F_IPV4	./src/dnsmasq.h	314;"	d
+F_IPV6	./src/dnsmasq.h	315;"	d
+F_NAMEP	./src/dnsmasq.h	308;"	d
+F_NEG	./src/dnsmasq.h	312;"	d
+F_NOERR	./src/dnsmasq.h	319;"	d
+F_NXDOMAIN	./src/dnsmasq.h	317;"	d
+F_QUERY	./src/dnsmasq.h	326;"	d
+F_REVERSE	./src/dnsmasq.h	309;"	d
+F_RRNAME	./src/dnsmasq.h	324;"	d
+F_SERVER	./src/dnsmasq.h	325;"	d
+F_UPSTREAM	./src/dnsmasq.h	323;"	d
+GETLONG	./src/dns-protocol.h	87;"	d
+GETSHORT	./src/dns-protocol.h	79;"	d
+HAVE_ARC4RANDOM	./src/config.h	184;"	d
+HAVE_ARC4RANDOM	./src/config.h	198;"	d
+HAVE_ARC4RANDOM	./src/config.h	213;"	d
+HAVE_ARC4RANDOM	./src/config.h	226;"	d
+HAVE_ARC4RANDOM	./src/config.h	233;"	d
+HAVE_ARC4RANDOM	./src/config.h	241;"	d
+HAVE_ARC4RANDOM	./src/config.h	247;"	d
+HAVE_BSD_NETWORK	./src/config.h	220;"	d
+HAVE_BSD_NETWORK	./src/config.h	231;"	d
+HAVE_BSD_NETWORK	./src/config.h	239;"	d
+HAVE_DHCP	./src/config.h	118;"	d
+HAVE_DHCP	./src/config.h	281;"	d
+HAVE_DHCP	./src/config.h	291;"	d
+HAVE_DHCP6	./src/config.h	119;"	d
+HAVE_DHCP6	./src/config.h	282;"	d
+HAVE_DHCP6	./src/config.h	286;"	d
+HAVE_GETOPT_LONG	./src/config.h	183;"	d
+HAVE_GETOPT_LONG	./src/config.h	196;"	d
+HAVE_GETOPT_LONG	./src/config.h	212;"	d
+HAVE_GETOPT_LONG	./src/config.h	223;"	d
+HAVE_GETOPT_LONG	./src/config.h	232;"	d
+HAVE_GETOPT_LONG	./src/config.h	240;"	d
+HAVE_GETOPT_LONG	./src/config.h	246;"	d
+HAVE_IPV6	./src/config.h	258;"	d
+HAVE_IPV6	./src/config.h	261;"	d
+HAVE_IPV6	./src/config.h	264;"	d
+HAVE_IPV6	./src/config.h	273;"	d
+HAVE_LINUX_NETWORK	./src/config.h	182;"	d
+HAVE_LINUX_NETWORK	./src/config.h	193;"	d
+HAVE_LINUX_NETWORK	./src/config.h	211;"	d
+HAVE_LUASCRIPT	./src/config.h	296;"	d
+HAVE_SCRIPT	./src/config.h	121;"	d
+HAVE_SCRIPT	./src/config.h	295;"	d
+HAVE_SCRIPT	./src/config.h	301;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	185;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	199;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	214;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	228;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	234;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	242;"	d
+HAVE_SOCKADDR_SA_LEN	./src/config.h	248;"	d
+HAVE_SOLARIS_NETWORK	./src/config.h	245;"	d
+HAVE_TFTP	./src/config.h	120;"	d
+HAVE_TFTP	./src/config.h	277;"	d
+HB3_AA	./src/dns-protocol.h	66;"	d
+HB3_OPCODE	./src/dns-protocol.h	65;"	d
+HB3_QR	./src/dns-protocol.h	64;"	d
+HB3_RD	./src/dns-protocol.h	68;"	d
+HB3_TC	./src/dns-protocol.h	67;"	d
+HB4_AD	./src/dns-protocol.h	71;"	d
+HB4_CD	./src/dns-protocol.h	72;"	d
+HB4_RA	./src/dns-protocol.h	70;"	d
+HB4_RCODE	./src/dns-protocol.h	73;"	d
+HOSTSFILE	./src/config.h	33;"	d
+ICMP6_OPT_MTU	./src/radv-protocol.h	40;"	d
+ICMP6_OPT_PREFIX	./src/radv-protocol.h	39;"	d
+ICMP6_OPT_RDNSS	./src/radv-protocol.h	41;"	d
+ICMP6_OPT_SOURCE_MAC	./src/radv-protocol.h	38;"	d
+ICMP6_ROUTER_ADVERT	./src/radv-protocol.h	36;"	d
+ICMP6_ROUTER_SOLICIT	./src/radv-protocol.h	35;"	d
+IFA_RTA	./src/netlink.c	27;"	d	file:
+IN6ADDRSZ	./src/dns-protocol.h	20;"	d
+INADDRSZ	./src/dns-protocol.h	21;"	d
+INSTALL	./Makefile	/^INSTALL    = install$/;"	m
+IPV6_V6ONLY	./src/config.h	205;"	d
+LDFLAGS	./Makefile	/^LDFLAGS       = -lm$/;"	m
+LEASEFILE	./src/config.h	134;"	d
+LEASEFILE	./src/config.h	136;"	d
+LEASEFILE	./src/config.h	138;"	d
+LEASEFILE	./src/config.h	140;"	d
+LEASE_AUTH_NAME	./src/dnsmasq.h	444;"	d
+LEASE_AUX_CHANGED	./src/dnsmasq.h	443;"	d
+LEASE_CHANGED	./src/dnsmasq.h	442;"	d
+LEASE_NA	./src/dnsmasq.h	446;"	d
+LEASE_NEW	./src/dnsmasq.h	441;"	d
+LEASE_RETRY	./src/config.h	25;"	d
+LEASE_TA	./src/dnsmasq.h	447;"	d
+LEASE_USED	./src/dnsmasq.h	445;"	d
+LIBS	./Makefile	/^LIBS          = $/;"	m
+LIFC_UNDER_IPMP	./src/network.c	43;"	d	file:
+LINUX_CAPABILITY_VERSION_1	./src/dnsmasq.h	126;"	d
+LINUX_CAPABILITY_VERSION_2	./src/dnsmasq.h	127;"	d
+LINUX_CAPABILITY_VERSION_3	./src/dnsmasq.h	128;"	d
+LOCALEDIR	./Makefile	/^LOCALEDIR     = $(PREFIX)\/share\/locale$/;"	m
+LOCAL_CFLAGS	./bld/Android.mk	/^LOCAL_CFLAGS := -O2 -g -W -Wall -D__ANDROID__ -DNO_IPV6 -DNO_TFTP -DNO_SCRIPT$/;"	m
+LOCAL_C_INCLUDES	./bld/Android.mk	/^LOCAL_C_INCLUDES := external\/dnsmasq\/src$/;"	m
+LOCAL_MODULE	./bld/Android.mk	/^LOCAL_MODULE := dnsmasq$/;"	m
+LOCAL_PATH	./bld/Android.mk	/^LOCAL_PATH := external\/dnsmasq\/src$/;"	m
+LOCAL_SRC_FILES	./bld/Android.mk	/^LOCAL_SRC_FILES :=  bpf.c cache.c dbus.c dhcp.c dnsmasq.c \\$/;"	m
+LOCAL_SYSTEM_SHARED_LIBRARIES	./bld/Android.mk	/^LOCAL_SYSTEM_SHARED_LIBRARIES := libc libcutils$/;"	m
+LOG_MAX	./src/config.h	40;"	d
+LOOKFORDNSMASQ	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^		LOOKFORDNSMASQ:$/;"	l
+LOPT_ADD_MAC	./src/option.c	111;"	d	file:
+LOPT_ALTPORT	./src/option.c	95;"	d	file:
+LOPT_APREF	./src/option.c	85;"	d	file:
+LOPT_BANK	./src/option.c	83;"	d	file:
+LOPT_BRIDGE	./src/option.c	73;"	d	file:
+LOPT_BROADCAST	./src/option.c	93;"	d	file:
+LOPT_CIRCUIT	./src/option.c	79;"	d	file:
+LOPT_CNAME	./src/option.c	101;"	d	file:
+LOPT_CONNTRACK	./src/option.c	114;"	d	file:
+LOPT_DHCP_FQDN	./src/option.c	100;"	d	file:
+LOPT_DHCP_HOST	./src/option.c	84;"	d	file:
+LOPT_DHCP_OPTS	./src/option.c	91;"	d	file:
+LOPT_DNSSEC	./src/option.c	112;"	d	file:
+LOPT_FORCE	./src/option.c	75;"	d	file:
+LOPT_FQDN	./src/option.c	115;"	d	file:
+LOPT_GEN_NAMES	./src/option.c	107;"	d	file:
+LOPT_INCR_ADDR	./src/option.c	113;"	d	file:
+LOPT_INTNAME	./src/option.c	82;"	d	file:
+LOPT_LOCAL	./src/option.c	97;"	d	file:
+LOPT_LOC_REBND	./src/option.c	110;"	d	file:
+LOPT_LOG_OPTS	./src/option.c	77;"	d	file:
+LOPT_LUASCRIPT	./src/option.c	116;"	d	file:
+LOPT_MATCH	./src/option.c	92;"	d	file:
+LOPT_MAXTTL	./src/option.c	108;"	d	file:
+LOPT_MAX_LOGS	./src/option.c	78;"	d	file:
+LOPT_MINPORT	./src/option.c	99;"	d	file:
+LOPT_NAPTR	./src/option.c	98;"	d	file:
+LOPT_NEGTTL	./src/option.c	94;"	d	file:
+LOPT_NOBLOCK	./src/option.c	76;"	d	file:
+LOPT_NOLAST	./src/option.c	89;"	d	file:
+LOPT_NO_NAMES	./src/option.c	68;"	d	file:
+LOPT_NO_REBIND	./src/option.c	109;"	d	file:
+LOPT_OPTS	./src/option.c	90;"	d	file:
+LOPT_OVERRIDE	./src/option.c	86;"	d	file:
+LOPT_PREFIX	./src/option.c	71;"	d	file:
+LOPT_PROXY	./src/option.c	106;"	d	file:
+LOPT_PTR	./src/option.c	72;"	d	file:
+LOPT_PXE_PROMT	./src/option.c	102;"	d	file:
+LOPT_PXE_SERV	./src/option.c	103;"	d	file:
+LOPT_RA	./src/option.c	117;"	d	file:
+LOPT_REBIND	./src/option.c	88;"	d	file:
+LOPT_RELOAD	./src/option.c	67;"	d	file:
+LOPT_REMOTE	./src/option.c	80;"	d	file:
+LOPT_SCRIPTUSR	./src/option.c	96;"	d	file:
+LOPT_SECURE	./src/option.c	70;"	d	file:
+LOPT_SUBSCR	./src/option.c	81;"	d	file:
+LOPT_TAG_IF	./src/option.c	105;"	d	file:
+LOPT_TEST	./src/option.c	104;"	d	file:
+LOPT_TFTP	./src/option.c	69;"	d	file:
+LOPT_TFTPPORTS	./src/option.c	87;"	d	file:
+LOPT_TFTP_MAX	./src/option.c	74;"	d	file:
+MAN	./Makefile	/^MAN = man$/;"	m
+MANDIR	./Makefile	/^MANDIR        = $(PREFIX)\/share\/man$/;"	m
+MATCH_CIRCUIT	./src/dnsmasq.h	565;"	d
+MATCH_REMOTE	./src/dnsmasq.h	566;"	d
+MATCH_SUBSCRIBER	./src/dnsmasq.h	567;"	d
+MATCH_USER	./src/dnsmasq.h	564;"	d
+MATCH_VENDOR	./src/dnsmasq.h	563;"	d
+MAXARPANAME	./src/rfc1035.c	175;"	d	file:
+MAXDNAME	./src/dns-protocol.h	24;"	d
+MAXLABEL	./src/dns-protocol.h	26;"	d
+MAXLEASES	./src/config.h	27;"	d
+MAX_MESSAGE	./src/log.c	33;"	d	file:
+MAX_PROCS	./src/config.h	18;"	d
+MIN_PACKETSZ	./src/dhcp-protocol.h	28;"	d
+MSGFMT	./Makefile	/^MSGFMT     = msgfmt$/;"	m
+MSGMERGE	./Makefile	/^MSGMERGE   = msgmerge$/;"	m
+MS_DHCP	./src/dnsmasq.h	225;"	d
+MS_TFTP	./src/dnsmasq.h	224;"	d
+MUSH	./src/util.c	63;"	d	file:
+NAMESERVER_PORT	./src/dns-protocol.h	17;"	d
+NDA_RTA	./src/netlink.c	34;"	d	file:
+NOERROR	./src/dns-protocol.h	28;"	d
+NOTIMP	./src/dns-protocol.h	32;"	d
+NO_FORK	./src/config.h	190;"	d
+NO_FORK	./src/config.h	201;"	d
+NUM_OPTS	./src/rfc2131.c	1930;"	d	file:
+NXDOMAIN	./src/dns-protocol.h	31;"	d
+OPCODE	./src/dns-protocol.h	75;"	d
+OPTION6_AUTH	./src/dhcp6-protocol.h	46;"	d
+OPTION6_CLIENT_ID	./src/dhcp6-protocol.h	37;"	d
+OPTION6_DNS_SERVER	./src/dhcp6-protocol.h	56;"	d
+OPTION6_ELAPSED_TIME	./src/dhcp6-protocol.h	44;"	d
+OPTION6_FQDN	./src/dhcp6-protocol.h	59;"	d
+OPTION6_IAADDR	./src/dhcp6-protocol.h	41;"	d
+OPTION6_IA_NA	./src/dhcp6-protocol.h	39;"	d
+OPTION6_IA_TA	./src/dhcp6-protocol.h	40;"	d
+OPTION6_INTERFACE_ID	./src/dhcp6-protocol.h	53;"	d
+OPTION6_ORO	./src/dhcp6-protocol.h	42;"	d
+OPTION6_PREFERENCE	./src/dhcp6-protocol.h	43;"	d
+OPTION6_RAPID_COMMIT	./src/dhcp6-protocol.h	49;"	d
+OPTION6_RECONFIGURE_MSG	./src/dhcp6-protocol.h	54;"	d
+OPTION6_RECONF_ACCEPT	./src/dhcp6-protocol.h	55;"	d
+OPTION6_RELAY_MSG	./src/dhcp6-protocol.h	45;"	d
+OPTION6_REMOTE_ID	./src/dhcp6-protocol.h	57;"	d
+OPTION6_SERVER_ID	./src/dhcp6-protocol.h	38;"	d
+OPTION6_STATUS_CODE	./src/dhcp6-protocol.h	48;"	d
+OPTION6_SUBSCRIBER_ID	./src/dhcp6-protocol.h	58;"	d
+OPTION6_UNICAST	./src/dhcp6-protocol.h	47;"	d
+OPTION6_USER_CLASS	./src/dhcp6-protocol.h	50;"	d
+OPTION6_VENDOR_CLASS	./src/dhcp6-protocol.h	51;"	d
+OPTION6_VENDOR_OPTS	./src/dhcp6-protocol.h	52;"	d
+OPTION_AGENT_ID	./src/dhcp-protocol.h	54;"	d
+OPTION_ARCH	./src/dhcp-protocol.h	55;"	d
+OPTION_BROADCAST	./src/dhcp-protocol.h	36;"	d
+OPTION_CLIENT_FQDN	./src/dhcp-protocol.h	53;"	d
+OPTION_CLIENT_ID	./contrib/wrt/dhcp_release.c	56;"	d	file:
+OPTION_CLIENT_ID	./src/dhcp-protocol.h	49;"	d
+OPTION_DNSSERVER	./src/dhcp-protocol.h	33;"	d
+OPTION_DOMAINNAME	./src/dhcp-protocol.h	35;"	d
+OPTION_DOMAIN_SEARCH	./src/dhcp-protocol.h	58;"	d
+OPTION_END	./contrib/wrt/dhcp_lease_time.c	49;"	d	file:
+OPTION_END	./contrib/wrt/dhcp_release.c	58;"	d	file:
+OPTION_END	./src/dhcp-protocol.h	62;"	d
+OPTION_FILENAME	./src/dhcp-protocol.h	51;"	d
+OPTION_HOSTNAME	./src/dhcp-protocol.h	34;"	d
+OPTION_LEASE_TIME	./contrib/wrt/dhcp_lease_time.c	46;"	d	file:
+OPTION_LEASE_TIME	./src/dhcp-protocol.h	39;"	d
+OPTION_MAXMESSAGE	./src/dhcp-protocol.h	45;"	d
+OPTION_MESSAGE	./src/dhcp-protocol.h	44;"	d
+OPTION_MESSAGE_TYPE	./contrib/wrt/dhcp_lease_time.c	48;"	d	file:
+OPTION_MESSAGE_TYPE	./contrib/wrt/dhcp_release.c	57;"	d	file:
+OPTION_MESSAGE_TYPE	./src/dhcp-protocol.h	41;"	d
+OPTION_NETMASK	./src/dhcp-protocol.h	31;"	d
+OPTION_OVERLOAD	./contrib/wrt/dhcp_lease_time.c	47;"	d	file:
+OPTION_OVERLOAD	./src/dhcp-protocol.h	40;"	d
+OPTION_PAD	./contrib/wrt/dhcp_lease_time.c	45;"	d	file:
+OPTION_PAD	./src/dhcp-protocol.h	30;"	d
+OPTION_PXE_UUID	./src/dhcp-protocol.h	56;"	d
+OPTION_REQUESTED_IP	./src/dhcp-protocol.h	38;"	d
+OPTION_REQUESTED_OPTIONS	./src/dhcp-protocol.h	43;"	d
+OPTION_ROUTER	./src/dhcp-protocol.h	32;"	d
+OPTION_SERVER_IDENTIFIER	./contrib/wrt/dhcp_release.c	55;"	d	file:
+OPTION_SERVER_IDENTIFIER	./src/dhcp-protocol.h	42;"	d
+OPTION_SIP_SERVER	./src/dhcp-protocol.h	59;"	d
+OPTION_SNAME	./src/dhcp-protocol.h	50;"	d
+OPTION_SUBNET_SELECT	./src/dhcp-protocol.h	57;"	d
+OPTION_T1	./src/dhcp-protocol.h	46;"	d
+OPTION_T2	./src/dhcp-protocol.h	47;"	d
+OPTION_USER_CLASS	./src/dhcp-protocol.h	52;"	d
+OPTION_VENDOR_CLASS_OPT	./src/dhcp-protocol.h	37;"	d
+OPTION_VENDOR_ID	./src/dhcp-protocol.h	48;"	d
+OPTION_VENDOR_IDENT	./src/dhcp-protocol.h	60;"	d
+OPTION_VENDOR_IDENT_OPT	./src/dhcp-protocol.h	61;"	d
+OPTSTRING	./src/option.c	64;"	d	file:
+OPT_ADD_MAC	./src/dnsmasq.h	214;"	d
+OPT_ALL_SERVERS	./src/dnsmasq.h	205;"	d
+OPT_AUTHORITATIVE	./src/dnsmasq.h	199;"	d
+OPT_BOGUSPRIV	./src/dnsmasq.h	182;"	d
+OPT_CONNTRACK	./src/dnsmasq.h	217;"	d
+OPT_CONSEC_ADDR	./src/dnsmasq.h	216;"	d
+OPT_DBUS	./src/dnsmasq.h	201;"	d
+OPT_DEBUG	./src/dnsmasq.h	188;"	d
+OPT_DHCP_FQDN	./src/dnsmasq.h	202;"	d
+OPT_DNSSEC	./src/dnsmasq.h	215;"	d
+OPT_ETHERS	./src/dnsmasq.h	196;"	d
+OPT_EXPAND	./src/dnsmasq.h	191;"	d
+OPT_FILTER	./src/dnsmasq.h	183;"	d
+OPT_FQDN_UPDATE	./src/dnsmasq.h	218;"	d
+OPT_LAST	./src/dnsmasq.h	220;"	d
+OPT_LEASE_RO	./src/dnsmasq.h	204;"	d
+OPT_LOCALISE	./src/dnsmasq.h	200;"	d
+OPT_LOCALMX	./src/dnsmasq.h	192;"	d
+OPT_LOCAL_REBIND	./src/dnsmasq.h	207;"	d
+OPT_LOG	./src/dnsmasq.h	184;"	d
+OPT_LOG_OPTS	./src/dnsmasq.h	210;"	d
+OPT_NODOTS_LOCAL	./src/dnsmasq.h	194;"	d
+OPT_NOWILD	./src/dnsmasq.h	195;"	d
+OPT_NO_FORK	./src/dnsmasq.h	198;"	d
+OPT_NO_HOSTS	./src/dnsmasq.h	186;"	d
+OPT_NO_NEG	./src/dnsmasq.h	193;"	d
+OPT_NO_OVERRIDE	./src/dnsmasq.h	212;"	d
+OPT_NO_PING	./src/dnsmasq.h	203;"	d
+OPT_NO_POLL	./src/dnsmasq.h	187;"	d
+OPT_NO_REBIND	./src/dnsmasq.h	213;"	d
+OPT_NO_RESOLV	./src/dnsmasq.h	190;"	d
+OPT_ORDER	./src/dnsmasq.h	189;"	d
+OPT_RA	./src/dnsmasq.h	219;"	d
+OPT_RELOAD	./src/dnsmasq.h	206;"	d
+OPT_RESOLV_DOMAIN	./src/dnsmasq.h	197;"	d
+OPT_SELFMX	./src/dnsmasq.h	185;"	d
+OPT_TFTP_APREF	./src/dnsmasq.h	211;"	d
+OPT_TFTP_NOBLOCK	./src/dnsmasq.h	209;"	d
+OPT_TFTP_SECURE	./src/dnsmasq.h	208;"	d
+OP_ACK	./src/tftp.c	31;"	d	file:
+OP_DATA	./src/tftp.c	30;"	d	file:
+OP_ERR	./src/tftp.c	32;"	d	file:
+OP_OACK	./src/tftp.c	33;"	d	file:
+OP_RRQ	./src/tftp.c	28;"	d	file:
+OP_WRQ	./src/tftp.c	29;"	d	file:
+OT_ADDR_LIST	./src/option.c	370;"	d	file:
+OT_CSTRING	./src/option.c	374;"	d	file:
+OT_INTERNAL	./src/option.c	372;"	d	file:
+OT_NAME	./src/option.c	373;"	d	file:
+OT_RFC1035_NAME	./src/option.c	371;"	d	file:
+PACKETSZ	./src/dns-protocol.h	23;"	d
+PING_CACHE_TIME	./src/config.h	29;"	d
+PING_WAIT	./src/config.h	28;"	d
+PKG_CONFIG	./Makefile	/^PKG_CONFIG = pkg-config$/;"	m
+PO	./Makefile	/^PO  = po$/;"	m
+PREFIX	./Makefile	/^PREFIX        = \/usr\/local$/;"	m
+PUTLONG	./src/dns-protocol.h	105;"	d
+PUTSHORT	./src/dns-protocol.h	97;"	d
+PXE_PORT	./src/dhcp-protocol.h	20;"	d
+QUERY	./src/dns-protocol.h	35;"	d
+RANDFILE	./src/config.h	41;"	d
+RANDOM_SOCKS	./src/config.h	24;"	d
+RCODE	./src/dns-protocol.h	76;"	d
+REFUSED	./src/dns-protocol.h	33;"	d
+RESOLVFILE	./src/config.h	154;"	d
+RESOLVFILE	./src/config.h	156;"	d
+ROTATE	./src/util.c	62;"	d	file:
+RPM_OPT_FLAGS	./Makefile	/^RPM_OPT_FLAGS = $/;"	m
+RRFIXEDSZ	./src/dns-protocol.h	25;"	d
+RUNFILE	./src/config.h	35;"	d
+RestartService	./contrib/dnsmasq_MacOSX-pre10.4/DNSmasq	/^RestartService() {$/;"	f
+SA_SIZE	./src/bpf.c	39;"	d	file:
+SERVFAIL	./src/dns-protocol.h	30;"	d
+SERV_COUNTED	./src/dnsmasq.h	350;"	d
+SERV_FOR_NODOTS	./src/dnsmasq.h	345;"	d
+SERV_FROM_DBUS	./src/dnsmasq.h	347;"	d
+SERV_FROM_RESOLV	./src/dnsmasq.h	340;"	d
+SERV_HAS_DOMAIN	./src/dnsmasq.h	343;"	d
+SERV_HAS_SOURCE	./src/dnsmasq.h	344;"	d
+SERV_LITERAL_ADDRESS	./src/dnsmasq.h	342;"	d
+SERV_MARK	./src/dnsmasq.h	348;"	d
+SERV_NO_ADDR	./src/dnsmasq.h	341;"	d
+SERV_NO_REBIND	./src/dnsmasq.h	352;"	d
+SERV_TYPE	./src/dnsmasq.h	349;"	d
+SERV_USE_RESOLV	./src/dnsmasq.h	351;"	d
+SERV_WARNED_RECURSIVE	./src/dnsmasq.h	346;"	d
+SET_RCODE	./src/dns-protocol.h	77;"	d
+SMALLDNAME	./src/config.h	32;"	d
+SRC	./Makefile	/^SRC = src$/;"	m
+STANDARD_DEVIATION	./src/dnsmasq.h	675;"	d
+SUBOPT_CIRCUIT_ID	./src/dhcp-protocol.h	64;"	d
+SUBOPT_PXE_BOOT_ITEM	./src/dhcp-protocol.h	70;"	d
+SUBOPT_PXE_DISCOVERY	./src/dhcp-protocol.h	71;"	d
+SUBOPT_PXE_MENU	./src/dhcp-protocol.h	73;"	d
+SUBOPT_PXE_MENU_PROMPT	./src/dhcp-protocol.h	74;"	d
+SUBOPT_PXE_SERVERS	./src/dhcp-protocol.h	72;"	d
+SUBOPT_REMOTE_ID	./src/dhcp-protocol.h	65;"	d
+SUBOPT_SERVER_OR	./src/dhcp-protocol.h	68;"	d
+SUBOPT_SUBNET_SELECT	./src/dhcp-protocol.h	66;"	d
+SUBOPT_SUBSCR_ID	./src/dhcp-protocol.h	67;"	d
+SYSLOG_NAMES	./src/option.c	18;"	d	file:
+StartService	./contrib/dnsmasq_MacOSX-pre10.4/DNSmasq	/^StartService() {$/;"	f
+StopService	./contrib/dnsmasq_MacOSX-pre10.4/DNSmasq	/^StopService() {$/;"	f
+TFTP_MAX_CONNECTIONS	./src/config.h	39;"	d
+TFTP_PORT	./src/dns-protocol.h	18;"	d
+TIMEOUT	./src/config.h	21;"	d
+T_A	./src/dns-protocol.h	41;"	d
+T_AAAA	./src/dns-protocol.h	49;"	d
+T_ANY	./src/dns-protocol.h	56;"	d
+T_CNAME	./src/dns-protocol.h	43;"	d
+T_MAILB	./src/dns-protocol.h	55;"	d
+T_MX	./src/dns-protocol.h	46;"	d
+T_NAPTR	./src/dns-protocol.h	51;"	d
+T_NS	./src/dns-protocol.h	42;"	d
+T_OPT	./src/dns-protocol.h	52;"	d
+T_PTR	./src/dns-protocol.h	45;"	d
+T_SIG	./src/dns-protocol.h	48;"	d
+T_SOA	./src/dns-protocol.h	44;"	d
+T_SRV	./src/dns-protocol.h	50;"	d
+T_TKEY	./src/dns-protocol.h	53;"	d
+T_TSIG	./src/dns-protocol.h	54;"	d
+T_TXT	./src/dns-protocol.h	47;"	d
+XGETTEXT	./Makefile	/^XGETTEXT   = xgettext$/;"	m
+_	./src/dnsmasq.h	68;"	d
+_	./src/dnsmasq.h	72;"	d
+_BSD_SOCKLEN_T_	./src/config.h	236;"	d
+_FILE_OFFSET_BITS	./src/dnsmasq.h	22;"	d
+_GNU_SOURCE	./src/dnsmasq.h	28;"	d
+_LARGEFILE_SOURCE	./src/dnsmasq.h	21;"	d
+_PATH_LOG	./src/log.c	127;"	d	file:
+_XPG4_2	./src/dnsmasq.h	35;"	d
+__APPLE_USE_RFC_3542	./src/dnsmasq.h	45;"	d
+__EXTENSIONS__	./src/dnsmasq.h	36;"	d
+a_record_from_hosts	./src/cache.c	/^struct in_addr a_record_from_hosts(char *name, time_t now)$/;"	f
+action	./src/helper.c	/^  int action, hwaddr_len, hwaddr_type;$/;"	m	struct:script_data	file:
+add_acct	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub add_acct {$/;"	s
+add_extradata_opt	./src/rfc2131.c	/^static void add_extradata_opt(struct dhcp_lease *lease, unsigned char *opt)$/;"	f	file:
+add_hosts_entry	./src/cache.c	/^static void add_hosts_entry(struct crec *cache, struct all_addr *addr, int addrlen, $/;"	f	file:
+add_lla	./src/radv.c	/^static int add_lla(int index, unsigned int type, char *mac, size_t maclen, void *parm)$/;"	f	file:
+add_mac	./src/rfc1035.c	/^size_t add_mac(struct dns_header *header, size_t plen, char *limit, union mysockaddr *l3)$/;"	f
+add_prefixes	./src/radv.c	/^static int add_prefixes(struct in6_addr *local,  int prefix,$/;"	f	file:
+add_resource_record	./src/rfc1035.c	/^static int add_resource_record(struct dns_header *header, char *limit, int *truncp, unsigned int nameoffset, unsigned char **pp, $/;"	f	file:
+add_txt	./src/option.c	/^static void add_txt(char *name, char *txt)$/;"	f	file:
+add_watch	./src/dbus.c	/^static dbus_bool_t add_watch(DBusWatch *watch, void *data)$/;"	f	file:
+addn_hosts	./src/dnsmasq.h	/^  struct hostsfile *addn_hosts;$/;"	m	struct:daemon	typeref:struct:daemon::hostsfile
+addr	./src/dhcp.c	/^  struct in_addr netmask, broadcast, addr;$/;"	m	struct:match_param	typeref:struct:match_param::	file:
+addr	./src/dnsmasq.h	/^    struct all_addr addr;$/;"	m	union:crec::__anon5	typeref:struct:crec::__anon5::all_addr
+addr	./src/dnsmasq.h	/^  struct in_addr addr, override, giaddr;$/;"	m	struct:dhcp_lease	typeref:struct:dhcp_lease::in_addr
+addr	./src/dnsmasq.h	/^  struct in_addr addr;$/;"	m	struct:addr_list	typeref:struct:addr_list::in_addr
+addr	./src/dnsmasq.h	/^  struct in_addr addr;$/;"	m	struct:bogus_addr	typeref:struct:bogus_addr::in_addr
+addr	./src/dnsmasq.h	/^  struct in_addr addr;$/;"	m	struct:dhcp_config	typeref:struct:dhcp_config::in_addr
+addr	./src/dnsmasq.h	/^  struct in_addr addr;$/;"	m	struct:ping_result	typeref:struct:ping_result::in_addr
+addr	./src/dnsmasq.h	/^  union mysockaddr addr, source_addr;$/;"	m	struct:server	typeref:union:server::mysockaddr
+addr	./src/dnsmasq.h	/^  union mysockaddr addr;$/;"	m	struct:iname	typeref:union:iname::mysockaddr
+addr	./src/dnsmasq.h	/^  union mysockaddr addr;$/;"	m	struct:irec	typeref:union:irec::mysockaddr
+addr	./src/dnsmasq.h	/^  } addr;$/;"	m	struct:all_addr	typeref:union:all_addr::__anon4
+addr	./src/dnsmasq.h	/^  } addr;$/;"	m	struct:crec	typeref:union:crec::__anon5
+addr	./src/helper.c	/^  struct in_addr addr, giaddr;$/;"	m	struct:script_data	typeref:struct:script_data::in_addr	file:
+addr4	./src/dnsmasq.h	/^    struct in_addr addr4;$/;"	m	union:all_addr::__anon4	typeref:struct:all_addr::__anon4::in_addr
+addr6	./src/dnsmasq.h	/^    struct in6_addr addr6;$/;"	m	union:all_addr::__anon4	typeref:struct:all_addr::__anon4::in6_addr
+addr6	./src/dnsmasq.h	/^  struct in6_addr addr6;$/;"	m	struct:dhcp_config	typeref:struct:dhcp_config::in6_addr
+addr6part	./src/util.c	/^u64 addr6part(struct in6_addr *addr)$/;"	f
+addr_epoch	./src/dnsmasq.h	/^  unsigned int lease_time, addr_epoch;$/;"	m	struct:dhcp_context
+addr_list	./src/dnsmasq.h	/^struct addr_list {$/;"	s
+addrbuff	./src/dnsmasq.h	/^  char *addrbuff;$/;"	m	struct:daemon
+address6_allocate	./src/dhcp6.c	/^int address6_allocate(struct dhcp_context *context,  unsigned char *clid, int clid_len, $/;"	f
+address6_available	./src/dhcp6.c	/^struct dhcp_context *address6_available(struct dhcp_context *context, $/;"	f
+address_allocate	./src/dhcp.c	/^int address_allocate(struct dhcp_context *context,$/;"	f
+address_available	./src/dhcp.c	/^struct dhcp_context *address_available(struct dhcp_context *context, $/;"	f
+alias	./src/dnsmasq.h	/^  char *alias, *target;$/;"	m	struct:cname
+alias	./src/dnsmasq.h	/^  struct dhcp_bridge *alias, *next;$/;"	m	struct:dhcp_bridge	typeref:struct:dhcp_bridge::dhcp_bridge
+all_addr	./src/dnsmasq.h	/^struct all_addr {$/;"	s
+allocate_frec	./src/forward.c	/^static struct frec *allocate_frec(time_t now)$/;"	f	file:
+allocate_rfd	./src/forward.c	/^static struct randfd *allocate_rfd(int family)$/;"	f	file:
+allocate_sfd	./src/network.c	/^static struct serverfd *allocate_sfd(union mysockaddr *addr, char *intname)$/;"	f	file:
+ancount	./src/dns-protocol.h	/^  u16 qdcount,ancount,nscount,arcount;$/;"	m	struct:dns_header
+answer_request	./src/rfc1035.c	/^size_t answer_request(struct dns_header *header, char *limit, size_t qlen,  $/;"	f
+arcount	./src/dns-protocol.h	/^  u16 qdcount,ancount,nscount,arcount;$/;"	m	struct:dns_header
+arg	./src/option.c	/^  char * const arg;$/;"	m	struct:__anon2	file:
+arp_enumerate	./src/bpf.c	/^int arp_enumerate(void *parm, int (*callback)())$/;"	f
+async_event	./src/dnsmasq.c	/^static void async_event(int pipe, time_t now)$/;"	f	file:
+atoi_check	./src/option.c	/^static int atoi_check(char *a, int *res)$/;"	f	file:
+atoi_check16	./src/option.c	/^static int atoi_check16(char *a, int *res)$/;"	f	file:
+authorize	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub authorize {$/;"	s
+backoff	./src/dnsmasq.h	/^  int backoff;$/;"	m	struct:tftp_transfer
+basename	./src/dnsmasq.h	/^  char *menu, *basename, *sname;$/;"	m	struct:pxe_service
+big_free	./src/cache.c	/^static union bigname *big_free = NULL;$/;"	v	typeref:union:bigname	file:
+bigname	./src/dnsmasq.h	/^union bigname {$/;"	u
+bignames_left	./src/cache.c	/^static int bignames_left, hash_size;$/;"	v	file:
+block	./src/dnsmasq.h	/^  unsigned int block, blocksize, expansion;$/;"	m	struct:tftp_transfer
+blocksize	./src/dnsmasq.h	/^  unsigned int block, blocksize, expansion;$/;"	m	struct:tftp_transfer
+bname	./src/dnsmasq.h	/^    union bigname *bname;$/;"	m	union:crec::__anon7	typeref:union:crec::__anon7::bigname
+bogus_addr	./src/dnsmasq.h	/^  struct bogus_addr *bogus_addr;$/;"	m	struct:daemon	typeref:struct:daemon::bogus_addr
+bogus_addr	./src/dnsmasq.h	/^struct bogus_addr {$/;"	s
+boot_config	./src/dnsmasq.h	/^  struct dhcp_boot *boot_config;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_boot
+bootp_dynamic	./src/dnsmasq.h	/^  struct dhcp_netid_list *force_broadcast, *bootp_dynamic;$/;"	m	struct:daemon	typeref:struct:daemon::
+bridges	./src/dnsmasq.h	/^  struct dhcp_bridge *bridges;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_bridge
+broadcast	./src/dhcp.c	/^  struct in_addr netmask, broadcast, addr;$/;"	m	struct:match_param	typeref:struct:match_param::	file:
+broadcast	./src/dnsmasq.h	/^  struct in_addr netmask, broadcast;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::
+buf	./src/helper.c	/^static struct script_data *buf = NULL;$/;"	v	typeref:struct:script_data	file:
+buf_size	./src/helper.c	/^static size_t bytes_in_buf = 0, buf_size = 0;$/;"	v	file:
+bump_maxfd	./src/util.c	/^void bump_maxfd(int fd, int *max)$/;"	f
+byip	./contrib/dnslist/dnslist.pl	/^sub byip {$/;"	s
+bytes_in_buf	./src/helper.c	/^static size_t bytes_in_buf = 0, buf_size = 0;$/;"	v	file:
+c_name	./src/option.c	/^  char *c_name;$/;"	m	struct:__anon1	file:
+c_val	./src/option.c	/^  unsigned int c_val;$/;"	m	struct:__anon1	file:
+cache	./src/dnsmasq.h	/^      struct crec *cache;$/;"	m	struct:crec::__anon5::__anon6	typeref:struct:crec::__anon5::__anon6::crec
+cache_add_dhcp_entry	./src/cache.c	/^void cache_add_dhcp_entry(char *host_name, int prot,$/;"	f
+cache_end_insert	./src/cache.c	/^void cache_end_insert(void)$/;"	f
+cache_find_by_addr	./src/cache.c	/^struct crec *cache_find_by_addr(struct crec *crecp, struct all_addr *addr, $/;"	f
+cache_find_by_name	./src/cache.c	/^struct crec *cache_find_by_name(struct crec *crecp, char *name, time_t now, unsigned short prot)$/;"	f
+cache_free	./src/cache.c	/^static void cache_free(struct crec *crecp)$/;"	f	file:
+cache_get_name	./src/cache.c	/^char *cache_get_name(struct crec *crecp)$/;"	f
+cache_hash	./src/cache.c	/^static void cache_hash(struct crec *crecp)$/;"	f	file:
+cache_head	./src/cache.c	/^static struct crec *cache_head = NULL, *cache_tail = NULL, **hash_table = NULL;$/;"	v	typeref:struct:crec	file:
+cache_init	./src/cache.c	/^void cache_init(void)$/;"	f
+cache_insert	./src/cache.c	/^struct crec *cache_insert(char *name, struct all_addr *addr, $/;"	f
+cache_inserted	./src/cache.c	/^static int cache_inserted = 0, cache_live_freed = 0, insert_error;$/;"	v	file:
+cache_link	./src/cache.c	/^static void cache_link(struct crec *crecp)$/;"	f	file:
+cache_live_freed	./src/cache.c	/^static int cache_inserted = 0, cache_live_freed = 0, insert_error;$/;"	v	file:
+cache_reload	./src/cache.c	/^void cache_reload(void)$/;"	f
+cache_scan_free	./src/cache.c	/^static int cache_scan_free(char *name, struct all_addr *addr, time_t now, unsigned short flags)$/;"	f	file:
+cache_start_insert	./src/cache.c	/^void cache_start_insert(void)$/;"	f
+cache_tail	./src/cache.c	/^static struct crec *cache_head = NULL, *cache_tail = NULL, **hash_table = NULL;$/;"	v	typeref:struct:	file:
+cache_unhash_dhcp	./src/cache.c	/^void cache_unhash_dhcp(void)$/;"	f
+cache_unlink	./src/cache.c	/^static void cache_unlink (struct crec *crecp)$/;"	f	file:
+cachesize	./src/dnsmasq.h	/^  int cachesize, ftabsize;$/;"	m	struct:daemon
+calc_time	./src/rfc2131.c	/^static unsigned int calc_time(struct dhcp_context *context, struct dhcp_config *config, unsigned char *opt)$/;"	f	file:
+callback	./src/conntrack.c	/^static int callback(enum nf_conntrack_msg_type type, struct nf_conntrack *ct, void *data)$/;"	f	file:
+canonicalise	./src/util.c	/^char *canonicalise(char *in, int *nomem)$/;"	f
+canonicalise_opt	./src/option.c	/^static char *canonicalise_opt(char *s)$/;"	f	file:
+carrylf	./src/dnsmasq.h	/^  char opt_blocksize, opt_transize, netascii, carrylf;$/;"	m	struct:tftp_transfer
+chaddr	./contrib/wrt/dhcp_lease_time.c	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet	file:
+chaddr	./contrib/wrt/dhcp_release.c	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet	file:
+chaddr	./src/dhcp-protocol.h	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet
+check_dbus_listeners	./src/dbus.c	/^void check_dbus_listeners(fd_set *rset, fd_set *wset, fd_set *eset)$/;"	f
+check_dhcp_hosts	./src/dhcp-common.c	/^void check_dhcp_hosts(int fatal)$/;"	f
+check_dns_listeners	./src/dnsmasq.c	/^static void check_dns_listeners(fd_set *set, time_t now)$/;"	f	file:
+check_for_bogus_wildcard	./src/rfc1035.c	/^int check_for_bogus_wildcard(struct dns_header *header, size_t qlen, char *name, $/;"	f
+check_for_local_domain	./src/rfc1035.c	/^int check_for_local_domain(char *name, time_t now)$/;"	f
+check_listen_addrs	./src/dhcp.c	/^static int check_listen_addrs(struct in_addr local, int if_index, $/;"	f	file:
+check_log_writer	./src/log.c	/^void check_log_writer(fd_set *set)$/;"	f
+check_name	./src/util.c	/^static int check_name(char *in)$/;"	f	file:
+check_servers	./src/network.c	/^void check_servers(void)$/;"	f
+check_state	./contrib/dnslist/dnslist.pl	/^sub check_state {$/;"	s
+check_tftp_fileperm	./src/tftp.c	/^static struct tftp_file *check_tftp_fileperm(ssize_t *len, char *prefix, int special)$/;"	f	file:
+check_tftp_listeners	./src/tftp.c	/^void check_tftp_listeners(fd_set *rset, time_t now)$/;"	f
+checksum	./src/radv-protocol.h	/^  u16 checksum;$/;"	m	struct:ra_packet
+ciaddr	./contrib/wrt/dhcp_lease_time.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::in_addr	file:
+ciaddr	./contrib/wrt/dhcp_release.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::in_addr	file:
+ciaddr	./src/dhcp-protocol.h	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::in_addr
+clear_cache_and_reload	./src/dnsmasq.c	/^void clear_cache_and_reload(time_t now)$/;"	f
+clear_packet	./src/rfc2131.c	/^static void clear_packet(struct dhcp_packet *mess, unsigned char *end)$/;"	f	file:
+clid	./src/dnsmasq.h	/^  unsigned char *clid;   \/* clientid *\/$/;"	m	struct:dhcp_config
+clid	./src/dnsmasq.h	/^  unsigned char *clid;   \/* clientid *\/$/;"	m	struct:dhcp_lease
+clid_len	./src/dnsmasq.h	/^  int clid_len;          \/* length of client identifier *\/$/;"	m	struct:dhcp_config
+clid_len	./src/dnsmasq.h	/^  int clid_len;          \/* length of client identifier *\/$/;"	m	struct:dhcp_lease
+clid_len	./src/helper.c	/^  int clid_len, hostname_len, ed_len;$/;"	m	struct:script_data	file:
+cname	./src/dnsmasq.h	/^    } cname;$/;"	m	union:crec::__anon5	typeref:struct:crec::__anon5::__anon6
+cname	./src/dnsmasq.h	/^struct cname {$/;"	s
+cnames	./src/dnsmasq.h	/^  struct cname *cnames;$/;"	m	struct:daemon	typeref:struct:daemon::cname
+code	./src/radv-protocol.h	/^  u8 type, code;$/;"	m	struct:ra_packet
+compile_opts	./src/config.h	/^static char *compile_opts = $/;"	v
+complete_context	./src/dhcp.c	/^static int complete_context(struct in_addr local, int if_index, $/;"	f	file:
+complete_context6	./src/dhcp6.c	/^static int complete_context6(struct in6_addr *local,  int prefix,$/;"	f	file:
+cond_domain	./src/dnsmasq.h	/^  struct cond_domain *cond_domain;$/;"	m	struct:daemon	typeref:struct:daemon::cond_domain
+cond_domain	./src/dnsmasq.h	/^struct cond_domain {$/;"	s
+config_find_by_address	./src/dhcp.c	/^struct dhcp_config *config_find_by_address(struct dhcp_config *configs, struct in_addr addr)$/;"	f
+config_find_by_address6	./src/dhcp6.c	/^struct dhcp_config *config_find_by_address6(struct dhcp_config *configs, struct in6_addr *net, int prefix, u64 addr)$/;"	f
+config_has_mac	./src/dhcp.c	/^int config_has_mac(struct dhcp_config *config, unsigned char *hwaddr, int len, int type)$/;"	f
+connection_good	./src/log.c	/^static int connection_good = 1;$/;"	v	file:
+connection_type	./src/log.c	/^static int connection_type = SOCK_DGRAM;$/;"	v	file:
+cookie	./contrib/wrt/dhcp_lease_time.c	/^  u32 cookie;$/;"	m	struct:dhcp_packet	file:
+cookie	./contrib/wrt/dhcp_release.c	/^  u32 cookie;$/;"	m	struct:dhcp_packet	file:
+crc	./src/dnsmasq.h	/^  unsigned int crc;$/;"	m	struct:frec
+create_bound_listeners	./src/network.c	/^void create_bound_listeners(int dienow)$/;"	f
+create_helper	./src/helper.c	/^int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)$/;"	f
+create_listeners	./src/network.c	/^static struct listener *create_listeners(union mysockaddr *addr, int do_tftp, int dienow)$/;"	f	file:
+create_wildcard_listeners	./src/network.c	/^void create_wildcard_listeners(void)$/;"	f
+crec	./src/dnsmasq.h	/^struct crec { $/;"	s
+crec_ttl	./src/rfc1035.c	/^static unsigned long crec_ttl(struct crec *crecp, time_t now)$/;"	f	file:
+ct_cflags	./Makefile	/^ct_cflags =   `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_CONNTRACK $(PKG_CONFIG) --cflags libnetfilter_conntrack`$/;"	m
+ct_libs	./Makefile	/^ct_libs =     `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_CONNTRACK $(PKG_CONFIG) --libs libnetfilter_conntrack`$/;"	m
+current	./src/dhcp.c	/^  struct dhcp_context *current;$/;"	m	struct:iface_param	typeref:struct:iface_param::dhcp_context	file:
+current	./src/dhcp6.c	/^  struct dhcp_context *current;$/;"	m	struct:iface_param	typeref:struct:iface_param::dhcp_context	file:
+current	./src/dnsmasq.h	/^  struct dhcp_context *next, *current;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::
+dad	./src/dnsmasq.h	/^  int tftp_ok, mtu, done, dad;$/;"	m	struct:irec
+daemon	./src/dnsmasq.c	/^struct daemon *daemon;$/;"	v	typeref:struct:daemon
+daemon	./src/dnsmasq.h	/^extern struct daemon {$/;"	s
+daemon	./src/dnsmasq.h	136;"	d
+data	./src/dnsmasq.h	/^  char *data;$/;"	m	struct:dhcp_vendor
+data	./src/dnsmasq.h	/^  int event, data, msg_sz;$/;"	m	struct:event_desc
+dbus	./src/dnsmasq.h	/^  void *dbus;$/;"	m	struct:daemon
+dbus_cflags	./Makefile	/^dbus_cflags = `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_DBUS $(PKG_CONFIG) --cflags dbus-1` $/;"	m
+dbus_init	./src/dbus.c	/^char *dbus_init(void)$/;"	f
+dbus_libs	./Makefile	/^dbus_libs =   `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_DBUS $(PKG_CONFIG) --libs dbus-1` $/;"	m
+dbus_read_servers	./src/dbus.c	/^static void dbus_read_servers(DBusMessage *message)$/;"	f	file:
+decline_time	./src/dnsmasq.h	/^  time_t decline_time;$/;"	m	struct:dhcp_config
+default_resolv	./src/dnsmasq.h	/^  struct resolvc default_resolv, *resolv_files;$/;"	m	struct:daemon	typeref:struct:daemon::resolvc
+del_acct	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub del_acct {$/;"	s
+desc	./src/option.c	/^  char * const desc;$/;"	m	struct:__anon2	file:
+dest	./src/dnsmasq.h	/^  struct all_addr dest;$/;"	m	struct:frec	typeref:struct:frec::all_addr
+dev	./src/dnsmasq.h	/^  dev_t dev;$/;"	m	struct:tftp_file
+dhcp	./src/dnsmasq.h	/^  struct dhcp_context *dhcp, *dhcp6, *ra_contexts;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_context
+dhcp6	./src/dnsmasq.h	/^  struct dhcp_context *dhcp, *dhcp6, *ra_contexts;$/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp6_init	./src/dhcp6.c	/^void dhcp6_init(void)$/;"	f
+dhcp6_maybe_relay	./src/rfc3315.c	/^static int dhcp6_maybe_relay(struct in6_addr *link_address, struct dhcp_netid **relay_tagsp, struct dhcp_context *context,$/;"	f	file:
+dhcp6_no_relay	./src/rfc3315.c	/^static int dhcp6_no_relay(int msg_type, struct in6_addr *link_address, struct dhcp_netid *tags, struct dhcp_context *context, $/;"	f	file:
+dhcp6_packet	./src/dhcp6.c	/^void dhcp6_packet(time_t now)$/;"	f
+dhcp6_reply	./src/rfc3315.c	/^size_t dhcp6_reply(struct dhcp_context *context, int interface, char *iface_name,$/;"	f
+dhcp6fd	./src/dnsmasq.h	/^  int dhcp6fd, icmp6fd;$/;"	m	struct:daemon
+dhcp_boot	./src/dnsmasq.h	/^struct dhcp_boot {$/;"	s
+dhcp_bridge	./src/dnsmasq.h	/^struct dhcp_bridge {$/;"	s
+dhcp_buff	./src/dnsmasq.h	/^  char *dhcp_buff, *dhcp_buff2, *dhcp_buff3;$/;"	m	struct:daemon
+dhcp_buff2	./src/dnsmasq.h	/^  char *dhcp_buff, *dhcp_buff2, *dhcp_buff3;$/;"	m	struct:daemon
+dhcp_buff3	./src/dnsmasq.h	/^  char *dhcp_buff, *dhcp_buff2, *dhcp_buff3;$/;"	m	struct:daemon
+dhcp_client_port	./src/dnsmasq.h	/^  int dhcp_server_port, dhcp_client_port;$/;"	m	struct:daemon
+dhcp_common_init	./src/dhcp-common.c	/^void dhcp_common_init(void)$/;"	f
+dhcp_conf	./src/dnsmasq.h	/^  struct dhcp_config *dhcp_conf;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_config
+dhcp_config	./src/dnsmasq.h	/^struct dhcp_config {$/;"	s
+dhcp_context	./src/dnsmasq.h	/^struct dhcp_context {$/;"	s
+dhcp_except	./src/dnsmasq.h	/^  struct iname *if_names, *if_addrs, *if_except, *dhcp_except;$/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_gen_names	./src/dnsmasq.h	/^  struct dhcp_netid_list *dhcp_ignore, *dhcp_ignore_names, *dhcp_gen_names; $/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_hosts_file	./src/dnsmasq.h	/^  struct hostsfile *dhcp_hosts_file, *dhcp_opts_file;$/;"	m	struct:daemon	typeref:struct:daemon::hostsfile
+dhcp_icmp_fd	./src/dnsmasq.h	/^  int dhcp_raw_fd, dhcp_icmp_fd;$/;"	m	struct:daemon
+dhcp_ignore	./src/dnsmasq.h	/^  struct dhcp_netid_list *dhcp_ignore, *dhcp_ignore_names, *dhcp_gen_names; $/;"	m	struct:daemon	typeref:struct:daemon::dhcp_netid_list
+dhcp_ignore_names	./src/dnsmasq.h	/^  struct dhcp_netid_list *dhcp_ignore, *dhcp_ignore_names, *dhcp_gen_names; $/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_init	./src/dhcp.c	/^void dhcp_init(void)$/;"	f
+dhcp_lease	./src/dnsmasq.h	/^struct dhcp_lease {$/;"	s
+dhcp_mac	./src/dnsmasq.h	/^struct dhcp_mac {$/;"	s
+dhcp_macs	./src/dnsmasq.h	/^  struct dhcp_mac *dhcp_macs;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_mac
+dhcp_match	./src/dnsmasq.h	/^  struct dhcp_opt *dhcp_opts, *dhcp_match, *dhcp_opts6, *dhcp_match6;$/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_match6	./src/dnsmasq.h	/^  struct dhcp_opt *dhcp_opts, *dhcp_match, *dhcp_opts6, *dhcp_match6;$/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_max	./src/dnsmasq.h	/^  int dhcp_max, tftp_max;$/;"	m	struct:daemon
+dhcp_netid	./src/dnsmasq.h	/^struct dhcp_netid {$/;"	s
+dhcp_netid_list	./src/dnsmasq.h	/^struct dhcp_netid_list {$/;"	s
+dhcp_opt	./src/dnsmasq.h	/^struct dhcp_opt {$/;"	s
+dhcp_opts	./src/dnsmasq.h	/^  struct dhcp_opt *dhcp_opts, *dhcp_match, *dhcp_opts6, *dhcp_match6;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_opt
+dhcp_opts6	./src/dnsmasq.h	/^  struct dhcp_opt *dhcp_opts, *dhcp_match, *dhcp_opts6, *dhcp_match6;$/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_opts_file	./src/dnsmasq.h	/^  struct hostsfile *dhcp_hosts_file, *dhcp_opts_file;$/;"	m	struct:daemon	typeref:struct:daemon::
+dhcp_packet	./contrib/wrt/dhcp_lease_time.c	/^struct dhcp_packet {$/;"	s	file:
+dhcp_packet	./contrib/wrt/dhcp_release.c	/^struct dhcp_packet {$/;"	s	file:
+dhcp_packet	./src/dhcp-protocol.h	/^struct dhcp_packet {$/;"	s
+dhcp_packet	./src/dhcp.c	/^void dhcp_packet(time_t now, int pxe_fd)$/;"	f
+dhcp_packet	./src/dnsmasq.h	/^  struct iovec dhcp_packet;$/;"	m	struct:daemon	typeref:struct:daemon::iovec
+dhcp_packet_size	./src/rfc2131.c	/^static size_t dhcp_packet_size(struct dhcp_packet *mess, unsigned char *agent_id, unsigned char *real_end)$/;"	f	file:
+dhcp_raw_fd	./src/dnsmasq.h	/^  int dhcp_raw_fd, dhcp_icmp_fd;$/;"	m	struct:daemon
+dhcp_read_ethers	./src/dhcp.c	/^void dhcp_read_ethers(void)$/;"	f
+dhcp_reply	./src/rfc2131.c	/^size_t dhcp_reply(struct dhcp_context *context, char *iface_name, int int_index,$/;"	f
+dhcp_server_port	./src/dnsmasq.h	/^  int dhcp_server_port, dhcp_client_port;$/;"	m	struct:daemon
+dhcp_skip_opts	./src/rfc2131.c	/^static unsigned char *dhcp_skip_opts(unsigned char *start)$/;"	f	file:
+dhcp_spare	./src/cache.c	/^static struct crec *dhcp_spare = NULL;$/;"	v	typeref:struct:crec	file:
+dhcp_update_configs	./src/dhcp-common.c	/^void dhcp_update_configs(struct dhcp_config *configs)$/;"	f
+dhcp_vendor	./src/dnsmasq.h	/^struct dhcp_vendor {$/;"	s
+dhcp_vendors	./src/dnsmasq.h	/^  struct dhcp_vendor *dhcp_vendors;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_vendor
+dhcpfd	./src/dnsmasq.h	/^  int dhcpfd, helperfd, pxefd; $/;"	m	struct:daemon
+die	./src/log.c	/^void die(char *message, char *arg1, int exit_code)$/;"	f
+display_opts	./src/option.c	/^static void display_opts(void)$/;"	f	file:
+display_opts6	./src/option.c	/^static void display_opts6(void)$/;"	f	file:
+dns_dirty	./src/lease.c	/^static int dns_dirty, file_dirty, leases_left;$/;"	v	file:
+dns_header	./src/dns-protocol.h	/^struct dns_header {$/;"	s
+dnsmasq_rescan_configs	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub dnsmasq_rescan_configs {$/;"	s
+dnsmasq_time	./src/util.c	/^time_t dnsmasq_time(void)$/;"	f
+do_doctor	./src/rfc1035.c	/^static unsigned char *do_doctor(unsigned char *p, int count, struct dns_header *header, size_t qlen, char *name)$/;"	f	file:
+do_encap_opts	./src/rfc2131.c	/^static int do_encap_opts(struct dhcp_opt *opt, int encap, int flag,  $/;"	f	file:
+do_host	./contrib/dnslist/dnslist.pl	/^sub do_host {$/;"	s
+do_opt	./src/rfc2131.c	/^static int do_opt(struct dhcp_opt *opt, unsigned char *p, struct dhcp_context *context, int null_term)$/;"	f	file:
+do_options	./src/rfc2131.c	/^static void do_options(struct dhcp_context *context,$/;"	f	file:
+do_rfc1035_name	./src/util.c	/^unsigned char *do_rfc1035_name(unsigned char *p, char *sval)$/;"	f
+do_script_run	./src/lease.c	/^int do_script_run(time_t now)$/;"	f
+do_usage	./src/option.c	/^static void do_usage(void)$/;"	f	file:
+doctor	./src/dnsmasq.h	/^struct doctor {$/;"	s
+doctors	./src/dnsmasq.h	/^  struct doctor *doctors;$/;"	m	struct:daemon	typeref:struct:daemon::doctor
+domain	./src/dnsmasq.h	/^  char *domain; \/* set if this server only handles a domain. *\/ $/;"	m	struct:server
+domain	./src/dnsmasq.h	/^  char *domain;$/;"	m	struct:cond_domain
+domain	./src/dnsmasq.h	/^  char *hostname, *domain;$/;"	m	struct:dhcp_config
+domain_suffix	./src/dnsmasq.h	/^  char *domain_suffix;$/;"	m	struct:daemon
+done	./src/dnsmasq.h	/^  int tftp_ok, mtu, done, dad;$/;"	m	struct:irec
+duid	./src/dnsmasq.h	/^  unsigned char *duid;$/;"	m	struct:daemon
+duid_len	./src/dnsmasq.h	/^  int duid_len;$/;"	m	struct:daemon
+dump_cache	./src/cache.c	/^void dump_cache(time_t now)$/;"	f
+eatspace	./src/cache.c	/^static int eatspace(FILE *f)$/;"	f	file:
+echo_stderr	./src/log.c	/^static int echo_stderr = 0;$/;"	v	file:
+ed_len	./src/helper.c	/^  int clid_len, hostname_len, ed_len;$/;"	m	struct:script_data	file:
+edns_pktsz	./src/dnsmasq.h	/^  unsigned short edns_pktsz;$/;"	m	struct:daemon
+emit_dbus_signal	./src/dbus.c	/^void emit_dbus_signal(int action, struct dhcp_lease *lease, char *hostname)$/;"	f
+enable_pxe	./src/dnsmasq.h	/^  int enable_pxe;$/;"	m	struct:daemon
+encap	./src/dnsmasq.h	/^    int encap;$/;"	m	union:dhcp_opt::__anon8
+end	./src/dnsmasq.h	/^  struct in_addr in, end, out, mask;$/;"	m	struct:doctor	typeref:struct:doctor::
+end	./src/dnsmasq.h	/^  struct in_addr start, end; \/* range of available addresses *\/$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::
+end	./src/dnsmasq.h	/^  struct in_addr start, end;$/;"	m	struct:cond_domain	typeref:struct:cond_domain::
+end6	./src/dnsmasq.h	/^  struct in6_addr start6, end6; \/* range of available addresses *\/$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::
+end6	./src/dnsmasq.h	/^  struct in6_addr start6, end6;$/;"	m	struct:cond_domain	typeref:struct:cond_domain::
+end_opt6	./src/outpacket.c	/^void end_opt6(int container)$/;"	f
+end_tftp_port	./src/dnsmasq.h	/^  int start_tftp_port, end_tftp_port; $/;"	m	struct:daemon
+enterprise	./src/dnsmasq.h	/^  unsigned int enterprise;$/;"	m	struct:dhcp_vendor
+entries	./src/log.c	/^static struct log_entry *entries = NULL;$/;"	v	typeref:struct:log_entry	file:
+entries_alloced	./src/log.c	/^static int entries_alloced = 0;$/;"	v	file:
+entries_lost	./src/log.c	/^static int entries_lost = 0;$/;"	v	file:
+enumerate_interfaces	./src/network.c	/^int enumerate_interfaces(void)$/;"	f
+event	./src/dnsmasq.h	/^  int event, data, msg_sz;$/;"	m	struct:event_desc
+event_desc	./src/dnsmasq.h	/^struct event_desc {$/;"	s
+expand	./src/outpacket.c	/^void *expand(size_t headroom)$/;"	f
+expand_buf	./contrib/wrt/dhcp_release.c	/^static int expand_buf(struct iovec *iov, size_t size)$/;"	f	file:
+expand_buf	./src/util.c	/^int expand_buf(struct iovec *iov, size_t size)$/;"	f
+expand_filelist	./src/option.c	/^struct hostsfile *expand_filelist(struct hostsfile *list)$/;"	f
+expansion	./src/dnsmasq.h	/^  unsigned int block, blocksize, expansion;$/;"	m	struct:tftp_transfer
+expires	./src/dnsmasq.h	/^  time_t expires;        \/* lease expiry *\/$/;"	m	struct:dhcp_lease
+expires	./src/helper.c	/^  time_t expires;$/;"	m	struct:script_data	file:
+extended_hwaddr	./src/rfc2131.c	/^unsigned char *extended_hwaddr(int hwtype, int hwlen, unsigned char *hwaddr, $/;"	f
+extract_addresses	./src/rfc1035.c	/^int extract_addresses(struct dns_header *header, size_t qlen, char *name, time_t now, $/;"	f
+extract_name	./src/rfc1035.c	/^static int extract_name(struct dns_header *header, size_t plen, unsigned char **pp, $/;"	f	file:
+extract_request	./src/rfc1035.c	/^unsigned int extract_request(struct dns_header *header, size_t qlen, char *name, unsigned short *typep)$/;"	f
+extradata	./src/dnsmasq.h	/^  unsigned char *extradata;$/;"	m	struct:dhcp_lease
+extradata_len	./src/dnsmasq.h	/^  unsigned int extradata_len, extradata_size;$/;"	m	struct:dhcp_lease
+extradata_size	./src/dnsmasq.h	/^  unsigned int extradata_len, extradata_size;$/;"	m	struct:dhcp_lease
+facilitynames	./src/option.c	/^}  facilitynames[] = {$/;"	v	typeref:struct:__anon1	file:
+failed_queries	./src/dnsmasq.h	/^  unsigned int queries, failed_queries;$/;"	m	struct:server
+fallback	./src/dhcp6.c	/^  struct in6_addr fallback;$/;"	m	struct:iface_param	typeref:struct:iface_param::in6_addr	file:
+family	./src/dnsmasq.h	/^  int fd, tcpfd, tftpfd, family;$/;"	m	struct:listener
+family	./src/dnsmasq.h	/^  unsigned short refcount, family;$/;"	m	struct:randfd
+fatal_event	./src/dnsmasq.c	/^static void fatal_event(struct event_desc *ev, char *msg)$/;"	f	file:
+fd	./src/dnsmasq.h	/^  int fd, forwardall, flags;$/;"	m	struct:frec
+fd	./src/dnsmasq.h	/^  int fd, tcpfd, tftpfd, family;$/;"	m	struct:listener
+fd	./src/dnsmasq.h	/^  int fd;$/;"	m	struct:randfd
+fd	./src/dnsmasq.h	/^  int fd;$/;"	m	struct:serverfd
+fd	./src/dnsmasq.h	/^  int refcount, fd;$/;"	m	struct:tftp_file
+file	./contrib/wrt/dhcp_lease_time.c	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet	file:
+file	./contrib/wrt/dhcp_release.c	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet	file:
+file	./src/dhcp-protocol.h	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet
+file	./src/dnsmasq.h	/^  char *file, *sname, *tftp_sname;$/;"	m	struct:dhcp_boot
+file	./src/dnsmasq.h	/^  struct tftp_file *file;$/;"	m	struct:tftp_transfer	typeref:struct:tftp_transfer::tftp_file
+file_dirty	./src/lease.c	/^static int dns_dirty, file_dirty, leases_left;$/;"	v	file:
+filename	./src/dnsmasq.h	/^  char filename[];$/;"	m	struct:tftp_file
+filter	./src/dnsmasq.h	/^  struct dhcp_netid netid, *filter;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::
+filter_mac	./src/rfc1035.c	/^static int filter_mac(int family, char *addrp, char *mac, size_t maclen, void *parmv)$/;"	f	file:
+find_boot	./src/rfc2131.c	/^struct dhcp_boot *find_boot(struct dhcp_netid *netid)$/;"	f
+find_config	./src/dhcp.c	/^struct dhcp_config *find_config(struct dhcp_config *configs,$/;"	f
+find_config6	./src/dhcp6.c	/^struct dhcp_config *find_config6(struct dhcp_config *configs,$/;"	f
+find_interface	./contrib/wrt/dhcp_release.c	/^static struct in_addr find_interface(struct in_addr client, int fd, unsigned int index)$/;"	f	file:
+find_overload	./src/rfc2131.c	/^static unsigned char *find_overload(struct dhcp_packet *mess)$/;"	f	file:
+find_pseudoheader	./src/rfc1035.c	/^unsigned char *find_pseudoheader(struct dns_header *header, size_t plen, size_t  *len, unsigned char **p, int *is_sign)$/;"	f
+find_soa	./src/rfc1035.c	/^static int find_soa(struct dns_header *header, size_t qlen, char *name)$/;"	f	file:
+first	./src/radv.c	/^  int ind, managed, found_context, first;$/;"	m	struct:ra_param	file:
+fix_fd	./src/network.c	/^int fix_fd(int fd)$/;"	f
+flag	./src/option.c	/^  int *flag;$/;"	m	struct:myoption	file:
+flagdesc	./src/option.c	/^  char * const flagdesc;$/;"	m	struct:__anon2	file:
+flags	./contrib/wrt/dhcp_lease_time.c	/^  u16 secs, flags;$/;"	m	struct:dhcp_packet	file:
+flags	./contrib/wrt/dhcp_release.c	/^  u16 secs, flags;$/;"	m	struct:dhcp_packet	file:
+flags	./src/dhcp-protocol.h	/^  u16 secs, flags;$/;"	m	struct:dhcp_packet
+flags	./src/dnsmasq.h	/^  char *name, *replace, *regexp, *services, *flags;$/;"	m	struct:naptr
+flags	./src/dnsmasq.h	/^  int fd, forwardall, flags;$/;"	m	struct:frec
+flags	./src/dnsmasq.h	/^  int flags, tcpfd;$/;"	m	struct:server
+flags	./src/dnsmasq.h	/^  int flags;$/;"	m	struct:dhcp_context
+flags	./src/dnsmasq.h	/^  int flags;$/;"	m	struct:dhcp_lease
+flags	./src/dnsmasq.h	/^  int flags;$/;"	m	struct:hostsfile
+flags	./src/dnsmasq.h	/^  int opt, len, flags;$/;"	m	struct:dhcp_opt
+flags	./src/dnsmasq.h	/^  unsigned int flags;$/;"	m	struct:dhcp_config
+flags	./src/dnsmasq.h	/^  unsigned short flags;$/;"	m	struct:crec
+flags	./src/helper.c	/^  int flags;$/;"	m	struct:script_data	file:
+flags	./src/radv-protocol.h	/^  u8 hop_limit, flags;$/;"	m	struct:ra_packet
+flags	./src/radv-protocol.h	/^  u8 type, len, prefix_len, flags;$/;"	m	struct:prefix_opt
+flush_log	./src/log.c	/^void flush_log(void)$/;"	f
+fname	./src/dnsmasq.h	/^  char *fname;$/;"	m	struct:hostsfile
+force_broadcast	./src/dnsmasq.h	/^  struct dhcp_netid_list *force_broadcast, *bootp_dynamic;$/;"	m	struct:daemon	typeref:struct:daemon::dhcp_netid_list
+forward_query	./src/forward.c	/^static int forward_query(int udpfd, union mysockaddr *udpaddr,$/;"	f	file:
+forwardall	./src/dnsmasq.h	/^  int fd, forwardall, flags;$/;"	m	struct:frec
+forwardcount	./src/dnsmasq.h	/^  int forwardcount;$/;"	m	struct:daemon
+forwardtime	./src/dnsmasq.h	/^  time_t forwardtime;$/;"	m	struct:daemon
+found_context	./src/radv.c	/^  int ind, managed, found_context, first;$/;"	m	struct:ra_param	file:
+fqdn	./src/dnsmasq.h	/^  char *hostname, *fqdn; \/* name from client-hostname option or config *\/$/;"	m	struct:dhcp_lease
+frec	./src/dnsmasq.h	/^struct frec {$/;"	s
+frec_list	./src/dnsmasq.h	/^  struct frec *frec_list;$/;"	m	struct:daemon	typeref:struct:daemon::frec
+free_entries	./src/log.c	/^static struct log_entry *free_entries = NULL;$/;"	v	typeref:struct:log_entry	file:
+free_entry	./src/log.c	/^static void free_entry(void)$/;"	f	file:
+free_frec	./src/forward.c	/^static void free_frec(struct frec *f)$/;"	f	file:
+free_space	./src/rfc2131.c	/^static unsigned char *free_space(struct dhcp_packet *mess, unsigned char *end, int opt, int len)$/;"	f	file:
+free_transfer	./src/tftp.c	/^static void free_transfer(struct tftp_transfer *transfer)$/;"	f	file:
+ftabsize	./src/dnsmasq.h	/^  int cachesize, ftabsize;$/;"	m	struct:daemon
+get_block	./src/tftp.c	/^static ssize_t get_block(char *packet, struct tftp_transfer *transfer)$/;"	f	file:
+get_domain	./src/cache.c	/^char *get_domain(struct in_addr addr)$/;"	f
+get_domain6	./src/cache.c	/^char *get_domain6(struct in6_addr *addr)$/;"	f
+get_id	./src/forward.c	/^static unsigned short get_id(unsigned int crc)$/;"	f	file:
+get_ifaddr	./src/network.c	/^struct in_addr get_ifaddr(char *intr)$/;"	f
+get_incoming_mark	./src/conntrack.c	/^int get_incoming_mark(union mysockaddr *peer_addr, struct all_addr *local_addr, int istcp, unsigned int *markp)$/;"	f
+get_new_frec	./src/forward.c	/^struct frec *get_new_frec(time_t now, int *wait)$/;"	f
+get_source_port	./src/util.c	/^int get_source_port()$/;"	f
+get_standard_deviation	./src/forward.c	/^static int get_standard_deviation(unsigned short id)$/;"	f	file:
+gettext_noop	./src/dnsmasq.h	66;"	d
+gettok	./src/cache.c	/^static int gettok(FILE *f, char *token)$/;"	f	file:
+giaddr	./contrib/wrt/dhcp_lease_time.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::	file:
+giaddr	./contrib/wrt/dhcp_release.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::	file:
+giaddr	./src/dhcp-protocol.h	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::
+giaddr	./src/dnsmasq.h	/^  struct in_addr addr, override, giaddr;$/;"	m	struct:dhcp_lease	typeref:struct:dhcp_lease::
+giaddr	./src/helper.c	/^  struct in_addr addr, giaddr;$/;"	m	struct:script_data	typeref:struct:script_data::	file:
+gotit	./src/conntrack.c	/^static int gotit = 0; \/* yuck *\/$/;"	v	file:
+grab_extradata	./src/helper.c	/^static unsigned char *grab_extradata(unsigned char *buf, unsigned char *end,  char *env, int *err)$/;"	f	file:
+grab_extradata_lua	./src/helper.c	/^static unsigned char *grab_extradata_lua(unsigned char *buf, unsigned char *end, char *field)$/;"	f	file:
+group_set	./src/dnsmasq.h	/^  int group_set, osport;$/;"	m	struct:daemon
+groupname	./src/dnsmasq.h	/^  char *username, *groupname, *scriptuser;$/;"	m	struct:daemon
+has_arg	./src/option.c	/^  int has_arg;$/;"	m	struct:myoption	file:
+hash	./src/dnsmasq.h	/^  unsigned int hash;$/;"	m	struct:ping_result
+hash_bucket	./src/cache.c	/^static struct crec **hash_bucket(char *name)$/;"	f	file:
+hash_next	./src/dnsmasq.h	/^  struct crec *next, *prev, *hash_next;$/;"	m	struct:crec	typeref:struct:crec::
+hash_size	./src/cache.c	/^static int bignames_left, hash_size;$/;"	v	file:
+hash_table	./src/cache.c	/^static struct crec *cache_head = NULL, *cache_tail = NULL, **hash_table = NULL;$/;"	v	typeref:struct:	file:
+have_config	./src/dnsmasq.h	507;"	d
+hb3	./src/dns-protocol.h	/^  u8  hb3,hb4;$/;"	m	struct:dns_header
+hb4	./src/dns-protocol.h	/^  u8  hb3,hb4;$/;"	m	struct:dns_header
+hdrs	./Makefile	/^hdrs = dnsmasq.h config.h dhcp-protocol.h dhcp6-protocol.h \\$/;"	m
+header	./src/rfc1035.c	/^  struct dns_header *header;$/;"	m	struct:macparm	typeref:struct:macparm::dns_header	file:
+helper_buf_empty	./src/helper.c	/^int helper_buf_empty(void)$/;"	f
+helper_write	./src/helper.c	/^void helper_write(void)$/;"	f
+helperfd	./src/dnsmasq.h	/^  int dhcpfd, helperfd, pxefd; $/;"	m	struct:daemon
+hide_meta	./src/option.c	/^static char hide_meta(char c)$/;"	f	file:
+hlen	./contrib/wrt/dhcp_lease_time.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+hlen	./contrib/wrt/dhcp_release.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+hlen	./src/dhcp-protocol.h	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet
+hop_limit	./src/radv-protocol.h	/^  u8 hop_limit, flags;$/;"	m	struct:ra_packet
+hop_limit	./src/radv.c	/^static int hop_limit;$/;"	v	file:
+hops	./contrib/wrt/dhcp_lease_time.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+hops	./contrib/wrt/dhcp_release.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+hops	./src/dhcp-protocol.h	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet
+host_from_dns	./src/dhcp.c	/^char *host_from_dns(struct in_addr addr)$/;"	f
+hostname	./src/dnsmasq.h	/^  char *hostname, *domain;$/;"	m	struct:dhcp_config
+hostname	./src/dnsmasq.h	/^  char *hostname, *fqdn; \/* name from client-hostname option or config *\/$/;"	m	struct:dhcp_lease
+hostname_isequal	./src/util.c	/^int hostname_isequal(char *a, char *b)$/;"	f
+hostname_len	./src/helper.c	/^  int clid_len, hostname_len, ed_len;$/;"	m	struct:script_data	file:
+hostsfile	./src/dnsmasq.h	/^struct hostsfile {$/;"	s
+htype	./contrib/wrt/dhcp_lease_time.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+htype	./contrib/wrt/dhcp_release.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+htype	./src/dhcp-protocol.h	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet
+hwaddr	./src/dnsmasq.h	/^  struct hwaddr_config *hwaddr;$/;"	m	struct:dhcp_config	typeref:struct:dhcp_config::hwaddr_config
+hwaddr	./src/dnsmasq.h	/^  unsigned char hwaddr[DHCP_CHADDR_MAX]; \/* also IPv6 address *\/$/;"	m	struct:dhcp_lease
+hwaddr	./src/dnsmasq.h	/^  unsigned char hwaddr[DHCP_CHADDR_MAX];$/;"	m	struct:dhcp_mac
+hwaddr	./src/dnsmasq.h	/^  unsigned char hwaddr[DHCP_CHADDR_MAX];$/;"	m	struct:hwaddr_config
+hwaddr	./src/helper.c	/^  unsigned char hwaddr[DHCP_CHADDR_MAX];$/;"	m	struct:script_data	file:
+hwaddr_config	./src/dnsmasq.h	/^struct hwaddr_config {$/;"	s
+hwaddr_len	./src/dnsmasq.h	/^  int hwaddr_len, hwaddr_type; \/* hw_type used for iaid in v6 *\/$/;"	m	struct:dhcp_lease
+hwaddr_len	./src/dnsmasq.h	/^  int hwaddr_len, hwaddr_type;$/;"	m	struct:dhcp_mac
+hwaddr_len	./src/dnsmasq.h	/^  int hwaddr_len, hwaddr_type;$/;"	m	struct:hwaddr_config
+hwaddr_len	./src/helper.c	/^  int action, hwaddr_len, hwaddr_type;$/;"	m	struct:script_data	file:
+hwaddr_type	./src/dnsmasq.h	/^  int hwaddr_len, hwaddr_type; \/* hw_type used for iaid in v6 *\/$/;"	m	struct:dhcp_lease
+hwaddr_type	./src/dnsmasq.h	/^  int hwaddr_len, hwaddr_type;$/;"	m	struct:dhcp_mac
+hwaddr_type	./src/dnsmasq.h	/^  int hwaddr_len, hwaddr_type;$/;"	m	struct:hwaddr_config
+hwaddr_type	./src/helper.c	/^  int action, hwaddr_len, hwaddr_type;$/;"	m	struct:script_data	file:
+icmp6_packet	./src/radv.c	/^void icmp6_packet(void)$/;"	f
+icmp6fd	./src/dnsmasq.h	/^  int dhcp6fd, icmp6fd;$/;"	m	struct:daemon
+icmp_ping	./src/dnsmasq.c	/^int icmp_ping(struct in_addr addr)$/;"	f
+id	./src/dns-protocol.h	/^  u16 id;$/;"	m	struct:dns_header
+id	./src/dnsmasq.h	/^  int id;$/;"	m	struct:daemon
+idn_cflags	./Makefile	/^idn_cflags =  `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_IDN $(PKG_CONFIG) --cflags libidn` $/;"	m
+idn_libs	./Makefile	/^idn_libs =    `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_IDN $(PKG_CONFIG) --libs libidn` $/;"	m
+if_addrs	./src/dnsmasq.h	/^  struct iname *if_names, *if_addrs, *if_except, *dhcp_except;$/;"	m	struct:daemon	typeref:struct:daemon::
+if_except	./src/dnsmasq.h	/^  struct iname *if_names, *if_addrs, *if_except, *dhcp_except;$/;"	m	struct:daemon	typeref:struct:daemon::
+if_name	./src/radv.c	/^  char *if_name;$/;"	m	struct:ra_param	file:
+if_names	./src/dnsmasq.h	/^  struct iname *if_names, *if_addrs, *if_except, *dhcp_except;$/;"	m	struct:daemon	typeref:struct:daemon::iname
+if_prefix	./src/dnsmasq.h	/^  struct tftp_prefix *if_prefix; \/* per-interface TFTP prefixes *\/$/;"	m	struct:daemon	typeref:struct:daemon::tftp_prefix
+iface	./src/dnsmasq.h	/^  char iface[IF_NAMESIZE];$/;"	m	struct:dhcp_bridge
+iface	./src/dnsmasq.h	/^  struct irec *iface; \/* only valid for non-wildcard *\/$/;"	m	struct:listener	typeref:struct:listener::irec
+iface	./src/dnsmasq.h	/^  unsigned int iface;$/;"	m	struct:frec
+iface	./src/radv.c	/^  time_t now; int iface;$/;"	m	struct:search_param	file:
+iface_allowed	./src/network.c	/^static int iface_allowed(struct irec **irecp, int if_index, $/;"	f	file:
+iface_allowed_v4	./src/network.c	/^static int iface_allowed_v4(struct in_addr local, int if_index, $/;"	f	file:
+iface_allowed_v6	./src/network.c	/^static int iface_allowed_v6(struct in6_addr *local, int prefix, $/;"	f	file:
+iface_check	./src/network.c	/^int iface_check(int family, struct all_addr *addr, char *name)$/;"	f
+iface_enumerate	./src/bpf.c	/^int iface_enumerate(int family, void *parm, int (*callback)())$/;"	f
+iface_enumerate	./src/netlink.c	/^int iface_enumerate(int family, void *parm, int (*callback)())$/;"	f
+iface_param	./src/dhcp.c	/^struct iface_param {$/;"	s	file:
+iface_param	./src/dhcp6.c	/^struct iface_param {$/;"	s	file:
+iface_search	./src/radv.c	/^static int iface_search(struct in6_addr *local,  int prefix,$/;"	f	file:
+ifconf	./src/bpf.c	/^static struct iovec ifconf = {$/;"	v	typeref:struct:iovec	file:
+ifr_mtu	./src/dnsmasq.h	89;"	d
+ifreq	./src/bpf.c	/^static struct iovec ifreq = {$/;"	v	typeref:struct:iovec	file:
+in	./src/dnsmasq.h	/^  struct in_addr in, end, out, mask;$/;"	m	struct:doctor	typeref:struct:doctor::in_addr
+in	./src/dnsmasq.h	/^  struct sockaddr_in in;$/;"	m	union:mysockaddr	typeref:struct:mysockaddr::sockaddr_in
+in	./src/util.c	/^static u32 in[12];$/;"	v	file:
+in6	./src/dnsmasq.h	/^  struct sockaddr_in6 in6;$/;"	m	union:mysockaddr	typeref:struct:mysockaddr::sockaddr_in6
+in_arpa_name_2_addr	./src/rfc1035.c	/^static int in_arpa_name_2_addr(char *namein, struct all_addr *addrp)$/;"	f	file:
+in_list	./src/rfc2131.c	/^static int in_list(unsigned char *list, int opt)$/;"	f	file:
+iname	./src/dnsmasq.h	/^struct iname {$/;"	s
+ind	./src/dhcp.c	/^  int ind, matched;$/;"	m	struct:match_param	file:
+ind	./src/dhcp.c	/^  int ind;$/;"	m	struct:iface_param	file:
+ind	./src/dhcp6.c	/^  int ind;$/;"	m	struct:iface_param	file:
+ind	./src/radv.c	/^  int ind, managed, found_context, first;$/;"	m	struct:ra_param	file:
+index	./src/dnsmasq.h	/^  int index; \/* matches to cache entries for logging *\/$/;"	m	struct:hostsfile
+indextoname	./src/network.c	/^int indextoname(int fd, int index, char *name)$/;"	f
+init_bpf	./src/bpf.c	/^void init_bpf(void)$/;"	f
+inode	./src/dnsmasq.h	/^  ino_t inode;$/;"	m	struct:tftp_file
+insert_error	./src/cache.c	/^static int cache_inserted = 0, cache_live_freed = 0, insert_error;$/;"	v	file:
+int_names	./src/dnsmasq.h	/^  struct interface_name *int_names;$/;"	m	struct:daemon	typeref:struct:daemon::interface_name
+interface	./src/dnsmasq.h	/^  char *interface;$/;"	m	struct:dhcp_context
+interface	./src/dnsmasq.h	/^  char *interface;$/;"	m	struct:interface_list
+interface	./src/dnsmasq.h	/^  char *interface;$/;"	m	struct:tftp_prefix
+interface	./src/dnsmasq.h	/^  char interface[IF_NAMESIZE+1];$/;"	m	struct:server
+interface	./src/dnsmasq.h	/^  char interface[IF_NAMESIZE+1];$/;"	m	struct:serverfd
+interface	./src/helper.c	/^  char interface[IF_NAMESIZE];$/;"	m	struct:script_data	file:
+interface_list	./src/dnsmasq.h	/^struct interface_list {$/;"	s
+interface_name	./src/dnsmasq.h	/^struct interface_name {$/;"	s
+interfaces	./src/dnsmasq.h	/^  struct irec *interfaces;$/;"	m	struct:daemon	typeref:struct:daemon::irec
+intr	./src/dnsmasq.h	/^  char *intr; \/* interface name *\/$/;"	m	struct:interface_name
+introspection_xml	./src/dbus.c	/^const char* introspection_xml =$/;"	v
+iov	./contrib/wrt/dhcp_release.c	/^static struct iovec iov;$/;"	v	typeref:struct:iovec	file:
+iov	./src/netlink.c	/^static struct iovec iov;$/;"	v	typeref:struct:iovec	file:
+irec	./src/dnsmasq.h	/^struct irec {$/;"	s
+is6	./src/dnsmasq.h	/^  int is6;$/;"	m	struct:cond_domain
+is_addr_in_context	./src/dhcp.c	/^static int is_addr_in_context(struct dhcp_context *context, struct dhcp_config *config)$/;"	f	file:
+is_addr_in_context6	./src/dhcp6.c	/^static int is_addr_in_context6(struct dhcp_context *context, struct dhcp_config *config)$/;"	f	file:
+is_dad_listeners	./src/network.c	/^int is_dad_listeners(void)$/;"	f
+is_default	./src/dnsmasq.h	/^  int is_default, logged;$/;"	m	struct:resolvc
+is_expired	./src/cache.c	/^static int is_expired(time_t now, struct crec *crecp)$/;"	f	file:
+is_outdated_cname_pointer	./src/cache.c	/^static int is_outdated_cname_pointer(struct crec *crecp)$/;"	f	file:
+is_same_net	./contrib/wrt/dhcp_release.c	/^static int is_same_net(struct in_addr a, struct in_addr b, struct in_addr mask)$/;"	f	file:
+is_same_net	./src/util.c	/^int is_same_net(struct in_addr a, struct in_addr b, struct in_addr mask)$/;"	f
+is_same_net6	./src/util.c	/^int is_same_net6(struct in6_addr *a, struct in6_addr *b, int prefixlen)$/;"	f
+is_tag_prefix	./src/option.c	/^static int is_tag_prefix(char *arg)$/;"	f	file:
+isloop	./src/dnsmasq.h	/^  int isloop, used;$/;"	m	struct:iname
+issrv	./src/dnsmasq.h	/^  int issrv, srvport, priority, weight;$/;"	m	struct:mx_srv_record
+join_multicast	./src/dhcp-common.c	/^void join_multicast(void)$/;"	f
+join_multicast_worker	./src/dhcp-common.c	/^static int join_multicast_worker(struct in6_addr *local, int prefix, $/;"	f	file:
+kill_name	./src/lease.c	/^static void kill_name(struct dhcp_lease *lease)$/;"	f	file:
+l3	./src/rfc1035.c	/^  union mysockaddr *l3;$/;"	m	struct:macparm	typeref:union:macparm::mysockaddr	file:
+last_interface	./src/dnsmasq.h	/^  int last_interface;$/;"	m	struct:dhcp_lease
+last_resolv	./src/dnsmasq.h	/^  time_t last_resolv;$/;"	m	struct:daemon
+last_server	./src/dnsmasq.h	/^  struct server *last_server;$/;"	m	struct:daemon	typeref:struct:daemon::server
+lease4_allocate	./src/lease.c	/^struct dhcp_lease *lease4_allocate(struct in_addr addr)$/;"	f
+lease6_allocate	./src/lease.c	/^struct dhcp_lease *lease6_allocate(struct in6_addr *addrp, int lease_type)$/;"	f
+lease6_find	./src/lease.c	/^struct dhcp_lease *lease6_find(unsigned char *clid, int clid_len, $/;"	f
+lease6_find_by_addr	./src/lease.c	/^struct dhcp_lease *lease6_find_by_addr(struct in6_addr *net, int prefix, u64 addr)$/;"	f
+lease_add_extradata	./src/lease.c	/^void lease_add_extradata(struct dhcp_lease *lease, unsigned char *data, unsigned int len, int delim)$/;"	f
+lease_allocate	./src/lease.c	/^static struct dhcp_lease *lease_allocate(void)$/;"	f	file:
+lease_change_command	./src/dnsmasq.h	/^  char *lease_change_command;$/;"	m	struct:daemon
+lease_file	./src/dnsmasq.h	/^  char *lease_file; $/;"	m	struct:daemon
+lease_find_by_addr	./src/lease.c	/^struct dhcp_lease *lease_find_by_addr(struct in_addr addr)$/;"	f
+lease_find_by_client	./src/lease.c	/^struct dhcp_lease *lease_find_by_client(unsigned char *hwaddr, int hw_len, int hw_type,$/;"	f
+lease_find_max_addr	./src/lease.c	/^struct in_addr lease_find_max_addr(struct dhcp_context *context)$/;"	f
+lease_find_max_addr6	./src/lease.c	/^u64 lease_find_max_addr6(struct dhcp_context *context)$/;"	f
+lease_init	./src/lease.c	/^void lease_init(time_t now)$/;"	f
+lease_prune	./src/lease.c	/^void lease_prune(struct dhcp_lease *target, time_t now)$/;"	f
+lease_set_expires	./src/lease.c	/^void lease_set_expires(struct dhcp_lease *lease, unsigned int len, time_t now)$/;"	f
+lease_set_hostname	./src/lease.c	/^void lease_set_hostname(struct dhcp_lease *lease, char *name, int auth, char *domain, char *config_domain)$/;"	f
+lease_set_hwaddr	./src/lease.c	/^void lease_set_hwaddr(struct dhcp_lease *lease, unsigned char *hwaddr,$/;"	f
+lease_set_interface	./src/lease.c	/^void lease_set_interface(struct dhcp_lease *lease, int interface)$/;"	f
+lease_stream	./src/dnsmasq.h	/^  FILE *lease_stream;$/;"	m	struct:daemon
+lease_time	./src/dnsmasq.h	/^  unsigned int lease_time, addr_epoch;$/;"	m	struct:dhcp_context
+lease_time	./src/dnsmasq.h	/^  unsigned int lease_time;$/;"	m	struct:dhcp_config
+lease_update_dns	./src/lease.c	/^void lease_update_dns(void)$/;"	f
+lease_update_file	./src/lease.c	/^void lease_update_file(time_t now)$/;"	f
+lease_update_from_configs	./src/lease.c	/^void lease_update_from_configs(void)$/;"	f
+leases	./src/lease.c	/^static struct dhcp_lease *leases = NULL, *old_leases = NULL;$/;"	v	typeref:struct:dhcp_lease	file:
+leases_left	./src/lease.c	/^static int dns_dirty, file_dirty, leases_left;$/;"	v	file:
+legal_hostname	./src/util.c	/^int legal_hostname(char *name)$/;"	f
+len	./src/dnsmasq.h	/^  int len, match_type;$/;"	m	struct:dhcp_vendor
+len	./src/dnsmasq.h	/^  int opt, len, flags;$/;"	m	struct:dhcp_opt
+len	./src/dnsmasq.h	/^  unsigned short class, len;$/;"	m	struct:txt_record	typeref:class:txt_record::
+len	./src/radv-protocol.h	/^  u8 type, len, prefix_len, flags;$/;"	m	struct:prefix_opt
+length	./src/dnsmasq.h	/^  unsigned int length;$/;"	m	struct:dhcp_lease
+length	./src/helper.c	/^  unsigned int length;$/;"	m	struct:script_data	file:
+length	./src/log.c	/^  int offset, length;$/;"	m	struct:log_entry	file:
+lifetime	./src/radv-protocol.h	/^  u16 lifetime;$/;"	m	struct:ra_packet
+limit	./src/rfc1035.c	/^  unsigned char *limit;$/;"	m	struct:macparm	file:
+link_local	./src/radv.c	/^  struct in6_addr link_local;$/;"	m	struct:ra_param	typeref:struct:ra_param::in6_addr	file:
+list	./src/dnsmasq.h	/^  struct dhcp_netid *list;$/;"	m	struct:dhcp_netid_list	typeref:struct:dhcp_netid_list::dhcp_netid
+listen_for_updates	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub listen_for_updates {$/;"	s
+listener	./src/dnsmasq.h	/^struct listener {$/;"	s
+listeners	./src/dnsmasq.h	/^  struct listener *listeners;$/;"	m	struct:daemon	typeref:struct:daemon::listener
+local	./src/dnsmasq.h	/^  struct in_addr local, router;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::in_addr
+local6	./src/dnsmasq.h	/^  struct in6_addr local6;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::in6_addr
+local_answer	./src/dnsmasq.h	/^  unsigned int local_answer, queries_forwarded;$/;"	m	struct:daemon
+local_bind	./src/network.c	/^int local_bind(int fd, union mysockaddr *addr, char *intname, int is_tcp)$/;"	f
+local_ttl	./src/dnsmasq.h	/^  unsigned long local_ttl, neg_ttl, max_ttl;$/;"	m	struct:daemon
+log6_packet	./src/rfc3315.c	/^static void log6_packet(char *type, unsigned char *clid, int clid_len, struct in6_addr *addr, int xid, char *iface, char *string)$/;"	f	file:
+log_entry	./src/log.c	/^struct log_entry {$/;"	s	file:
+log_fac	./src/dnsmasq.h	/^  int log_fac; \/* log facility *\/$/;"	m	struct:daemon
+log_fac	./src/log.c	/^static int log_fac = LOG_DAEMON;$/;"	v	file:
+log_fd	./src/log.c	/^static int log_fd = -1;$/;"	v	file:
+log_file	./src/dnsmasq.h	/^  char *log_file; \/* optional log file *\/$/;"	m	struct:daemon
+log_options	./src/rfc2131.c	/^static void log_options(unsigned char *start, u32 xid)$/;"	f	file:
+log_packet	./src/rfc2131.c	/^static void log_packet(char *type, void *addr, unsigned char *ext_mac, $/;"	f	file:
+log_query	./src/cache.c	/^void log_query(unsigned int flags, char *name, struct all_addr *addr, char *arg)$/;"	f
+log_reopen	./src/log.c	/^int log_reopen(char *log_file)$/;"	f
+log_start	./src/log.c	/^int log_start(struct passwd *ent_pw, int errfd)$/;"	f
+log_stderr	./src/log.c	/^static int log_stderr = 0;$/;"	v	file:
+log_tags	./src/dhcp-common.c	/^void log_tags(struct dhcp_netid *netid, u32 xid)$/;"	f
+log_to_file	./src/log.c	/^static int log_to_file = 0;$/;"	v	file:
+log_write	./src/log.c	/^static void log_write(void)$/;"	f	file:
+logged	./src/dnsmasq.h	/^  int is_default, logged;$/;"	m	struct:resolvc
+lookup_frec	./src/forward.c	/^static struct frec *lookup_frec(unsigned short id, unsigned int crc)$/;"	f	file:
+lookup_frec_by_sender	./src/forward.c	/^static struct frec *lookup_frec_by_sender(unsigned short id,$/;"	f	file:
+lua	./src/helper.c	/^lua_State *lua;$/;"	v
+lua_cflags	./Makefile	/^lua_cflags =  `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_LUASCRIPT $(PKG_CONFIG) --cflags lua5.1` $/;"	m
+lua_libs	./Makefile	/^lua_libs =    `echo $(COPTS) | $(top)\/bld\/pkg-wrapper HAVE_LUASCRIPT $(PKG_CONFIG) --libs lua5.1` $/;"	m
+luascript	./src/dnsmasq.h	/^  char *luascript;$/;"	m	struct:daemon
+macparm	./src/rfc1035.c	/^struct macparm {$/;"	s	file:
+main	./contrib/wrt/dhcp_lease_time.c	/^int main(int argc, char **argv)$/;"	f
+main	./contrib/wrt/dhcp_release.c	/^int main(int argc, char **argv)$/;"	f
+main	./src/dnsmasq.c	/^int main (int argc, char **argv)$/;"	f
+make_duid	./src/dhcp6.c	/^void make_duid(time_t now)$/;"	f
+make_duid1	./src/dhcp6.c	/^static int make_duid1(int index, unsigned int type, char *mac, size_t maclen, void *parm)$/;"	f	file:
+make_fd	./src/dhcp.c	/^static int make_fd(int port)$/;"	f	file:
+make_icmp_sock	./src/dnsmasq.c	/^int make_icmp_sock(void)$/;"	f
+make_sock	./src/network.c	/^static int make_sock(union mysockaddr *addr, int type, int dienow)$/;"	f	file:
+managed	./src/radv.c	/^  int ind, managed, found_context, first;$/;"	m	struct:ra_param	file:
+mask	./src/dnsmasq.h	/^  struct in_addr in, end, out, mask;$/;"	m	struct:doctor	typeref:struct:doctor::
+mask	./src/dnsmasq.h	/^  unsigned int mask;$/;"	m	struct:dhcp_mac
+match_bytes	./src/dhcp-common.c	/^int match_bytes(struct dhcp_opt *o, unsigned char *p, int len)$/;"	f
+match_netid	./src/dhcp-common.c	/^int match_netid(struct dhcp_netid *check, struct dhcp_netid *pool, int tagnotneeded)$/;"	f
+match_param	./src/dhcp.c	/^struct match_param {$/;"	s	file:
+match_type	./src/dnsmasq.h	/^  int len, match_type;$/;"	m	struct:dhcp_vendor
+match_vendor_opts	./src/rfc2131.c	/^static void match_vendor_opts(unsigned char *opt, struct dhcp_opt *dopt)$/;"	f	file:
+matched	./src/dhcp.c	/^  int ind, matched;$/;"	m	struct:match_param	file:
+max_logs	./src/dnsmasq.h	/^  int max_logs;  \/* queue limit *\/$/;"	m	struct:daemon
+max_logs	./src/log.c	/^static int max_logs = 0;$/;"	v	file:
+max_ttl	./src/dnsmasq.h	/^  unsigned long local_ttl, neg_ttl, max_ttl;$/;"	m	struct:daemon
+mem_jmp	./src/option.c	/^static jmp_buf mem_jmp;$/;"	v	file:
+mem_recover	./src/option.c	/^static volatile int mem_recover = 0;$/;"	v	file:
+memcmp_masked	./src/util.c	/^int memcmp_masked(unsigned char *a, unsigned char *b, int len, unsigned int mask)$/;"	f
+menu	./src/dnsmasq.h	/^  char *menu, *basename, *sname;$/;"	m	struct:pxe_service
+message_handler	./src/dbus.c	/^DBusHandlerResult message_handler(DBusConnection *connection, $/;"	f
+meta	./src/option.c	/^static const char meta[] = "\\000123456 \\b\\t\\n78\\r90abcdefABCDE\\033F:,.";$/;"	v	file:
+min_leasetime	./src/dnsmasq.h	/^  unsigned int min_leasetime;$/;"	m	struct:daemon
+min_port	./src/dnsmasq.h	/^  int port, query_port, min_port;$/;"	m	struct:daemon
+msg_sz	./src/dnsmasq.h	/^  int event, data, msg_sz;$/;"	m	struct:event_desc
+mtime	./src/dnsmasq.h	/^  time_t mtime;$/;"	m	struct:resolvc
+mtu	./src/dnsmasq.h	/^  int tftp_ok, mtu, done, dad;$/;"	m	struct:irec
+mx_srv_record	./src/dnsmasq.h	/^struct mx_srv_record {$/;"	s
+mxnames	./src/dnsmasq.h	/^  struct mx_srv_record *mxnames;$/;"	m	struct:daemon	typeref:struct:daemon::mx_srv_record
+mxtarget	./src/dnsmasq.h	/^  char *mxtarget;$/;"	m	struct:daemon
+my_setenv	./src/helper.c	/^static void my_setenv(const char *name, const char *value, int *error)$/;"	f	file:
+my_syslog	./src/log.c	/^void my_syslog(int priority, const char *format, ...)$/;"	f
+myoption	./src/option.c	/^struct myoption {$/;"	s	file:
+mysockaddr	./src/dnsmasq.h	/^union mysockaddr {$/;"	u
+name	./src/cache.c	/^  const char * const name;$/;"	m	struct:__anon3	file:
+name	./src/dnsmasq.h	/^  char *name, *ptr;$/;"	m	struct:ptr_record
+name	./src/dnsmasq.h	/^  char *name, *replace, *regexp, *services, *flags;$/;"	m	struct:naptr
+name	./src/dnsmasq.h	/^  char *name, *target;$/;"	m	struct:mx_srv_record
+name	./src/dnsmasq.h	/^  char *name; \/* domain name *\/$/;"	m	struct:interface_name
+name	./src/dnsmasq.h	/^  char *name;$/;"	m	struct:iname
+name	./src/dnsmasq.h	/^  char *name;$/;"	m	struct:irec
+name	./src/dnsmasq.h	/^  char *name;$/;"	m	struct:resolvc
+name	./src/dnsmasq.h	/^  char *name;$/;"	m	struct:txt_record
+name	./src/dnsmasq.h	/^  char name[MAXDNAME];$/;"	m	union:bigname
+name	./src/dnsmasq.h	/^  } name;$/;"	m	struct:crec	typeref:union:crec::__anon7
+name	./src/option.c	/^  char *name;$/;"	m	struct:opttab_t	file:
+name	./src/option.c	/^  const char *name;$/;"	m	struct:myoption	file:
+namebuff	./src/dnsmasq.h	/^  char *namebuff; \/* MAXDNAME size buffer *\/$/;"	m	struct:daemon
+namep	./src/dnsmasq.h	/^    char *namep;$/;"	m	union:crec::__anon7
+naptr	./src/dnsmasq.h	/^  struct naptr *naptr;$/;"	m	struct:daemon	typeref:struct:daemon::naptr
+naptr	./src/dnsmasq.h	/^struct naptr {$/;"	s
+narrow_context	./src/dhcp.c	/^struct dhcp_context *narrow_context(struct dhcp_context *context, $/;"	f
+narrow_context6	./src/dhcp6.c	/^struct dhcp_context *narrow_context6(struct dhcp_context *context, $/;"	f
+neg_ttl	./src/dnsmasq.h	/^  unsigned long local_ttl, neg_ttl, max_ttl;$/;"	m	struct:daemon
+net	./src/dnsmasq.h	/^  char *net;$/;"	m	struct:dhcp_netid
+netascii	./src/dnsmasq.h	/^  char opt_blocksize, opt_transize, netascii, carrylf;$/;"	m	struct:tftp_transfer
+netid	./src/dnsmasq.h	/^  struct dhcp_netid *netid;$/;"	m	struct:dhcp_boot	typeref:struct:dhcp_boot::dhcp_netid
+netid	./src/dnsmasq.h	/^  struct dhcp_netid *netid;$/;"	m	struct:dhcp_opt	typeref:struct:dhcp_opt::dhcp_netid
+netid	./src/dnsmasq.h	/^  struct dhcp_netid *netid;$/;"	m	struct:pxe_service	typeref:struct:pxe_service::dhcp_netid
+netid	./src/dnsmasq.h	/^  struct dhcp_netid netid, *filter;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::dhcp_netid
+netid	./src/dnsmasq.h	/^  struct dhcp_netid netid;$/;"	m	struct:dhcp_mac	typeref:struct:dhcp_mac::dhcp_netid
+netid	./src/dnsmasq.h	/^  struct dhcp_netid netid;$/;"	m	struct:dhcp_vendor	typeref:struct:dhcp_vendor::dhcp_netid
+netid	./src/dnsmasq.h	/^  struct dhcp_netid_list *netid;$/;"	m	struct:dhcp_config	typeref:struct:dhcp_config::dhcp_netid_list
+netlink_init	./src/netlink.c	/^void netlink_init(void)$/;"	f
+netlink_multicast	./src/netlink.c	/^void netlink_multicast(void)$/;"	f
+netlink_pid	./src/netlink.c	/^static u32 netlink_pid;$/;"	v	file:
+netlink_recv	./contrib/wrt/dhcp_release.c	/^static ssize_t netlink_recv(int fd)$/;"	f	file:
+netlink_recv	./src/netlink.c	/^static ssize_t netlink_recv(void)$/;"	f	file:
+netlinkfd	./src/dnsmasq.h	/^  int netlinkfd;$/;"	m	struct:daemon
+netmask	./src/dhcp.c	/^  struct in_addr netmask, broadcast, addr;$/;"	m	struct:match_param	typeref:struct:match_param::in_addr	file:
+netmask	./src/dnsmasq.h	/^  struct in_addr netmask, broadcast;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::in_addr
+netmask	./src/dnsmasq.h	/^  struct in_addr netmask; \/* only valid for IPv4 *\/$/;"	m	struct:irec	typeref:struct:irec::in_addr
+new_chain	./src/cache.c	/^static struct crec *new_chain = NULL;$/;"	v	typeref:struct:crec	file:
+new_id	./src/dnsmasq.h	/^  unsigned short orig_id, new_id;$/;"	m	struct:frec
+new_opt6	./src/outpacket.c	/^int new_opt6(int opt)$/;"	f
+next	./src/dbus.c	/^  struct watch *next;$/;"	m	struct:watch	typeref:struct:watch::watch	file:
+next	./src/dnsmasq.h	/^  struct addr_list *next;$/;"	m	struct:addr_list	typeref:struct:addr_list::addr_list
+next	./src/dnsmasq.h	/^  struct bogus_addr *next;$/;"	m	struct:bogus_addr	typeref:struct:bogus_addr::bogus_addr
+next	./src/dnsmasq.h	/^  struct cname *next;$/;"	m	struct:cname	typeref:struct:cname::cname
+next	./src/dnsmasq.h	/^  struct cond_domain *next;$/;"	m	struct:cond_domain	typeref:struct:cond_domain::cond_domain
+next	./src/dnsmasq.h	/^  struct crec *next, *prev, *hash_next;$/;"	m	struct:crec	typeref:struct:crec::crec
+next	./src/dnsmasq.h	/^  struct dhcp_boot *next;$/;"	m	struct:dhcp_boot	typeref:struct:dhcp_boot::dhcp_boot
+next	./src/dnsmasq.h	/^  struct dhcp_bridge *alias, *next;$/;"	m	struct:dhcp_bridge	typeref:struct:dhcp_bridge::
+next	./src/dnsmasq.h	/^  struct dhcp_config *next;$/;"	m	struct:dhcp_config	typeref:struct:dhcp_config::dhcp_config
+next	./src/dnsmasq.h	/^  struct dhcp_context *next, *current;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::dhcp_context
+next	./src/dnsmasq.h	/^  struct dhcp_lease *next;$/;"	m	struct:dhcp_lease	typeref:struct:dhcp_lease::dhcp_lease
+next	./src/dnsmasq.h	/^  struct dhcp_mac *next;$/;"	m	struct:dhcp_mac	typeref:struct:dhcp_mac::dhcp_mac
+next	./src/dnsmasq.h	/^  struct dhcp_netid *next;$/;"	m	struct:dhcp_netid	typeref:struct:dhcp_netid::dhcp_netid
+next	./src/dnsmasq.h	/^  struct dhcp_netid_list *next;$/;"	m	struct:dhcp_netid_list	typeref:struct:dhcp_netid_list::dhcp_netid_list
+next	./src/dnsmasq.h	/^  struct dhcp_opt *next;$/;"	m	struct:dhcp_opt	typeref:struct:dhcp_opt::dhcp_opt
+next	./src/dnsmasq.h	/^  struct dhcp_vendor *next;$/;"	m	struct:dhcp_vendor	typeref:struct:dhcp_vendor::dhcp_vendor
+next	./src/dnsmasq.h	/^  struct doctor *next;$/;"	m	struct:doctor	typeref:struct:doctor::doctor
+next	./src/dnsmasq.h	/^  struct frec *next;$/;"	m	struct:frec	typeref:struct:frec::frec
+next	./src/dnsmasq.h	/^  struct hostsfile *next;$/;"	m	struct:hostsfile	typeref:struct:hostsfile::hostsfile
+next	./src/dnsmasq.h	/^  struct hwaddr_config *next;$/;"	m	struct:hwaddr_config	typeref:struct:hwaddr_config::hwaddr_config
+next	./src/dnsmasq.h	/^  struct iname *next;$/;"	m	struct:iname	typeref:struct:iname::iname
+next	./src/dnsmasq.h	/^  struct interface_list *next;$/;"	m	struct:interface_list	typeref:struct:interface_list::interface_list
+next	./src/dnsmasq.h	/^  struct interface_name *next;$/;"	m	struct:interface_name	typeref:struct:interface_name::interface_name
+next	./src/dnsmasq.h	/^  struct irec *next;$/;"	m	struct:irec	typeref:struct:irec::irec
+next	./src/dnsmasq.h	/^  struct listener *next;$/;"	m	struct:listener	typeref:struct:listener::listener
+next	./src/dnsmasq.h	/^  struct mx_srv_record *next;$/;"	m	struct:mx_srv_record	typeref:struct:mx_srv_record::mx_srv_record
+next	./src/dnsmasq.h	/^  struct naptr *next;$/;"	m	struct:naptr	typeref:struct:naptr::naptr
+next	./src/dnsmasq.h	/^  struct ping_result *next;$/;"	m	struct:ping_result	typeref:struct:ping_result::ping_result
+next	./src/dnsmasq.h	/^  struct ptr_record *next;$/;"	m	struct:ptr_record	typeref:struct:ptr_record::ptr_record
+next	./src/dnsmasq.h	/^  struct pxe_service *next;$/;"	m	struct:pxe_service	typeref:struct:pxe_service::pxe_service
+next	./src/dnsmasq.h	/^  struct resolvc *next;$/;"	m	struct:resolvc	typeref:struct:resolvc::resolvc
+next	./src/dnsmasq.h	/^  struct server *next; $/;"	m	struct:server	typeref:struct:server::server
+next	./src/dnsmasq.h	/^  struct serverfd *next;$/;"	m	struct:serverfd	typeref:struct:serverfd::serverfd
+next	./src/dnsmasq.h	/^  struct tag_if *next;$/;"	m	struct:tag_if	typeref:struct:tag_if::tag_if
+next	./src/dnsmasq.h	/^  struct tftp_prefix *next;$/;"	m	struct:tftp_prefix	typeref:struct:tftp_prefix::tftp_prefix
+next	./src/dnsmasq.h	/^  struct tftp_transfer *next;$/;"	m	struct:tftp_transfer	typeref:struct:tftp_transfer::tftp_transfer
+next	./src/dnsmasq.h	/^  struct txt_record *next;$/;"	m	struct:txt_record	typeref:struct:txt_record::txt_record
+next	./src/dnsmasq.h	/^  union bigname *next; \/* freelist *\/$/;"	m	union:bigname	typeref:union:bigname::bigname
+next	./src/log.c	/^  struct log_entry *next;$/;"	m	struct:log_entry	typeref:struct:log_entry::log_entry	file:
+next	./src/tftp.c	/^static char *next(char **p, char *end)$/;"	f	file:
+next_server	./src/dnsmasq.h	/^  struct in_addr next_server;$/;"	m	struct:dhcp_boot	typeref:struct:dhcp_boot::in_addr
+nice_time	./contrib/dnslist/dnslist.pl	/^sub nice_time {$/;"	s
+nl_err	./src/netlink.c	/^static void nl_err(struct nlmsghdr *h)$/;"	f	file:
+nl_routechange	./src/netlink.c	/^static void nl_routechange(struct nlmsghdr *h)$/;"	f	file:
+now	./src/radv.c	/^  time_t now; int iface;$/;"	m	struct:search_param	file:
+nscount	./src/dns-protocol.h	/^  u16 qdcount,ancount,nscount,arcount;$/;"	m	struct:dns_header
+objs	./Makefile	/^objs = cache.o rfc1035.o util.o option.o forward.o network.o \\$/;"	m
+offset	./src/dnsmasq.h	/^  off_t offset;$/;"	m	struct:tftp_transfer
+offset	./src/dnsmasq.h	/^  unsigned int offset;$/;"	m	struct:mx_srv_record
+offset	./src/log.c	/^  int offset, length;$/;"	m	struct:log_entry	file:
+old_hostname	./src/dnsmasq.h	/^  char *old_hostname;    \/* hostname before it moved to another lease *\/$/;"	m	struct:dhcp_lease
+old_leases	./src/lease.c	/^static struct dhcp_lease *leases = NULL, *old_leases = NULL;$/;"	v	typeref:struct:	file:
+one_file	./src/option.c	/^static void one_file(char *file, int hard_opt)$/;"	f	file:
+one_opt	./src/option.c	/^static char *one_opt(int option, char *arg, char *gen_prob, int command_line)$/;"	f	file:
+op	./contrib/wrt/dhcp_lease_time.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+op	./contrib/wrt/dhcp_release.c	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet	file:
+op	./src/dhcp-protocol.h	/^  u8 op, htype, hlen, hops;$/;"	m	struct:dhcp_packet
+opt	./src/dnsmasq.h	/^  int opt, len, flags;$/;"	m	struct:dhcp_opt
+opt	./src/option.c	/^  int opt;$/;"	m	struct:__anon2	file:
+opt6_find	./src/rfc3315.c	/^static void *opt6_find (void *opts, void *end, unsigned int search, unsigned int minsize)$/;"	f	file:
+opt6_len	./src/rfc3315.c	32;"	d	file:
+opt6_next	./src/rfc3315.c	/^static void *opt6_next(void *opts, void *end)$/;"	f	file:
+opt6_ptr	./src/rfc3315.c	34;"	d	file:
+opt6_type	./src/rfc3315.c	33;"	d	file:
+opt6_uint	./src/rfc3315.c	/^static unsigned int opt6_uint(unsigned char *opt, int offset, int size)$/;"	f	file:
+opt_blocksize	./src/dnsmasq.h	/^  char opt_blocksize, opt_transize, netascii, carrylf;$/;"	m	struct:tftp_transfer
+opt_malloc	./src/option.c	/^static void *opt_malloc(size_t size)$/;"	f	file:
+opt_string_alloc	./src/option.c	/^static char *opt_string_alloc(char *cp)$/;"	f	file:
+opt_transize	./src/dnsmasq.h	/^  char opt_blocksize, opt_transize, netascii, carrylf;$/;"	m	struct:tftp_transfer
+option_addr	./src/rfc2131.c	/^static struct in_addr option_addr(unsigned char *opt)$/;"	f	file:
+option_bool	./src/dnsmasq.h	180;"	d
+option_filter	./src/dhcp-common.c	/^struct dhcp_netid *option_filter(struct dhcp_netid *tags, struct dhcp_netid *context_tags, struct dhcp_opt *opts)$/;"	f
+option_find	./contrib/wrt/dhcp_lease_time.c	/^static unsigned char *option_find(struct dhcp_packet *mess, size_t size, int opt_type, int minsize)$/;"	f	file:
+option_find	./src/rfc2131.c	/^static unsigned char *option_find(struct dhcp_packet *mess, size_t size, int opt_type, int minsize)$/;"	f	file:
+option_find1	./contrib/wrt/dhcp_lease_time.c	/^static unsigned char *option_find1(unsigned char *p, unsigned char *end, int opt, int minsize)$/;"	f	file:
+option_find1	./src/rfc2131.c	/^static unsigned char *option_find1(unsigned char *p, unsigned char *end, int opt, int minsize)$/;"	f	file:
+option_find2	./src/rfc2131.c	/^static struct dhcp_opt *option_find2(int opt)$/;"	f	file:
+option_len	./contrib/wrt/dhcp_lease_time.c	53;"	d	file:
+option_len	./src/rfc2131.c	21;"	d	file:
+option_ptr	./contrib/wrt/dhcp_lease_time.c	54;"	d	file:
+option_ptr	./src/rfc2131.c	22;"	d	file:
+option_put	./src/rfc2131.c	/^static void option_put(struct dhcp_packet *mess, unsigned char *end, int opt, int len, unsigned int val)$/;"	f	file:
+option_put_string	./src/rfc2131.c	/^static void option_put_string(struct dhcp_packet *mess, unsigned char *end, int opt, $/;"	f	file:
+option_string	./src/option.c	/^char *option_string(int prot, unsigned int opt, unsigned char *val, int opt_len, char *buf, int buf_len)$/;"	f
+option_uint	./contrib/wrt/dhcp_lease_time.c	/^static unsigned int option_uint(unsigned char *opt, int size)$/;"	f	file:
+option_uint	./src/rfc2131.c	/^static unsigned int option_uint(unsigned char *opt, int offset, int size)$/;"	f	file:
+options	./contrib/wrt/dhcp_lease_time.c	/^  unsigned char options[308];$/;"	m	struct:dhcp_packet	file:
+options	./contrib/wrt/dhcp_release.c	/^  unsigned char options[308];$/;"	m	struct:dhcp_packet	file:
+options	./src/dhcp-protocol.h	/^  u8 options[312];$/;"	m	struct:dhcp_packet
+options	./src/dnsmasq.h	/^  unsigned int options, options2;$/;"	m	struct:daemon
+options2	./src/dnsmasq.h	/^  unsigned int options, options2;$/;"	m	struct:daemon
+opts	./src/option.c	/^static const struct option opts[] =  $/;"	v	typeref:struct:option	file:
+opttab	./src/option.c	/^} opttab[] = {$/;"	v	typeref:struct:opttab_t	file:
+opttab6	./src/option.c	/^static const struct opttab_t opttab6[] = {$/;"	v	typeref:struct:opttab_t	file:
+opttab_t	./src/option.c	/^static const struct opttab_t {$/;"	s	file:
+order	./src/dnsmasq.h	/^  unsigned int order, pref;$/;"	m	struct:naptr
+orig_id	./src/dnsmasq.h	/^  unsigned short orig_id, new_id;$/;"	m	struct:frec
+osport	./src/dnsmasq.h	/^  int group_set, osport;$/;"	m	struct:daemon
+ourprintf	./src/lease.c	/^static void ourprintf(int *errp, char *format, ...)$/;"	f	file:
+out	./src/dnsmasq.h	/^  struct in_addr in, end, out, mask;$/;"	m	struct:doctor	typeref:struct:doctor::
+out	./src/util.c	/^static u32 out[8];$/;"	v	file:
+outpacket	./src/dnsmasq.h	/^  struct iovec outpacket;$/;"	m	struct:daemon	typeref:struct:daemon::iovec
+outpacket_counter	./src/outpacket.c	/^static size_t outpacket_counter;$/;"	v	file:
+override	./src/dnsmasq.h	/^  int override;$/;"	m	struct:daemon
+override	./src/dnsmasq.h	/^  struct in_addr addr, override, giaddr;$/;"	m	struct:dhcp_lease	typeref:struct:dhcp_lease::
+override_relays	./src/dnsmasq.h	/^  struct addr_list *override_relays;$/;"	m	struct:daemon	typeref:struct:daemon::addr_list
+packet	./src/dnsmasq.h	/^  char *packet; \/* packet buffer *\/$/;"	m	struct:daemon
+packet_buff_sz	./src/dnsmasq.h	/^  int packet_buff_sz; \/* size of above *\/$/;"	m	struct:daemon
+packet_len	./src/dnsmasq.h	/^  size_t packet_len;       \/*      "        "        *\/$/;"	m	struct:daemon
+pad	./contrib/dnslist/dnslist.pl	/^sub pad {$/;"	s
+parse_dhcp_opt	./src/option.c	/^static char *parse_dhcp_opt(char *arg, int flags)$/;"	f	file:
+parse_hex	./contrib/wrt/dhcp_release.c	/^static int parse_hex(char *in, unsigned char *out, int maxlen, int *mac_type)$/;"	f	file:
+parse_hex	./src/util.c	/^int parse_hex(char *in, unsigned char *out, int maxlen, $/;"	f
+payload	./src/log.c	/^  char payload[MAX_MESSAGE];$/;"	m	struct:log_entry	file:
+peer	./src/dnsmasq.h	/^  union mysockaddr peer;$/;"	m	struct:tftp_transfer	typeref:union:tftp_transfer::mysockaddr
+periodic_ra	./src/radv.c	/^time_t periodic_ra(time_t now)$/;"	f
+pid	./src/dnsmasq.c	/^static volatile pid_t pid = 0;$/;"	v	file:
+pid	./src/log.c	/^  pid_t pid; \/* to avoid duplicates over a fork *\/$/;"	m	struct:log_entry	file:
+ping_result	./src/dnsmasq.h	/^struct ping_result {$/;"	s
+ping_results	./src/dnsmasq.h	/^  struct ping_result *ping_results;$/;"	m	struct:daemon	typeref:struct:daemon::ping_result
+pipewrite	./src/dnsmasq.c	/^static volatile int pipewrite;$/;"	v	file:
+plen	./src/rfc1035.c	/^  size_t plen;$/;"	m	struct:macparm	file:
+poll_resolv	./src/dnsmasq.c	/^void poll_resolv(int force, int do_reload, time_t now)$/;"	f
+port	./src/dnsmasq.h	/^  int port, query_port, min_port;$/;"	m	struct:daemon
+pre_allocate_sfds	./src/network.c	/^void pre_allocate_sfds(void)$/;"	f
+pref	./src/dnsmasq.h	/^  unsigned int order, pref;$/;"	m	struct:naptr
+preferred_lifetime	./src/radv-protocol.h	/^  u32 valid_lifetime, preferred_lifetime, reserved;$/;"	m	struct:prefix_opt
+prefix	./src/dnsmasq.h	/^  char *prefix;$/;"	m	struct:tftp_prefix
+prefix	./src/dnsmasq.h	/^  int prefix;$/;"	m	struct:dhcp_context
+prefix	./src/radv-protocol.h	/^  struct in6_addr prefix;$/;"	m	struct:prefix_opt	typeref:struct:prefix_opt::in6_addr
+prefix_len	./src/radv-protocol.h	/^  u8 type, len, prefix_len, flags;$/;"	m	struct:prefix_opt
+prefix_opt	./src/radv-protocol.h	/^struct prefix_opt {$/;"	s
+prettyprint_addr	./src/util.c	/^int prettyprint_addr(union mysockaddr *addr, char *buf)$/;"	f
+prettyprint_time	./src/util.c	/^void prettyprint_time(char *buf, unsigned int t)$/;"	f
+prev	./src/dnsmasq.h	/^  struct crec *next, *prev, *hash_next;$/;"	m	struct:crec	typeref:struct:crec::
+print_http_response	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub print_http_response {$/;"	s
+print_mac	./src/util.c	/^char *print_mac(char *buff, unsigned char *mac, int len)$/;"	f
+priority	./src/dnsmasq.h	/^  int issrv, srvport, priority, weight;$/;"	m	struct:mx_srv_record
+private_net	./src/rfc1035.c	/^static int private_net(struct in_addr addr, int ban_localhost) $/;"	f	file:
+process_reply	./src/forward.c	/^static size_t process_reply(struct dns_header *header, time_t now, $/;"	f	file:
+prune_vendor_opts	./src/rfc2131.c	/^static int prune_vendor_opts(struct dhcp_netid *netid)$/;"	f	file:
+ptr	./src/dnsmasq.h	/^  char *name, *ptr;$/;"	m	struct:ptr_record
+ptr	./src/dnsmasq.h	/^  struct ptr_record *ptr;$/;"	m	struct:daemon	typeref:struct:daemon::ptr_record
+ptr_record	./src/dnsmasq.h	/^struct ptr_record {$/;"	s
+put_opt6	./src/outpacket.c	/^void *put_opt6(void *data, size_t len)$/;"	f
+put_opt6_char	./src/outpacket.c	/^void put_opt6_char(unsigned int val)$/;"	f
+put_opt6_long	./src/outpacket.c	/^void put_opt6_long(unsigned int val)$/;"	f
+put_opt6_short	./src/outpacket.c	/^void put_opt6_short(unsigned int val)$/;"	f
+put_opt6_string	./src/outpacket.c	/^void put_opt6_string(char *s)$/;"	f
+pxe_misc	./src/rfc2131.c	/^static void pxe_misc(struct dhcp_packet *mess, unsigned char *end, unsigned char *uuid)$/;"	f	file:
+pxe_opts	./src/rfc2131.c	/^static struct dhcp_opt *pxe_opts(int pxe_arch, struct dhcp_netid *netid, struct in_addr local, time_t now)$/;"	f	file:
+pxe_service	./src/dnsmasq.h	/^struct pxe_service {$/;"	s
+pxe_services	./src/dnsmasq.h	/^  struct pxe_service *pxe_services;$/;"	m	struct:daemon	typeref:struct:daemon::pxe_service
+pxefd	./src/dnsmasq.h	/^  int dhcpfd, helperfd, pxefd; $/;"	m	struct:daemon
+qdcount	./src/dns-protocol.h	/^  u16 qdcount,ancount,nscount,arcount;$/;"	m	struct:dns_header
+queries	./src/dnsmasq.h	/^  unsigned int queries, failed_queries;$/;"	m	struct:server
+queries_forwarded	./src/dnsmasq.h	/^  unsigned int local_answer, queries_forwarded;$/;"	m	struct:daemon
+query_port	./src/dnsmasq.h	/^  int port, query_port, min_port;$/;"	m	struct:daemon
+querystr	./src/cache.c	/^void querystr(char *str, unsigned short type)$/;"	f
+questions_crc	./src/rfc1035.c	/^unsigned int questions_crc(struct dns_header *header, size_t plen, char *name)$/;"	f
+queue_script	./src/helper.c	/^void queue_script(int action, struct dhcp_lease *lease, char *hostname, time_t now)$/;"	f
+ra_contexts	./src/dnsmasq.h	/^  struct dhcp_context *dhcp, *dhcp6, *ra_contexts;$/;"	m	struct:daemon	typeref:struct:daemon::
+ra_init	./src/radv.c	/^void ra_init(time_t now)$/;"	f
+ra_packet	./src/radv-protocol.h	/^struct ra_packet {$/;"	s
+ra_param	./src/radv.c	/^struct ra_param {$/;"	s	file:
+ra_short_period_start	./src/radv.c	/^static time_t ra_short_period_start;$/;"	v	file:
+ra_start_unsolicted	./src/radv.c	/^void ra_start_unsolicted(time_t now)$/;"	f
+ra_time	./src/dnsmasq.h	/^  time_t ra_time;$/;"	m	struct:dhcp_context
+rand16	./src/util.c	/^unsigned short rand16(void)$/;"	f
+rand_init	./src/util.c	/^void rand_init()$/;"	f
+rand_init	./src/util.c	/^void rand_init(void)$/;"	f
+randfd	./src/dnsmasq.h	/^struct randfd {$/;"	s
+random_sock	./src/network.c	/^int random_sock(int family)$/;"	f
+randomsocks	./src/dnsmasq.h	/^  struct randfd randomsocks[RANDOM_SOCKS];$/;"	m	struct:daemon	typeref:struct:daemon::randfd
+reachable_time	./src/radv-protocol.h	/^  u32 reachable_time;$/;"	m	struct:ra_packet
+read_event	./src/dnsmasq.c	/^static int read_event(int fd, struct event_desc *evp, char **msg)$/;"	f	file:
+read_file	./src/option.c	/^static void read_file(char *file, FILE *f, int hard_opt)	$/;"	f	file:
+read_hostsfile	./src/cache.c	/^static int read_hostsfile(char *filename, int index, int cache_size, struct crec **rhash, int hashsz)$/;"	f	file:
+read_opts	./src/option.c	/^void read_opts(int argc, char **argv, char *compile_opts)$/;"	f
+read_state	./contrib/dnslist/dnslist.pl	/^sub read_state {$/;"	s
+read_write	./src/util.c	/^int read_write(int fd, unsigned char *packet, int size, int rw)$/;"	f
+receive_query	./src/forward.c	/^void receive_query(struct listener *listen, time_t now)$/;"	f
+record_source	./src/cache.c	/^char *record_source(int index)$/;"	f
+recv_dhcp_packet	./src/dhcp-common.c	/^ssize_t recv_dhcp_packet(int fd, struct msghdr *msg)$/;"	f
+refcount	./src/dnsmasq.h	/^  int refcount, fd;$/;"	m	struct:tftp_file
+refcount	./src/dnsmasq.h	/^  unsigned short refcount, family;$/;"	m	struct:randfd
+regexp	./src/dnsmasq.h	/^  char *name, *replace, *regexp, *services, *flags;$/;"	m	struct:naptr
+rehash	./src/cache.c	/^static void rehash(int size)$/;"	f	file:
+reload_servers	./src/network.c	/^int reload_servers(char *fname)$/;"	f
+remaining_time	./src/helper.c	/^  unsigned int remaining_time;$/;"	m	struct:script_data	file:
+remove_watch	./src/dbus.c	/^static void remove_watch(DBusWatch *watch, void *data)$/;"	f	file:
+replace	./src/dnsmasq.h	/^  char *name, *replace, *regexp, *services, *flags;$/;"	m	struct:naptr
+reply_query	./src/forward.c	/^void reply_query(int fd, int family, time_t now)$/;"	f
+rept	./src/option.c	/^  unsigned int rept;$/;"	m	struct:__anon2	file:
+reread_dhcp	./src/option.c	/^void reread_dhcp(void)$/;"	f
+rerun_scripts	./src/lease.c	/^void rerun_scripts(void)$/;"	f
+reserved	./src/radv-protocol.h	/^  u32 valid_lifetime, preferred_lifetime, reserved;$/;"	m	struct:prefix_opt
+resize_packet	./src/rfc1035.c	/^size_t resize_packet(struct dns_header *header, size_t plen, unsigned char *pheader, size_t hlen)$/;"	f
+resolv_files	./src/dnsmasq.h	/^  struct resolvc default_resolv, *resolv_files;$/;"	m	struct:daemon	typeref:struct:daemon::
+resolvc	./src/dnsmasq.h	/^struct resolvc {$/;"	s
+retrans_time	./src/radv-protocol.h	/^  u32 retrans_time;$/;"	m	struct:ra_packet
+retry_send	./src/util.c	/^int retry_send(void)$/;"	f
+rfd4	./src/dnsmasq.h	/^  struct randfd *rfd4;$/;"	m	struct:frec	typeref:struct:frec::randfd
+rfd6	./src/dnsmasq.h	/^  struct randfd *rfd6;$/;"	m	struct:frec	typeref:struct:frec::randfd
+rfd_save	./src/dnsmasq.h	/^  struct randfd *rfd_save; \/*      "        "        *\/$/;"	m	struct:daemon	typeref:struct:daemon::randfd
+router	./src/dnsmasq.h	/^  struct in_addr local, router;$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::
+run_tag_if	./src/dhcp-common.c	/^struct dhcp_netid *run_tag_if(struct dhcp_netid *tags)$/;"	f
+runfile	./src/dnsmasq.h	/^  char *runfile; $/;"	m	struct:daemon
+sa	./src/dnsmasq.h	/^  struct sockaddr sa;$/;"	m	union:mysockaddr	typeref:struct:mysockaddr::sockaddr
+sa_len	./src/util.c	/^int sa_len(union mysockaddr *addr)$/;"	f
+safe_malloc	./src/util.c	/^void *safe_malloc(size_t size)$/;"	f
+safe_pipe	./src/util.c	/^void safe_pipe(int *fd, int read_noblock)$/;"	f
+sanitise	./src/rfc2131.c	/^static int sanitise(unsigned char *opt, char *buf)$/;"	f	file:
+save_counter	./src/outpacket.c	/^int save_counter(int newval)$/;"	f
+script_data	./src/helper.c	/^struct script_data$/;"	s	file:
+scriptuser	./src/dnsmasq.h	/^  char *username, *groupname, *scriptuser;$/;"	m	struct:daemon
+search_param	./src/radv.c	/^struct search_param {$/;"	s	file:
+search_servers	./src/forward.c	/^static unsigned int search_servers(time_t now, struct all_addr **addrpp, $/;"	f	file:
+secs	./contrib/wrt/dhcp_lease_time.c	/^  u16 secs, flags;$/;"	m	struct:dhcp_packet	file:
+secs	./contrib/wrt/dhcp_release.c	/^  u16 secs, flags;$/;"	m	struct:dhcp_packet	file:
+secs	./src/dhcp-protocol.h	/^  u16 secs, flags;$/;"	m	struct:dhcp_packet
+seed	./src/util.c	/^static u32 seed[32];$/;"	v	file:
+send_alarm	./src/dnsmasq.c	/^void send_alarm(void)$/;"	f
+send_event	./src/dnsmasq.c	/^void send_event(int fd, int event, int data, char *msg)$/;"	f
+send_from	./src/forward.c	/^void send_from(int fd, int nowild, char *packet, size_t len, $/;"	f
+send_ra	./src/radv.c	/^static void send_ra(int iface, char *iface_name, struct in6_addr *dest)$/;"	f	file:
+send_via_bpf	./src/bpf.c	/^void send_via_bpf(struct dhcp_packet *mess, size_t len,$/;"	f
+sentto	./src/dnsmasq.h	/^  struct server *sentto; \/* NULL means free *\/$/;"	m	struct:frec	typeref:struct:frec::server
+server	./src/dnsmasq.h	/^  struct in_addr server;$/;"	m	struct:pxe_service	typeref:struct:pxe_service::in_addr
+server	./src/dnsmasq.h	/^struct server {$/;"	s
+server_gone	./src/forward.c	/^void server_gone(struct server *server)$/;"	f
+server_id	./src/rfc2131.c	/^static struct in_addr server_id(struct dhcp_context *context, struct in_addr override, struct in_addr fallback)$/;"	f	file:
+serverfd	./src/dnsmasq.h	/^struct serverfd {$/;"	s
+servers	./src/dnsmasq.h	/^  struct server *servers;$/;"	m	struct:daemon	typeref:struct:daemon::server
+services	./src/dnsmasq.h	/^  char *name, *replace, *regexp, *services, *flags;$/;"	m	struct:naptr
+set	./src/dnsmasq.h	/^  struct dhcp_netid_list *set;$/;"	m	struct:tag_if	typeref:struct:tag_if::dhcp_netid_list
+set_dbus_listeners	./src/dbus.c	/^void set_dbus_listeners(int *maxfdp,$/;"	f
+set_dns_listeners	./src/dnsmasq.c	/^static int set_dns_listeners(time_t now, fd_set *set, int *maxfdp)$/;"	f	file:
+set_ipv6pktinfo	./src/network.c	/^int set_ipv6pktinfo(int fd)$/;"	f
+set_log_writer	./src/log.c	/^void set_log_writer(fd_set *set, int *maxfdp)$/;"	f
+set_option_bool	./src/option.c	/^void set_option_bool(unsigned int opt)$/;"	f
+set_prefix	./src/option.c	/^static char *set_prefix(char *arg)$/;"	f	file:
+setaddr6part	./src/util.c	/^void setaddr6part(struct in6_addr *addr, u64 host)$/;"	f
+setup_reply	./src/rfc1035.c	/^size_t setup_reply(struct dns_header *header, size_t qlen,$/;"	f
+sfd	./src/dnsmasq.h	/^  struct serverfd *sfd; $/;"	m	struct:server	typeref:struct:server::serverfd
+sfds	./src/dnsmasq.h	/^  struct serverfd *sfds;$/;"	m	struct:daemon	typeref:struct:daemon::serverfd
+show_license	./contrib/dnslist/dnslist.pl	/^sub show_license {$/;"	s
+siaddr	./contrib/wrt/dhcp_lease_time.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::	file:
+siaddr	./contrib/wrt/dhcp_release.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::	file:
+siaddr	./src/dhcp-protocol.h	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::
+sig_handler	./src/dnsmasq.c	/^static void sig_handler(int sig)$/;"	f	file:
+size	./src/dnsmasq.h	/^  off_t size;$/;"	m	struct:tftp_file
+size	./src/option.c	/^  u16 val, size;$/;"	m	struct:opttab_t	file:
+skip_name	./src/rfc1035.c	/^static unsigned char *skip_name(unsigned char *ansp, struct dns_header *header, size_t plen, int extrabytes)$/;"	f	file:
+skip_questions	./src/rfc1035.c	/^static unsigned char *skip_questions(struct dns_header *header, size_t plen)$/;"	f	file:
+skip_section	./src/rfc1035.c	/^static unsigned char *skip_section(unsigned char *ansp, int count, struct dns_header *header, size_t plen)$/;"	f	file:
+sname	./contrib/wrt/dhcp_lease_time.c	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet	file:
+sname	./contrib/wrt/dhcp_release.c	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet	file:
+sname	./src/dhcp-protocol.h	/^  u8 chaddr[DHCP_CHADDR_MAX], sname[64], file[128];$/;"	m	struct:dhcp_packet
+sname	./src/dnsmasq.h	/^    char sname[SMALLDNAME];$/;"	m	union:crec::__anon7
+sname	./src/dnsmasq.h	/^  char *file, *sname, *tftp_sname;$/;"	m	struct:dhcp_boot
+sname	./src/dnsmasq.h	/^  char *menu, *basename, *sname;$/;"	m	struct:pxe_service
+sockaddr_isequal	./src/util.c	/^int sockaddr_isequal(union mysockaddr *s1, union mysockaddr *s2)$/;"	f
+sockfd	./src/dnsmasq.h	/^  int sockfd;$/;"	m	struct:tftp_transfer
+source	./src/dnsmasq.h	/^  union mysockaddr source;$/;"	m	struct:frec	typeref:union:frec::mysockaddr
+source_addr	./src/dnsmasq.h	/^  union mysockaddr addr, source_addr;$/;"	m	struct:server	typeref:union:server::
+source_addr	./src/dnsmasq.h	/^  union mysockaddr source_addr;$/;"	m	struct:serverfd	typeref:union:serverfd::mysockaddr
+split	./src/option.c	/^static char *split(char *s)$/;"	f	file:
+split_chr	./src/option.c	/^static char *split_chr(char *s, char c)$/;"	f	file:
+srv_save	./src/dnsmasq.h	/^  struct server *srv_save; \/* Used for resend on DoD *\/$/;"	m	struct:daemon	typeref:struct:daemon::server
+srvport	./src/dnsmasq.h	/^  int issrv, srvport, priority, weight;$/;"	m	struct:mx_srv_record
+start	./src/dnsmasq.h	/^  struct in_addr start, end; \/* range of available addresses *\/$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::in_addr
+start	./src/dnsmasq.h	/^  struct in_addr start, end;$/;"	m	struct:cond_domain	typeref:struct:cond_domain::in_addr
+start6	./src/dnsmasq.h	/^  struct in6_addr start6, end6; \/* range of available addresses *\/$/;"	m	struct:dhcp_context	typeref:struct:dhcp_context::in6_addr
+start6	./src/dnsmasq.h	/^  struct in6_addr start6, end6;$/;"	m	struct:cond_domain	typeref:struct:cond_domain::in6_addr
+start_tftp_port	./src/dnsmasq.h	/^  int start_tftp_port, end_tftp_port; $/;"	m	struct:daemon
+strip_hostname	./src/dhcp-common.c	/^char *strip_hostname(char *hostname)$/;"	f
+sunos_libs	./Makefile	/^sunos_libs =  `if uname | grep SunOS >\/dev\/null 2>&1; then echo -lsocket -lnsl -lposix4; fi`$/;"	m
+surf	./src/util.c	/^static void surf(void)$/;"	f	file:
+tag	./src/dnsmasq.h	/^  struct dhcp_netid *tag;$/;"	m	struct:tag_if	typeref:struct:tag_if::dhcp_netid
+tag_if	./src/dnsmasq.h	/^  struct tag_if *tag_if; $/;"	m	struct:daemon	typeref:struct:daemon::tag_if
+tag_if	./src/dnsmasq.h	/^struct tag_if {$/;"	s
+target	./src/dnsmasq.h	/^  char *alias, *target;$/;"	m	struct:cname
+target	./src/dnsmasq.h	/^  char *name, *target;$/;"	m	struct:mx_srv_record
+tcp_pids	./src/dnsmasq.h	/^  pid_t tcp_pids[MAX_PROCS];$/;"	m	struct:daemon
+tcp_request	./src/forward.c	/^unsigned char *tcp_request(int confd, time_t now,$/;"	f
+tcpfd	./src/dnsmasq.h	/^  int fd, tcpfd, tftpfd, family;$/;"	m	struct:listener
+tcpfd	./src/dnsmasq.h	/^  int flags, tcpfd;$/;"	m	struct:server
+tftp_err	./src/tftp.c	/^static ssize_t tftp_err(int err, char *packet, char *message, char *file)$/;"	f	file:
+tftp_err_oops	./src/tftp.c	/^static ssize_t tftp_err_oops(char *packet, char *file)$/;"	f	file:
+tftp_file	./src/dnsmasq.h	/^struct tftp_file {$/;"	s
+tftp_interfaces	./src/dnsmasq.h	/^  struct interface_list *tftp_interfaces; \/* interfaces for limited TFTP service *\/$/;"	m	struct:daemon	typeref:struct:daemon::interface_list
+tftp_max	./src/dnsmasq.h	/^  int dhcp_max, tftp_max;$/;"	m	struct:daemon
+tftp_ok	./src/dnsmasq.h	/^  int tftp_ok, mtu, done, dad;$/;"	m	struct:irec
+tftp_prefix	./src/dnsmasq.h	/^  char *tftp_prefix; $/;"	m	struct:daemon
+tftp_prefix	./src/dnsmasq.h	/^struct tftp_prefix {$/;"	s
+tftp_request	./src/tftp.c	/^void tftp_request(struct listener *listen, time_t now)$/;"	f
+tftp_sname	./src/dnsmasq.h	/^  char *file, *sname, *tftp_sname;$/;"	m	struct:dhcp_boot
+tftp_trans	./src/dnsmasq.h	/^  struct tftp_transfer *tftp_trans;$/;"	m	struct:daemon	typeref:struct:daemon::tftp_transfer
+tftp_transfer	./src/dnsmasq.h	/^struct tftp_transfer {$/;"	s
+tftp_unlimited	./src/dnsmasq.h	/^  int tftp_unlimited;$/;"	m	struct:daemon
+tftpfd	./src/dnsmasq.h	/^  int fd, tcpfd, tftpfd, family;$/;"	m	struct:listener
+time	./src/dnsmasq.h	/^  time_t time;$/;"	m	struct:frec
+time	./src/dnsmasq.h	/^  time_t time;$/;"	m	struct:ping_result
+timeout	./src/dnsmasq.h	/^  time_t timeout;$/;"	m	struct:tftp_transfer
+top	./Makefile	/^top?=$(CURDIR)$/;"	m
+ttd	./src/dnsmasq.h	/^  time_t ttd; \/* time to die *\/$/;"	m	struct:crec
+txt	./src/dnsmasq.h	/^  struct txt_record *txt;$/;"	m	struct:daemon	typeref:struct:daemon::txt_record
+txt	./src/dnsmasq.h	/^  unsigned char *txt;$/;"	m	struct:txt_record
+txt_record	./src/dnsmasq.h	/^struct txt_record {$/;"	s
+type	./src/cache.c	/^  unsigned int type;$/;"	m	struct:__anon3	file:
+type	./src/dnsmasq.h	/^  unsigned short CSA, type; $/;"	m	struct:pxe_service
+type	./src/radv-protocol.h	/^  u8 type, code;$/;"	m	struct:ra_packet
+type	./src/radv-protocol.h	/^  u8 type, len, prefix_len, flags;$/;"	m	struct:prefix_opt
+typestr	./src/cache.c	/^} typestr[] = {$/;"	v	typeref:struct:__anon3	file:
+u	./src/dnsmasq.h	/^  } u;$/;"	m	struct:dhcp_opt	typeref:union:dhcp_opt::__anon8
+u16	./contrib/wrt/dhcp_lease_time.c	/^typedef unsigned short u16;$/;"	t	file:
+u16	./contrib/wrt/dhcp_release.c	/^typedef unsigned short u16;$/;"	t	file:
+u16	./src/dnsmasq.h	/^typedef unsigned short u16;$/;"	t
+u32	./contrib/wrt/dhcp_lease_time.c	/^typedef unsigned int u32;$/;"	t	file:
+u32	./contrib/wrt/dhcp_release.c	/^typedef unsigned int u32;$/;"	t	file:
+u32	./src/dnsmasq.h	/^typedef unsigned int u32;$/;"	t
+u64	./src/dnsmasq.h	/^typedef unsigned long long u64;$/;"	t
+u8	./contrib/wrt/dhcp_lease_time.c	/^typedef unsigned char u8;$/;"	t	file:
+u8	./contrib/wrt/dhcp_release.c	/^typedef unsigned char u8;$/;"	t	file:
+u8	./src/dnsmasq.h	/^typedef unsigned char u8;$/;"	t
+uid	./src/cache.c	/^static int uid = 0;$/;"	v	file:
+uid	./src/dnsmasq.h	/^      int uid;$/;"	m	struct:crec::__anon5::__anon6
+uid	./src/dnsmasq.h	/^  int uid; $/;"	m	struct:crec
+unhide_meta	./src/option.c	/^static char unhide_meta(char cr)$/;"	f	file:
+unhide_metas	./src/option.c	/^static void unhide_metas(char *cp)$/;"	f	file:
+update_dns	./contrib/dynamic-dnsmasq/dynamic-dnsmasq.pl	/^sub update_dns {$/;"	s
+usage	./src/option.c	/^} usage[] = {$/;"	v	typeref:struct:__anon2	file:
+used	./src/dnsmasq.h	/^  int isloop, used;$/;"	m	struct:iname
+username	./src/dnsmasq.h	/^  char *username, *groupname, *scriptuser;$/;"	m	struct:daemon
+v6pktinfo	./src/dnsmasq.h	/^  int v6pktinfo; $/;"	m	struct:daemon
+val	./src/dnsmasq.h	/^  unsigned char *val;$/;"	m	struct:dhcp_opt
+val	./src/option.c	/^  int val;$/;"	m	struct:myoption	file:
+val	./src/option.c	/^  u16 val, size;$/;"	m	struct:opttab_t	file:
+valid_lifetime	./src/radv-protocol.h	/^  u32 valid_lifetime, preferred_lifetime, reserved;$/;"	m	struct:prefix_opt
+vendor_class	./src/dnsmasq.h	/^    unsigned char *vendor_class;$/;"	m	union:dhcp_opt::__anon8
+version	./Makefile	/^version =     -DVERSION='\\"`$(top)\/bld\/get-version $(top)`\\"'$/;"	m
+watch	./src/dbus.c	/^  DBusWatch *watch;      $/;"	m	struct:watch	file:
+watch	./src/dbus.c	/^struct watch {$/;"	s	file:
+watches	./src/dnsmasq.h	/^  struct watch *watches;$/;"	m	struct:daemon	typeref:struct:daemon::watch
+weight	./src/dnsmasq.h	/^  int issrv, srvport, priority, weight;$/;"	m	struct:mx_srv_record
+whine_malloc	./src/util.c	/^void *whine_malloc(size_t size)$/;"	f
+wildcard_mask	./src/dnsmasq.h	/^    unsigned int wildcard_mask;$/;"	m	union:dhcp_opt::__anon8
+wildcard_mask	./src/dnsmasq.h	/^  unsigned int wildcard_mask;$/;"	m	struct:hwaddr_config
+write_output	./contrib/dnslist/dnslist.pl	/^sub write_output {$/;"	s
+xid	./contrib/wrt/dhcp_lease_time.c	/^  u32 xid;$/;"	m	struct:dhcp_packet	file:
+xid	./contrib/wrt/dhcp_release.c	/^  u32 xid;$/;"	m	struct:dhcp_packet	file:
+xid	./src/dhcp-protocol.h	/^  u32 xid;$/;"	m	struct:dhcp_packet
+yiaddr	./contrib/wrt/dhcp_lease_time.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::	file:
+yiaddr	./contrib/wrt/dhcp_release.c	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::	file:
+yiaddr	./src/dhcp-protocol.h	/^  struct in_addr ciaddr, yiaddr, siaddr, giaddr;$/;"	m	struct:dhcp_packet	typeref:struct:dhcp_packet::

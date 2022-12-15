@@ -1,0 +1,58 @@
+#
+#How to build Broadcom toolchain?
+#
+
+1)Background
+Please make sure base on ubuntu 10.04 to setup environment.
+
+1-1)Install Software
+	g++ (apt-get install g++)
+	bison (apt-get install bison)
+	msgfmt (apt-get install gettext)
+	makeinfo (apt-get install texinfo)
+	patch (apt-get install patch)
+	termcap (apt-get install libncurses5-dev)
+	flex (apt-get install flex)
+
+1-2)Do not use root to build, and folder /opt need have write for build user
+Make sure /bin/sh is link to dash not bash
+GCC on build machine is 4.6 or older, GCC never compiles well with a version of GCC that is newer than itself.
+
+Note: If you plan to distribute the binaries to others, make sure that you build on a 32-bit machine and the GLIBC is older than ANY of the machines that your users have.
+
+1-3)How to add extended attributes in broadcom toolchain?
+Ensure you have write access to /opt/toolchains (or change the TOOLCHAIN_TOP variable in the instructions below to a directory where you have write access)
+
+2)Compile and install Toolchain
+2-1)How to compile toolchain
+tar xf crosstools-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21-sources.tar.bz2
+cd src/buildroot-2011.11/
+cp ../mips.buildroot.config .config
+cp ../mips.uClibc-0.9.32.brcm.config toolchain/uClibc/uClibc-0.9.32.brcm.config
+export BR_VER=2011.11
+export UCLIBC_VER=0.9.32
+export LINUX_VER=3.4
+export GCC_VER=4.6
+export BINUTILS_VER=2.21
+export ARCH=mips
+export TOOLCHAIN_TOP=/opt/toolchains
+export TOOLCHAIN_SRC_NAME=crosstools-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER-sources
+export TOOLCHAIN_ARM_NAME=crosstools-arm-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER
+export TOOLCHAIN_MIPS_NAME=crosstools-mips-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER
+export TOOLCHAIN_MIPSEL_NAME=crosstools-mipsel-gcc-$GCC_VER-linux-$LINUX_VER-uclibc-$UCLIBC_VER-binutils-$BINUTILS_VER
+make uclibc-menuconfig
+Go to "Advanced Library settings" ---> "Extended attributes". Select this and save the configuration and exit. 
+make
+
+2-2)then you should do a link /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/lib -> 
+/opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/mips-unknown-linux-uclibc/sysroot/lib
+(ln -s /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/mips-unknown-linux-uclibc/sysroot/lib /opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/lib)
+
+2-3)create a file named "bcm_toolver.h" at following DIR
+/opt/toolchains/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21/usr/include/bcm_toolver.h
+
+then edit it as below
+vi bcm_toolver.h
+#define BCM_TOOLCHAIN_VERSION "Rel1.1"
+#define BCM_TOOLCHAIN_MAJOR 1
+#define BCM_TOOLCHAIN_MINOR 1

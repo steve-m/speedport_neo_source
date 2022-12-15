@@ -1,0 +1,6 @@
+Input:
+{"group":{"other":{"dsc":"some dsc","enable":true},"default":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]}}}
+Get token via path: OK
+Trying to insert into 'other': OK
+Result:
+{"group":{"other":{"dsc":"some dsc","enable":true,"string":"asdf"},"default":{"dsc":"some dsc","enable":true,"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]}}}

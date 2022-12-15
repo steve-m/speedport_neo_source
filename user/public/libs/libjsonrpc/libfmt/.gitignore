@@ -1,0 +1,13 @@
+*.a
+*.o
+*.so
+core
+vgcore*
+.built
+.configured_
+.prepared_*
+ipkg-zynq/
+unittests/test_*/result
+unittests/test_*/test
+unittests/test_*/*/result
+unittests/test_*/*/test

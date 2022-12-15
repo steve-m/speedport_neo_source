@@ -1,0 +1,123 @@
+#!/bin/sh
+DNSMASQCONFIG=/etc/dnsmasq.conf
+CHILLICONFIG=/etc/default/chilli
+FONMACCONFIG=/etc/fon_mac
+FONKEYWCONFIG=/etc/fon_keyword
+set -e
+. /usr/share/debconf/confmodule
+
+# Substitute in the values from the debconf db.
+# There are obvious optimizations possible here.
+# The cp before the sed ensures we do not mess up
+# the config file's ownership and permissions.
+
+# dnsmasq options:
+db_get fonap/no-dhcp-interface # dnsmasq routing interface
+NODHCP="$RET"
+cp -a -f $DNSMASQCONFIG $DNSMASQCONFIG.tmp
+
+# If the admin deleted or commented some variables but then set
+# them via debconf, (re-)add them to the conffile.
+#test -z "$no-dhcp-interface" || grep -Eq '^ *no-dhcp-interface=' $DNSMASQCONFIG || \
+#    echo "no-dhcp-interface=" >> $DNSMASQCONFIG
+
+sed -e "s/^ *no-dhcp-interface=.*/no-dhcp-interface=\"$NODHCP\"/" \
+    < $DNSMASQCONFIG > $DNSMASQCONFIG.tmp
+mv -f $DNSMASQCONFIG.tmp $DNSMASQCONFIG
+
+# chilli options
+db_get fonap/chilli-dhcp-interface # chilli interface
+ETH="$RET"
+cp -a -f $CHILLICONFIG $CHILLICONFIG.tmp
+
+sed -e "s/^ *DHCPIF=.*/DHCPIF=\"$ETH\"/" \
+    < $CHILLICONFIG > $CHILLICONFIG.tmp
+mv -f $CHILLICONFIG.tmp $CHILLICONFIG
+
+# mac:
+db_get fonap/device-mac # mac
+MAC="$RET"
+echo $MAC > $FONMACCONFIG
+
+# keyword:
+db_get fonap/keyword # kw
+KWORD="$RET"
+echo $KWORD > $FONKEYWCONFIG
+
+# debconf hangs if daemon gets started below without this
+db_stop
+
+# create a user to run as (code stolen from dovecot-common)
+if [ "$1" = "configure" ]; then
+  if [ -z "`id -u dnsmasq 2> /dev/null`" ]; then
+    /usr/sbin/adduser --system  --home /var/lib/misc --gecos "dnsmasq" \
+                      --no-create-home --disabled-password \
+                      --quiet dnsmasq || true
+  fi
+
+fi
+
+#update-rc.d dnsmasq start 15 2 3 4 5 . stop 85 1 . >/dev/null
+
+#if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ]; then
+#  if [ -e /var/run/dnsmasq.pid ]; then
+#      ACTION=restart
+#  else
+#      ACTION=start
+#  fi
+#
+#  if [ -x /usr/sbin/invoke-rc.d ] ; then
+#    invoke-rc.d dnsmasq $ACTION || true
+#  else
+#    /etc/init.d/dnsmasq $ACTION || true
+#  fi
+#
+#fi
+
+# chilli stuff:
+# Call radconfig
+# for dnsmasq whitelist
+mkdir -p /etc/fon/
+touch /etc/fon/localusers
+
+if [ -f /etc/default/fonap ] ; then
+   . /etc/default/fonap
+fi
+
+chmod 755 /usr/sbin/api-example.sh
+if [ -f /etc/ppp/options ]; then
+	rm /etc/ppp/options
+	touch /etc/ppp/options
+fi
+if [ "$START_FONAP" = "1" ] ; then
+    /etc/init.d/chilli radconfig || true
+fi
+
+#if [ -x "/etc/init.d/chilli" ]; then
+#	#update-rc.d chilli defaults >/dev/null
+#	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+#		invoke-rc.d chilli start || exit $?
+#	else
+#		/etc/init.d/chilli start || exit $?
+#	fi
+#fi
+
+#if [ -x "/etc/init.d/fonsmcd" ]; then
+#	#update-rc.d fonsmcd defaults >/dev/null
+#	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+#		invoke-rc.d fonsmcd start || exit $?
+#	else
+#		/etc/init.d/fonsmcd start || exit $?
+#	fi
+#fi
+
+if [ -x "/etc/init.d/fonap" ]; then
+        update-rc.d fonap defaults >/dev/null
+	if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
+		invoke-rc.d fonap start || exit $?
+	else
+		/etc/init.d/fonap start || exit $?
+	fi
+fi
+
+exit 0

@@ -1,0 +1,75 @@
+FONAP Security Vulnerabilities Analysis
+=======================================
+
+Abstract
+
+This document analyzes the protocols involved in the interaction
+between the fonap software, the users, and the FON platform. The 
+analysis is centered in the radconfig service used to update the
+captive portal gateway configuration, the ways a malicious user
+could modify, delete, forge or replay this configuration data, 
+and whether if any of those has the potential to disrupt the FON
+business
+
+This document discusses some of the security issues with 
+radconfig data dissemination. It does not discuss exhaustively 
+all the security issues that the fonap software may have.
+
+== Intercepting the radconfig configuration of a router knowing
+the radconfig uamsecret
+
+Knowing the radconfig uamsecret any configuration for a router
+can be retrieved from the server just by knowing the parameters
+that identify the router, and the ip addresses of the radconfig
+servers
+
+- Radius servers address (--radiuserver1 and --radiusserver2)
+- Mac address (--radiusnasid)
+- Admin user (--adminuser)
+- Admin password (--adminpassword)
+- Radius secret (--radiussecret)
+
+With that data, either with the chilli_radconfig binary, for wich
+we provide the source code, or with a program that does a radius
+authentication, such as the ats-radius Python program developed
+by Javier Monteagudo, anyone with internet access can obtain
+a legit configuration file from our radconfig servers
+ 
+= Intercepting the radconfig configuration of a router without
+knowing the radconfig uamsecret
+
+The data in the radconfig package is not encrypted in any way,
+thus to know the data a malicious user wishing to know wich
+configuration is sent to the router just need a packet sniffer
+such as tcpdump to retrieve the radconfig packages
+
+= Replacing the radconfig configuration of a router knowing the
+radius secret.
+
+Knowing the radius secret, and having a gateway with a dns
+proxy or server throug wich the router is connected to the
+internet, it is possible to install in that gateway a server
+that acts as the radconfig server and sends to the router
+an arbitrary configuration as an answer
+
+= Replacing the radconfig configuration of a router not knowing
+the radius secret.
+
+The package in the radconfig answer could be theoretically changed
+by a machine in the middle (captured and replied) so the payload
+appears as valid to the client. There is no CRC encrypted nor
+signed so there is no way to associate the payload with the
+transaction id and it is theoreticalle changeable by a party
+in the middle.
+
+= Getting the radius secret from radius traffic
+
+Theoretically there are reported ways to deduce or compute the
+radius secret having a sensible quantity of spoofed radius packages.
+For example http://www.techduke.com/2007/09/13/radius-vulnerabilities/
+
+References
+----------
+http://securityvulns.com/advisories/radius.asp
+http://securityvulns.com/files/test_radius.c
+

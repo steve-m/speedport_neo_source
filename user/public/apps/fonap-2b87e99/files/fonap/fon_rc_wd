@@ -1,0 +1,113 @@
+#!/bin/sh
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+DEBUG=0
+NAME=fon_rc_wd
+PIDFILE=/var/run/$NAME.pid
+
+RADCONFIGFILE=/tmp/var/chilli.conf
+RADWHITELIST=/tmp/var/whitelist
+RADCONFIGSAVED=/mnt/appdat/chilli.conf
+RADWHITELISTSAVED=/mnt/appdat/chilli.whitelist
+INTERVAL=$(/usr/sbin/cmld_client getv Device.Services.X_T-ONLINE-DE_Fon.Interval)
+FonRcStart=1
+
+FonRadConfig() {
+
+    #If there is a config file in tmp, do not read again.
+    if [ $FonRcStart -eq 1 ]; then
+        if [ -s $RADCONFIGFILE ]; then
+            return 1
+        fi
+    fi
+
+    /etc/fon/fon_hm radconfig
+    return $?
+}
+FonRadConfigUpdate() {
+    /etc/fon/fon_hm loadconfig
+    return 0
+}
+
+FonHMRestart() {
+    /etc/fon/fon_hm checkrunning
+    if [ $? -eq 1 ]; then
+        /etc/fon/fon_hm restart
+    fi
+    return 0
+}
+
+RadConfigWatchdogDaemon() {
+    Timer=0
+    while [ $FonRcStart -ge -1 ]; do
+
+        if [ $DEBUG -eq 1 ]; then
+            echo "RadConfig Daemon Sleep $Timer seconds."
+        fi     
+        sleep $Timer
+        FonRadConfig
+        if [ $? -eq 0 ]; then
+            # Check if config file recevived
+            if [ ! -s $RADCONFIGFILE ]; then
+                cp -f $RADCONFIGSAVED $RADCONFIGFILE > /dev/null 2>&1
+                cp -f $RADWHITELISTSAVED $RADWHITELIST > /dev/null 2>&1
+                FonRadConfigUpdate
+            fi
+
+            if [ $FonRcStart -eq 1 ]; then
+                Timer=$(awk -v max=$INTERVAL 'BEGIN{srand();k=int(rand()*max);printf k;}')
+                FonRcStart=0
+            else
+                Timer=$INTERVAL
+            fi
+        else
+            if [ $DEBUG -eq 1 ]; then
+                echo "RadConfig Changed."
+            fi
+            # Save new got config file 
+            cp -f $RADCONFIGFILE $RADCONFIGSAVED > /dev/null 2>&1
+            cp -f $RADWHITELIST $RADWHITELISTSAVED > /dev/null 2>&1
+            
+            FonRadConfigUpdate
+            if [ $FonRcStart -eq 1 ]; then
+                Timer=$(awk -v max=$INTERVAL 'BEGIN{srand();k=int(rand()*max);printf k;}')
+                FonRcStart=0
+            else
+                Timer=$INTERVAL
+                FonHMRestart
+            fi
+        fi    
+
+    done
+    return 0
+}
+
+case "$1" in
+    start)
+        if [ ! -f $PIDFILE ]; then
+            echo "$(pidof $NAME)" > $PIDFILE
+            RadConfigWatchdogDaemon
+        fi
+        ;;
+
+    stop)
+        if [ -f $PIDFILE ]; then
+            killall chilli_radconfig > /dev/null 2>&1
+            kill $(cat $PIDFILE) > /dev/null 2>&1
+            rm -f $PIDFILE
+        fi
+        ;;
+    check)
+        if [ -f $PIDFILE ]; then
+            exit 1
+        fi
+        ;;
+    *)
+        N=/etc/fon/$NAME
+        echo "Usage: $N {start|stop|check}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+

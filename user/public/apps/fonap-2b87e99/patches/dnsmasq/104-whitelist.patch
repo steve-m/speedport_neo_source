@@ -1,0 +1,439 @@
+Index: dnsmasq-2.45/src/cache.c
+===================================================================
+--- dnsmasq-2.45.orig/src/cache.c	2009-01-23 12:55:16.000000000 +0100
++++ dnsmasq-2.45/src/cache.c	2009-01-23 12:55:18.000000000 +0100
+@@ -24,6 +24,12 @@
+ static int uid = 0;
+ static char *addrbuff = NULL;
+ 
++#ifdef HAVE_WHITELIST
++static char *whitelist_file;
++static int maxregnum = 255;
++#endif
++
++
+ /* type->string mapping: this is also used by the name-hash function as a mixing table. */
+ static const struct {
+   unsigned int type;
+@@ -361,6 +367,12 @@
+   int freed_all = flags & F_REVERSE;
+   int free_avail = 0;
+ 
++#ifdef HAVE_WHITELIST
++  if (whitelist_file)
++    whitelist_cache_insert(flags | F_UPSTREAM, name, addr);
++#endif
++
++
+   log_query(flags | F_UPSTREAM, name, addr, NULL);
+ 
+   /* CONFIG bit no needed except for logging */
+@@ -1110,3 +1122,199 @@
+   my_syslog(LOG_DEBUG, "%s %s %s %s", source, name, verb, dest);
+ }
+ 
++
++#ifdef HAVE_WHITELIST
++/* whitelist stuff */
++
++int check_whitelist_file(const char *file)
++{
++  struct stat buf_stat;
++
++  if (stat(file, &buf_stat) < 0)
++    return 1;
++
++  whitelist_file = strdup(file);
++
++  return 0;
++}
++
++void whitelist_cache_insert(unsigned short flags, char *name, struct all_addr *addr)
++{
++  int ret;
++  char addrbuffer[ADDRSTRLEN];
++
++  if ((flags & F_FORWARD) &&
++                  (flags & F_UPSTREAM) &&
++                  (!(flags & F_CNAME)) &&
++                  (!(flags & F_NEG)) &&
++                  (addr != NULL)) {
++
++
++    ret = domain_in_whitelist(name);
++
++   switch (ret)
++   {
++      case 1:
++#ifdef HAVE_IPV6
++        inet_ntop(flags & F_IPV4 ? AF_INET : AF_INET6,
++                    addr, addrbuffer, ADDRSTRLEN);
++        syslog(LOG_INFO, "JAVI ip cached: %s", addrbuffer);
++#else
++        syslog(LOG_INFO, "JAVI ip cached: %s", inet_ntoa(addr->addr.addr4));
++#endif
++        commit_whitelist_cache(addr);
++        break;
++      case 2:
++#ifdef HAVE_IPV6
++        inet_ntop(flags & F_IPV4 ? AF_INET : AF_INET6,
++                    addr, addrbuffer, ADDRSTRLEN);
++        syslog(LOG_INFO, "JAVI ip dropped: %s", addrbuffer);
++#else
++        syslog(LOG_INFO, "JAVI ip dropped: %s", inet_ntoa(addr->addr.addr4));
++#endif
++        dropip_from_cache(addr);
++        break;
++    }
++  }
++
++  return;
++}
++
++int domain_in_whitelist(char *name)
++{
++  FILE *fp;
++  char *line = NULL;
++  size_t len = 0;
++  char *p;
++
++  if ((fp = fopen(whitelist_file, "r")) == NULL) {
++    syslog(LOG_DEBUG, "error open: %s", whitelist_file);
++    return -1;
++  }
++
++  /*syslog(LOG_DEBUG, "open: %s", whitelist_file);*/
++
++  while (getline(&line, &len, fp) != -1) {
++    p = strtok(line, "\n");
++
++    if ((*p == '!') && !fnmatch(p+1, name, FNM_NOESCAPE)) {
++      syslog(LOG_DEBUG, "%s matches %s", name, p);
++      free(line);
++      fclose(fp);
++      return 2;
++    }
++  }
++
++  rewind(fp);
++
++  while (getline(&line, &len, fp) != -1) {
++    p = strtok(line, "\n");
++    /*syslog(LOG_DEBUG, "try %s whith %s (in file)", name, p);*/
++    if (!fnmatch(p, name, FNM_NOESCAPE)) {
++      /*syslog(LOG_DEBUG, "%s matches %s", name, p);*/
++      free(line);
++      fclose(fp);
++      return 1;
++    }
++  }
++
++  if (line)
++    free(line);
++
++  fclose(fp);
++
++  /*syslog(LOG_DEBUG, "NO matches %s", name);*/
++
++  return 0;
++}
++
++int commit_whitelist_cache(struct all_addr *addr)
++{
++  struct in_addr inp;
++  struct in_addr tmp_inp;
++  static FILE *fp = NULL;
++  long pos;
++
++  if (fp == NULL)
++    if ((fp = fopen("/tmp/whitelist.cache", "w+")) == NULL) {
++      syslog(LOG_DEBUG, "error open: /etc/fon/whitelist.cache, %d", errno);
++      return -1;
++    }
++
++#ifdef HAVE_IPV6
++  memcpy(&inp, &addr->addr.addr4, sizeof(struct in_addr));
++#endif
++
++  /*
++   * look for duplicates.
++   */
++  pos = ftell(fp);
++  rewind(fp);
++
++  while (fread(&tmp_inp, sizeof(struct in_addr), 1, fp) == 1) {
++    if (tmp_inp.s_addr == inp.s_addr) {
++      syslog(LOG_DEBUG, "colission!\n");
++      fseek(fp, pos, SEEK_SET);
++      return 0;
++    }
++  }
++
++  if (maxregnum == (pos / sizeof(struct in_addr))) {
++    syslog(LOG_DEBUG, "rewind whitelist cache: reached %d records!\n", maxregnum);
++    rewind(fp);
++  }
++  else 
++    fseek(fp, pos, SEEK_SET);
++  
++  fwrite(&inp, sizeof(struct in_addr), 1, fp);
++
++  fflush(fp);
++
++  /*syslog(LOG_DEBUG, "whitelist.cache commited!\n");*/
++
++  return 0;
++}
++
++int dropip_from_cache(struct all_addr *addr)
++{
++  struct in_addr inp;
++  struct in_addr tmp_inp;
++  static FILE *fp = NULL;
++  struct crec *crec;
++
++  if ((fp = fopen("/tmp/whitelist.cache", "r+")) == NULL) {
++      syslog(LOG_DEBUG, "error open: /etc/fon/whitelist.cache, %d", errno);
++      return -1;
++   }
++
++#ifdef HAVE_IPV6
++  memcpy(&inp, &addr->addr.addr4, sizeof(struct in_addr));
++#endif
++  
++  while (fread(&tmp_inp, sizeof(struct in_addr), 1, fp) == 1) {
++    if (tmp_inp.s_addr == inp.s_addr) {
++      syslog(LOG_DEBUG, "replaced!\n");
++      fseek(fp, ftell(fp) - sizeof(struct in_addr), SEEK_SET);
++      inet_aton("127.0.0.1", &tmp_inp);
++      fwrite(&tmp_inp, sizeof(struct in_addr), 1, fp);
++      fflush(fp);
++      fclose(fp);
++      kill(getpid(), SIGHUP);
++/*
++      if ((crec = cache_find_by_addr(NULL, addr, 0, 0))) {
++      	syslog(LOG_DEBUG, "pasado");
++      	syslog(LOG_DEBUG, "%s", crec->name.namep);
++      }
++      syslog(LOG_DEBUG, "cache_get_name: %s", cache_get_name(crec));
++*/
++      return 0;
++    }
++  }
++
++
++  fclose(fp);
++
++  return -1;
++}
++#endif
++
+Index: dnsmasq-2.45/src/dnsmasq.c
+===================================================================
+--- dnsmasq-2.45.orig/src/dnsmasq.c	2009-01-23 12:55:16.000000000 +0100
++++ dnsmasq-2.45/src/dnsmasq.c	2009-01-23 12:55:18.000000000 +0100
+@@ -552,7 +552,16 @@
+   /* finished start-up - release original process */
+   if (err_pipe[1] != -1)
+     close(err_pipe[1]);
+-  
++#ifdef HAVE_WHITELIST
++  if (daemon->whitelist_file)
++    if (check_whitelist_file(daemon->whitelist_file)) {
++      syslog(LOG_INFO, "ERROR: unable access whitelist file: %s",
++                        daemon->whitelist_file);
++      daemon->whitelist_file = NULL;
++     } else
++       syslog(LOG_INFO, "whitelist file: %s", daemon->whitelist_file);
++#endif
++
+   if (daemon->port != 0)
+     check_servers();
+   
+Index: dnsmasq-2.45/src/dnsmasq.h
+===================================================================
+--- dnsmasq-2.45.orig/src/dnsmasq.h	2009-01-23 12:55:16.000000000 +0100
++++ dnsmasq-2.45/src/dnsmasq.h	2009-01-23 12:55:18.000000000 +0100
+@@ -29,6 +29,7 @@
+ #endif
+ 
+ /* get these before config.h  for IPv6 stuff... */
++#define _GNU_SOURCE
+ #include <sys/types.h> 
+ #include <netinet/in.h>
+ 
+@@ -94,6 +95,7 @@
+ #ifndef HAVE_LINUX_NETWORK
+ #  include <net/if_dl.h>
+ #endif
++#include <fnmatch.h>
+ 
+ #if defined(HAVE_LINUX_NETWORK)
+ #include <linux/capability.h>
+@@ -602,6 +604,10 @@
+   struct doctor *doctors;
+   unsigned short edns_pktsz;
+   char *tftp_prefix; 
++#ifdef HAVE_WHITELIST
++  /* whitelist stuff */
++  char *whitelist_file;
++#endif
+ 
+   /* globally used stuff for DNS */
+   char *packet; /* packet buffer */
+@@ -665,6 +671,15 @@
+ void cache_unhash_dhcp(void);
+ void dump_cache(time_t now);
+ char *cache_get_name(struct crec *crecp);
++#ifdef HAVE_WHITELIST
++ /* whitelist stuff */
++int check_whitelist_file(const char *file);
++void whitelist_cache_insert(unsigned short flags, char *name, struct all_addr *addr);
++int domain_in_whitelist(char *name);
++int commit_whitelist_cache(struct all_addr *addr);
++int dropip_from_cache(struct all_addr *addr);
++#endif
++
+ 
+ /* rfc1035.c */
+ unsigned short extract_request(HEADER *header, size_t qlen, 
+Index: dnsmasq-2.45/src/option.c
+===================================================================
+--- dnsmasq-2.45.orig/src/option.c	2009-01-23 12:55:16.000000000 +0100
++++ dnsmasq-2.45/src/option.c	2009-01-23 12:55:18.000000000 +0100
+@@ -18,6 +18,7 @@
+ #define SYSLOG_NAMES
+ #include "dnsmasq.h"
+ #include <setjmp.h>
++int have_whitelist = 1;
+ 
+ /* Solaris headers don't have facility names. */
+ #ifdef HAVE_SOLARIS_NETWORK
+@@ -2463,6 +2464,10 @@
+   daemon->tftp_max = TFTP_MAX_CONNECTIONS;
+   daemon->edns_pktsz = EDNS_PKTSZ;
+   daemon->log_fac = -1;
++#ifdef HAVE_WHITELIST
++  daemon->whitelist_file = "/etc/fon/whitelist.dnsmasq";
++#endif
++
+   add_txt("version.bind", "dnsmasq-" VERSION );
+   add_txt("authors.bind", "Simon Kelley");
+   add_txt("copyright.bind", COPYRIGHT);
+Index: dnsmasq-2.45/src/rfc1035.c
+===================================================================
+--- dnsmasq-2.45.orig/src/rfc1035.c	2009-01-23 12:55:16.000000000 +0100
++++ dnsmasq-2.45/src/rfc1035.c	2009-01-23 12:59:15.000000000 +0100
+@@ -20,6 +20,18 @@
+ 			       unsigned int nameoffset, unsigned char **pp, 
+ 			       unsigned long ttl, unsigned int *offset, unsigned short type, 
+ 			       unsigned short class, char *format, ...);
++static void dns_doctor(HEADER *header, struct doctor *doctor, struct in_addr *addr)
++{
++	for (; doctor; doctor = doctor->next)
++	if (is_same_net(doctor->in, *addr, doctor->mask))
++	{
++		addr->s_addr &= ~doctor->mask.s_addr;
++		addr->s_addr |= (doctor->out.s_addr & doctor->mask.s_addr);
++		/* Since we munged the data, the server it came from is no longer authoritative */
++		header->aa = 0;
++		break;
++	}
++}
+ 
+ static int extract_name(HEADER *header, size_t plen, unsigned char **pp, 
+ 			char *name, int isExtract)
+@@ -731,7 +743,16 @@
+ 	    
+ 	  if (!(flags & F_NXDOMAIN))
+ 	    {
+-	    cname_loop1:
++#ifdef HAVE_WHITELIST
++            char *alias = NULL;
++            char *cannonical_name = NULL;
++            int ret;
++            int in_loop;
++
++            in_loop = 0;
++#endif
++
++		cname_loop1:
+ 	      if (!(p1 = skip_questions(header, qlen)))
+ 		return 0;
+ 	      
+@@ -752,6 +773,9 @@
+ 			{
+ 			  if (!cname_count--)
+ 			    return 0; /* looped CNAMES */
++#ifdef HAVE_WHITELIST
++                          alias = strdup(name);
++#endif
+ 			  newc = cache_insert(name, NULL, now, attl, F_CNAME | F_FORWARD);
+ 			  if (newc && cpp)
+ 			    {
+@@ -765,21 +789,50 @@
+ 			  
+ 			  if (!extract_name(header, qlen, &p1, name, 1))
+ 			    return 0;
+-			  goto cname_loop1;
+-			}
+-		      else
+-			{
+-			  found = 1;
+-			  /* copy address into aligned storage */
+-			  memcpy(&addr, p1, addrlen);
+-			  
+-			  /* check for returned address in private space */
+-			  if ((daemon->options & OPT_NO_REBIND) &&
+-			      (flags & F_IPV4) &&
+-			      private_net(addr.addr.addr4))
+-			    return 1;
+-			  
+-			  newc = cache_insert(name, &addr, now, attl, flags | F_FORWARD);
++#ifdef HAVE_WHITELIST
++                          ret = domain_in_whitelist(alias);
++
++                          switch (ret)
++                          {
++                            case 1:
++                              syslog(LOG_INFO, "%s es un ALIAS en la whitelist (cannonical: %s)", alias, name);
++                              free(alias);
++                              cannonical_name = strdup(name);
++                              in_loop = 1;
++                              break;
++                            case 2:
++                              syslog(LOG_INFO, "%s es un ALIAS en la whitelist (cannonical: %s)", alias, name);
++                              free(alias);
++                              cannonical_name = NULL;
++                              break;
++                          }
++#endif
++                          goto cname_loop1;
++                        }
++                      else
++                      {
++                         found = 1;
++                         if (aqtype == T_A) {
++                           dns_doctor(header, daemon->doctors, (struct in_addr *)p1);
++#ifdef HAVE_WHITELIST
++                           if ((cannonical_name != NULL) && !strcmp(name, cannonical_name)) {
++                             syslog(LOG_INFO, "%s match %s ip iserted in whitelist", name, cannonical_name);
++                             free(cannonical_name);
++                             cannonical_name = NULL;
++                             in_loop = 0;
++                             commit_whitelist_cache((struct all_addr *)p1);
++                            }
++
++                            if (in_loop) {
++                             commit_whitelist_cache((struct all_addr *)p1);
++                             in_loop = 0;
++                             syslog(LOG_INFO, "doble CNAME\n");
++                            }
++#endif
++                          }
++
++
++			  newc = cache_insert(name, (struct all_addr *)p1, now, attl, flags | F_FORWARD);
+ 			  if (newc && cpp)
+ 			    {
+ 			      cpp->addr.cname.cache = newc;

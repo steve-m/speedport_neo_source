@@ -1,0 +1,67 @@
+\section{Fonera L2TP Solution}
+
+\subsection{Current ChillOut L2TP Login Procedure}
+\begin{alltt}\small
+                        LA FONERA                  BACK OFFICE   
+Client             Chilli     ChillOut      FON Portal   RADIUS  LNS
+  | Initial Req      |           |               |         |      |
+  |----------------->|           |               |         |      |
+  |                  |-------------------------->|         |      |   (1)
+  /                  /           /               /         |      |   
+  |<---------------------------------------------|         |      |   (2)   
+  |----------------->|           |               |         |      |
+  |                  |---------->|               |         |      |   (3)
+  |                  |           |------------------------------->|
+  |                  |------------------------------------>|      |   (4)
+  |                  |<------------------------------------|      |   (5)
+  |<-----------------|           |               |         |      |
+  |--------------------------------------------->|         |      |   (6)
+  |                  |           |               |         |      |
+  |                  |           |               |         |      |
+  |                  |------------------------------------>|      |   (7)
+
+1) Initial request is hijacked and user is sent to captive portal
+
+2) Portal redirects browser to Chilli for login
+
+3) The login request is sent by Chilli to ChillOut, which starts PPP
+
+4) Chilli continues on to use RADIUS to login user as well
+
+5) The RADIUS server responds with an Accept or Reject
+
+6) The visitor is sent back to the captive portal with the login status
+
+7) RADIUS accounting for the session duration
+\end{alltt}
+
+\newpage
+\subsection{Proposed ChillOut L2TP Login Procedure}
+\begin{alltt}\small
+                        LA FONERA                  BACK OFFICE   
+Client             Chilli     ChillOut      FON Portal   RADIUS  LNS
+  | Initial Req      |           |               |         |      |
+  |----------------->|           |               |         |      |
+  |                  |-------------------------->|         |      |   (1)
+  /                  /           /               /         |      |   
+  |<---------------------------------------------|         |      |   (2)   
+  |----------------->|           |               |         |      |
+  |                  |---------->|               |         |      |   (3)
+  |<-----------------|           |------------------------------->|
+  |                  |           |               |         |      |
+  /                  /           /               /         /      /
+  |                  |<----------|               |         |      |   (4)
+  |                  |------------------------------------>|      |   (5)
+
+1) Initial request is hijacked and user is sent to captive portal
+
+2) Portal redirects browser to Chilli for login
+
+3) The login request is sent by Chilli to ChillOut, which starts PPP, and
+   Chilli has visitor redirect to Logging In page
+
+4) On successful establishment of the PPP tunnel, ChillOut notifies Chilli
+   of the status, which has Chilli authorize the user session
+
+5) Optional RADIUS accounting for the duration of the session
+\end{alltt}

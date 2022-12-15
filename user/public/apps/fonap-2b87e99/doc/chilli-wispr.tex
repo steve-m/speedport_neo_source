@@ -1,0 +1,71 @@
+\section{WISPr Support}
+
+\textbf{WISPr 1.0 Process}
+\begin{alltt}\small
+
+Client              Chilli            Portal      RADIUS
+  |Initial Req        |                 |           |   * Original request is hijacked.
+  |------------------>|                 |           |
+  |                   |                 |           |
+  |   Redirect w/WISPr|                 |           |   * LoginURL = https://www.fon.com/....
+  |<------------------|                 |           |
+  |                   |                 |           |
+  |Portal Login Req   |                 |           |   * Sends username, password, challenge, etc.
+  |-------------------|---------------->|           |
+  |                   |                 |           |
+  |                   |   Login Redirect|           |   * Redirect Client, sending username and 
+  |<------------------|-----------------|           |     password or CHAP response.
+  |                   |                 |           |
+  |Login Request      |                 |           |   * Client immediately redirects to login
+  |------------------>|                 |           |     user through chilli, which in turn has chilli
+  |                   |-----------------|---------->|     sending RADIUS. The RADIUS response status is 
+  |    Redirect Status|<----------------|-----------|     sent back to the client in a redirect back to 
+  |<------------------|                 |           |     the portal.
+  |                   |                 |           |
+  |Portal Status Req  |                 |           |   * The portal is able to inform the user of their
+  |-------------------|---------------->|           |     login status, given any errors, or can also go
+  |                   |                 |           |     ahead and redirect to the original URL.
+\end{alltt}
+\newpage
+\textbf{WISPr 2.0 Process}
+\begin{alltt}\small
+
+Client              Chilli            Portal      RADIUS
+  |Initial Req        |                 |           |   * Original request is hijacked.
+  |------------------>|                 |           |
+  |                   |                 |           |
+  |   Redirect w/WISPr|                 |           |   * LoginURL = https://www.fon.com/....
+  |<------------------|                 |           |     WISPrEAPMsg = EAP-Identity
+  |                   |                 |           |
+  |Portal Login Req   |                 |           |   * Sends username and WISPrEAPMsg. EAP message
+  |-------------------|---------------->|           |     content is EAP method specific.
+  |                   |                 |           |
+  |                   |   Login Redirect|           |   * Without processing WISPrEAPMsg, bounce the 
+  |<------------------|-----------------|           |     client back to the chilli login URL with 
+  |                   |                 |           |     WISPrEAPMsg.
+  |Login Request      |                 |           |
+  |------------------>|                 |           |   * Client immediately redirects to login
+  |                   |-----------------|---------->|     user through chilli, which in turn has chilli
+  |    Redirect Status|<----------------|-----------|     sending EAP over RADIUS. The RADIUS status is 
+  |<------------------|                 |           |     sent back to the client along with any EAP 
+  |                   |                 |           |     message found in the RADIUS Challenge.
+  /                   /                 /           /
+  |                   |                 |           |
+  |Portal Login Req   |                 |           |   * This process continues until the EAP protocol 
+  |-------------------|---------------->|           |     is complete. The Client keeps sending WISPrEAPMsg 
+  |                   |                 |           |     through to the Portal. The Portal redirects back 
+  |                   |   Login Redirect|           |     to chilli, to put the EAP into RADIUS. The EAP 
+  |<------------------|-----------------|           |     response in RADIUS is then put into the WISPr XML
+  |                   |                 |           |     for the Client to pick-up and process. 
+  |Login Request      |                 |           |     
+  |------------------>|                 |           |       
+  |                   |-----------------|---------->|       
+  |    Redirect Status|<----------------|-----------|
+  |<------------------|                 |           |   * Upon success completion of EAP, the RADIUS server 
+  |                   |                 |           |     will stop repling with a Challenge and will issue 
+  /                   /                 /           /     either an RADIUS Accept or Reject.
+  |                   |                 |           |
+  |Portal Status Req  |                 |           |   * The portal is able to inform the client of their
+  |-------------------|---------------->|           |     login status, given any errors, or can also go
+  |                   |                 |           |     ahead and redirect to the original URL.
+\end{alltt}

@@ -1,0 +1,1114 @@
+connect.c:  struct SessionHandle *data = conn->data;
+connect.c:  ai = conn->ip_addr->ai_next;
+connect.c:      conn->sock[sockindex] = sockfd;
+connect.c:      conn->ip_addr = ai;
+connect.c:  struct SessionHandle *data = conn->data;
+connect.c:  curl_socket_t sockfd = conn->sock[sockindex];
+connect.c:  if(conn->bits.tcpconnect) {
+connect.c:            conn->host.name, conn->port, Curl_strerror(conn,error));
+connect.c:  struct SessionHandle *data= conn->data;
+connect.c:  struct SessionHandle *data= conn->data;
+connect.c:  struct SessionHandle *data = conn->data;
+connect.c:  if(conn->data->set.device) {
+connect.c:  struct SessionHandle *data = conn->data;
+dict.c:  struct SessionHandle *data=conn->data;
+dict.c:  curl_socket_t sockfd = conn->sock[FIRSTSOCKET];
+dict.c:  char *path = conn->path;
+dict.c:  curl_off_t *bytecount = &conn->bytecount;
+dict.c:  if(conn->bits.user_passwd) {
+file.c:  char *real_path = curl_unescape(conn->path, 0);
+file.c:  conn->proto.file = file;
+file.c:  if(!conn->data->set.upload && (fd == -1)) {
+file.c:    failf(conn->data, "Couldn't open file %s", conn->path);
+file.c:  struct FILEPROTO *file = conn->proto.file;
+file.c:  struct FILEPROTO *file = conn->proto.file;
+file.c:  struct SessionHandle *data = conn->data;
+file.c:  conn->fread = data->set.fread;
+file.c:  conn->fread_in = data->set.in;
+file.c:  conn->upload_fromhere = buf;
+file.c:  struct SessionHandle *data = conn->data;
+file.c:  fd = conn->proto.file->fd;
+file.c:  if(conn->bits.no_body && data->set.include_header && fstated) {
+file.c:  if (conn->resume_from <= expected_size)
+file.c:    expected_size -= conn->resume_from;
+file.c:  if(conn->resume_from)
+file.c:    lseek(fd, conn->resume_from, SEEK_SET);
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  curl_socket_t sock = conn->sock[SECONDARYSOCKET];
+ftp.c:      conn->sock[SECONDARYSOCKET] = s;
+ftp.c:  curl_socket_t sockfd = conn->sock[FIRSTSOCKET];
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  struct FTP *ftp = conn->proto.ftp;
+ftp.c:         remaining time.  Also, use "now" as opposed to "conn->now"
+ftp.c:        Curl_tvdiff(Curl_tvnow(), conn->now)/1000; /* spent time */
+ftp.c:        conn->headerbytecount += gotbytes;
+ftp.c:              Curl_debug(data, CURLINFO_HEADER_IN, line_start, perline, conn->host.dispname);
+ftp.c:  conn->data->info.httpcode=code;
+ftp.c:  struct SessionHandle *data=conn->data;
+ftp.c:  conn->proto.ftp = ftp;
+ftp.c:  conn->bits.close = FALSE;
+ftp.c:  ftp->bytecountp = &conn->bytecount;
+ftp.c:  ftp->user = conn->user;
+ftp.c:  ftp->passwd = conn->passwd;
+ftp.c:  if (conn->bits.tunnel_proxy) {
+ftp.c:                                         conn->host.name, conn->remote_port);
+ftp.c:  if(conn->protocol & PROT_FTPS) {
+ftp.c:  if(data->set.ftp_ssl && !conn->ssl[FIRSTSOCKET].use) {
+ftp.c:        conn->protocol |= PROT_FTPS;
+ftp.c:        conn->ssl[SECONDARYSOCKET].use = FALSE; /* clear-text data */
+ftp.c:    if (conn->ssl[FIRSTSOCKET].use) {
+ftp.c:      if(conn->sec_complete)
+ftp.c:      if(conn->passwd && *conn->passwd) {
+ftp.c:  if(conn->ssl[FIRSTSOCKET].use) {
+ftp.c:    if(!conn->ssl[SECONDARYSOCKET].use) {
+ftp.c:        conn->ssl[SECONDARYSOCKET].use = TRUE;
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  struct FTP *ftp = conn->proto.ftp;
+ftp.c:  path = curl_unescape(conn->path, 0); /* get the "raw" path */
+ftp.c:      conn->bits.close = TRUE; /* close this connection since we don't
+ftp.c:    if((-1 != conn->size) && (conn->size != *ftp->bytecountp) &&
+ftp.c:       (conn->maxdownload != *ftp->bytecountp)) {
+ftp.c:      conn->bits.close = TRUE; /* close this connection since we don't
+ftp.c:            (conn->size>0)) {
+ftp.c:  Curl_sec_fflush_fd(conn, conn->sock[SECONDARYSOCKET]);
+ftp.c:  shutdown(conn->sock[SECONDARYSOCKET],2);  /* SD_BOTH */
+ftp.c:  sclose(conn->sock[SECONDARYSOCKET]);
+ftp.c:  conn->sock[SECONDARYSOCKET] = CURL_SOCKET_BAD;
+ftp.c:  if (!result && conn->sec_conn) {   /* 3rd party transfer */
+ftp.c:    result = Curl_ftp_done(conn->sec_conn, status);
+ftp.c:        failf(conn->data, "QUOT string not accepted: %s", item->data);
+ftp.c:  char *buf = conn->data->state.buffer;
+ftp.c:        snprintf(buf, sizeof(conn->data->state.buffer),
+ftp.c:        conn->data->info.filetime = curl_getdate(buf, &secs);
+ftp.c:    infof(conn->data, "unsupported MDTM reply format\n");
+ftp.c:    failf(conn->data, "Given file does not exist");
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  infof(conn->data, "Connecting to %s (%s) port %d\n", newhost, buf, port);
+ftp.c:  struct SessionHandle *data=conn->data;
+ftp.c:  rc = getsockname(conn->sock[FIRSTSOCKET], (struct sockaddr *)&ss, &sslen);
+ftp.c:  if(!conn->bits.ftp_use_eprt &&
+ftp.c:     (conn->ip_addr->ai_family == PF_INET6)) {
+ftp.c:    conn->bits.ftp_use_eprt = TRUE;
+ftp.c:    if(!conn->bits.ftp_use_eprt && (EPRT == fcmd))
+ftp.c:    if(!conn->bits.ftp_use_lprt && (LPRT == fcmd))
+ftp.c:        conn->bits.ftp_use_eprt = FALSE;
+ftp.c:        conn->bits.ftp_use_lprt = FALSE;
+ftp.c:  conn->sock[SECONDARYSOCKET] = portsock;
+ftp.c:    if (getsockname(conn->sock[FIRSTSOCKET],
+ftp.c:      conn->sock[SECONDARYSOCKET] = portsock;
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  if(!conn->bits.ftp_use_epsv &&
+ftp.c:     (conn->ip_addr->ai_family == PF_INET6)) {
+ftp.c:    conn->bits.ftp_use_epsv = TRUE;
+ftp.c:  for (modeoff = (conn->bits.ftp_use_epsv?0:1);
+ftp.c:      conn->bits.ftp_use_epsv = FALSE;
+ftp.c:          Curl_printable_address(conn->ip_addr, newhost, NEWHOST_BUFSIZE);
+ftp.c:    rc = Curl_resolv(conn, conn->proxy.name, (int)conn->port, &addr);
+ftp.c:      (unsigned short)conn->port; /* we connect to the proxy's port */
+ftp.c:                            &conn->sock[SECONDARYSOCKET],
+ftp.c:  if(conn->bits.tunnel_proxy) {
+ftp.c:  struct SessionHandle *data=conn->data;
+ftp.c:  struct FTP *ftp = conn->proto.ftp;
+ftp.c:    if(conn->resume_from) {
+ftp.c:      if(conn->resume_from < 0 ) {
+ftp.c:        conn->resume_from = gottensize;
+ftp.c:      if(conn->resume_from) {
+ftp.c:          curl_off_t readthisamountnow = (conn->resume_from - passed);
+ftp.c:            conn->fread(data->state.buffer, 1, (size_t)readthisamountnow,
+ftp.c:                        conn->fread_in);
+ftp.c:        while(passed != conn->resume_from);
+ftp.c:          data->set.infilesize -= conn->resume_from;
+ftp.c:    if(conn->ssl[SECONDARYSOCKET].use) {
+ftp.c:  else if(!conn->bits.no_body) {
+ftp.c:    if(conn->bits.use_range && conn->range) {
+ftp.c:      from=curlx_strtoofft(conn->range, &ptr, 0);
+ftp.c:        conn->resume_from = from;
+ftp.c:        conn->maxdownload = -from;
+ftp.c:        conn->resume_from = from;
+ftp.c:        conn->maxdownload = totalsize+1; /* include the last mentioned byte */
+ftp.c:        conn->resume_from = from;
+ftp.c:              " getting %" FORMAT_OFF_T " bytes\n", from, conn->maxdownload);
+ftp.c:            from, to, conn->maxdownload);
+ftp.c:      if(conn->resume_from) {
+ftp.c:          if(conn->resume_from< 0) {
+ftp.c:            if(foundsize < -conn->resume_from) {
+ftp.c:                    conn->resume_from, foundsize);
+ftp.c:            downloadsize = -conn->resume_from;
+ftp.c:            conn->resume_from = foundsize - downloadsize;
+ftp.c:            if(foundsize < conn->resume_from) {
+ftp.c:                    conn->resume_from, foundsize);
+ftp.c:            downloadsize = foundsize-conn->resume_from;
+ftp.c:              conn->resume_from);
+ftp.c:        FTPSENDF(conn, "REST %" FORMAT_OFF_T, conn->resume_from);
+ftp.c:      if(conn->ssl[SECONDARYSOCKET].use) {
+ftp.c:      if(size > conn->maxdownload && conn->maxdownload > 0)
+ftp.c:        size = conn->size = conn->maxdownload;
+ftp.c:  struct SessionHandle *data=conn->data;
+ftp.c:  struct FTP *ftp = conn->proto.ftp;
+ftp.c:  if(conn->bits.no_body && data->set.include_header && ftp->file) {
+ftp.c:  if(conn->bits.no_body)
+ftp.c:  if (conn->sec_conn) /* 3rd party transfer */
+ftp.c:    res = Curl_write(conn, conn->sock[FIRSTSOCKET], sptr, write_len,
+ftp.c:    if(conn->data->set.verbose)
+ftp.c:      Curl_debug(conn->data, CURLINFO_HEADER_OUT, sptr, bytes_written, conn->host.dispname);
+ftp.c:  if(conn->proto.ftp->ctl_valid) {
+ftp.c:  struct FTP *ftp= conn->proto.ftp;
+ftp.c:    infof( conn->data , "Created remote directory %s\n" , path );
+ftp.c:    failf(conn->data, "Permission denied to make directory %s", path);
+ftp.c:    failf(conn->data, "unrecognized MKD response: %d", ftpcode );
+ftp.c:    if(conn->data->set.ftp_create_missing_dirs) {
+ftp.c:      failf(conn->data, "Couldn't CWD to %s", path);
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  struct connectdata *sec_conn = conn->sec_conn;
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  struct connectdata *sec_conn = conn->sec_conn;
+ftp.c:    failf(pasv_conn->data, "Couldn't interpret this 227-reply: %s", buf);
+ftp.c:    result = Curl_ftpsendf(conn, "%s %s", stor_cmd, conn->path);
+ftp.c:    result = Curl_ftpsendf(conn, "%s %s", stor_cmd, conn->path);
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  char *cur_pos = conn->path; /* current position in path. point at the begin
+ftp.c:  ftp = conn->proto.ftp;
+ftp.c:    bool absolute_dir = (cur_pos - conn->path > 0) && (ftp->dirdepth == 0);
+ftp.c:    char *path = curl_unescape(conn->path, 0);
+ftp.c:  struct FTP *ftp = conn->proto.ftp;
+ftp.c:  if (conn->bits.reuse && ftp->entrypath) {
+ftp.c:  struct SessionHandle *data = conn->data;
+ftp.c:  ftp = conn->proto.ftp;
+ftp.c:  conn->size = -1; /* make sure this is unknown at this point */
+ftp.c:    if(retcode && (conn->sock[SECONDARYSOCKET] != CURL_SOCKET_BAD)) {
+ftp.c:      sclose(conn->sock[SECONDARYSOCKET]);
+ftp.c:      conn->sock[SECONDARYSOCKET] = CURL_SOCKET_BAD;
+ftp.c:      conn->bits.do_more = TRUE;
+ftp.c:  conn->proto.ftp->ctl_valid = conn->sec_conn->proto.ftp->ctl_valid = TRUE;
+ftp.c:  conn->size = conn->sec_conn->size = -1;
+hostares.c:  int max = ares_fds(conn->data->state.areschannel,
+hostares.c:  struct SessionHandle *data = conn->data;
+hostares.c:  if(conn->async.done) {
+hostares.c:    if(!conn->async.dns) {
+hostares.c:      failf(data, "Could not resolve host: %s (%s)", conn->host.dispname,
+hostares.c:            ares_strerror(conn->async.status));
+hostares.c:    *dns = conn->async.dns;
+hostares.c:  struct SessionHandle *data = conn->data;
+hostares.c:  if(conn->data->set.connecttimeout)
+hostares.c:    timeout = conn->data->set.connecttimeout;
+hostares.c:  else if(conn->data->set.timeout)
+hostares.c:    timeout = conn->data->set.timeout;
+hostares.c:    *entry = conn->async.dns;
+hostares.c:  if(!conn->async.dns) {
+hostares.c:    if((timeout < 0) || (conn->async.status == ARES_ETIMEOUT)) {
+hostares.c:      failf(data, "Resolving host timed out: %s", conn->host.dispname);
+hostares.c:    else if(conn->async.done) {
+hostares.c:      failf(data, "Could not resolve host: %s (%s)", conn->host.dispname,
+hostares.c:            ares_strerror(conn->async.status));
+hostares.c:  struct SessionHandle *data = conn->data;
+hostares.c:    Curl_safefree(conn->async.hostname);
+hostares.c:    conn->async.hostname = bufp;
+hostares.c:    conn->async.port = port;
+hostares.c:    conn->async.done = FALSE; /* not done */
+hostares.c:    conn->async.status = 0;   /* clear */
+hostares.c:    conn->async.dns = NULL;   /* clear */
+hostip4.c:  struct SessionHandle *data = conn->data;
+hostip6.c:  struct SessionHandle *data = conn->data;
+hostip.c:  struct SessionHandle *data = conn->data;
+hostthre.c:  struct thread_data *td = (struct thread_data*) conn->async.os_specific;
+hostthre.c:  WSASetLastError (conn->async.status = NO_DATA); /* pending status */
+hostthre.c:  he = gethostbyname (conn->async.hostname);
+hostthre.c:    TRACE(("Winsock-error %d, addr %s\n", conn->async.status,
+hostthre.c:  struct thread_data *td   = (struct thread_data*) conn->async.os_specific;
+hostthre.c:  itoa(conn->async.port, service, 10);
+hostthre.c:  WSASetLastError(conn->async.status = NO_DATA); /* pending status */
+hostthre.c:  rc = getaddrinfo(conn->async.hostname, service, &td->hints, &res);
+hostthre.c:      TRACE(("Winsock-error %d, no address\n", conn->async.status));
+hostthre.c:  Curl_safefree(conn->async.hostname);
+hostthre.c:  conn->async.hostname = strdup(hostname);
+hostthre.c:  if (!conn->async.hostname) {
+hostthre.c:  conn->async.port = port;
+hostthre.c:  conn->async.done = FALSE;
+hostthre.c:  conn->async.status = 0;
+hostthre.c:  conn->async.dns = NULL;
+hostthre.c:  conn->async.os_specific = (void*) td;
+hostthre.c:    destroy_thread_data(&conn->async);
+hostthre.c:    destroy_thread_data(&conn->async);
+hostthre.c:     destroy_thread_data(&conn->async);
+hostthre.c:  struct thread_data   *td = (struct thread_data*) conn->async.os_specific;
+hostthre.c:  struct SessionHandle *data = conn->data;
+hostthre.c:    conn->data->set.connecttimeout ? conn->data->set.connecttimeout :
+hostthre.c:    conn->data->set.timeout ? conn->data->set.timeout :
+hostthre.c:      conn->async.done = TRUE;
+hostthre.c:       * thread.  'conn->async.done = TRUE' is set in
+hostthre.c:      WSASetLastError(conn->async.status);
+hostthre.c:    conn->async.done = TRUE;
+hostthre.c:    *entry = conn->async.dns;
+hostthre.c:  if (!conn->async.dns) {
+hostthre.c:    if (td->thread_status == (DWORD)-1 || conn->async.status == NO_DATA) {
+hostthre.c:      failf(data, "Resolving host timed out: %s", conn->host.name);
+hostthre.c:    else if(conn->async.done) {
+hostthre.c:            conn->host.name, Curl_strerror(conn,conn->async.status));
+hostthre.c:  destroy_thread_data(&conn->async);
+hostthre.c:  if (conn->async.done) {
+hostthre.c:    destroy_thread_data(&conn->async);
+hostthre.c:    if (!conn->async.dns) {
+hostthre.c:    *entry = conn->async.dns;
+hostthre.c:    (const struct thread_data *) conn->async.os_specific;
+hostthre.c:  struct SessionHandle *data = conn->data;
+hostthre.c:  struct SessionHandle *data = conn->data;
+http.c:  struct SessionHandle *data=conn->data;
+http.c:    userp = &conn->allocptr.proxyuserpwd;
+http.c:    user = conn->proxyuser;
+http.c:    pwd = conn->proxypasswd;
+http.c:    userp = &conn->allocptr.userpwd;
+http.c:    user = conn->user;
+http.c:    pwd = conn->passwd;
+http.c:  struct HTTP *http = conn->proto.http;
+http.c:  struct SessionHandle *data = conn->data;
+http.c:  conn->bits.rewindaftersend = FALSE; /* default */
+http.c:      conn->bits.close = FALSE; /* don't close, keep on sending */
+http.c:      conn->bits.rewindaftersend = TRUE;
+http.c:      conn->bits.close = TRUE;
+http.c:      conn->size = 0; /* don't download any more than 0 bytes */
+http.c:  struct SessionHandle *data = conn->data;
+http.c:  if(conn->bits.user_passwd &&
+http.c:     ((conn->keep.httpcode == 401) ||
+http.c:      (conn->bits.authneg && conn->keep.httpcode < 300))) {
+http.c:  if(conn->bits.proxy_user_passwd &&
+http.c:     ((conn->keep.httpcode == 407) ||
+http.c:      (conn->bits.authneg && conn->keep.httpcode < 300))) {
+http.c:    conn->newurl = strdup(data->change.url); /* clone URL */
+http.c:  else if((conn->keep.httpcode < 300) &&
+http.c:          conn->bits.authneg) {
+http.c:      conn->newurl = strdup(data->change.url); /* clone URL */
+http.c:           conn->keep.httpcode);
+http.c: * method. conn->data->state.authdone is set to TRUE when authentication is
+http.c:  struct SessionHandle *data = conn->data;
+http.c:  if((conn->bits.httpproxy && conn->bits.proxy_user_passwd) ||
+http.c:     conn->bits.user_passwd)
+http.c:     curl_strequal(data->state.first_host, conn->host.name) ||
+http.c:    if (conn->bits.httpproxy &&
+http.c:        (conn->bits.tunnel_proxy == proxytunnel)) {
+http.c:        if(conn->bits.proxy_user_passwd &&
+http.c:              auth, conn->proxyuser?conn->proxyuser:"");
+http.c:          if(conn->bits.user_passwd &&
+http.c:              auth, conn->user);
+http.c:  struct SessionHandle *data = conn->data;
+http.c:        conn->newurl = strdup(data->change.url);
+http.c:        data->state.authproblem = (conn->newurl == NULL);
+http.c:  data = conn->data;
+http.c:  k = &conn->keep;
+http.c:  if (conn->resume_from &&
+http.c:  infof(data,"%s: newurl = %s\n",__FUNCTION__,conn->newurl ? conn->newurl : "(null)");
+http.c:  if((k->httpcode == 401) && !conn->bits.user_passwd)
+http.c:  if((k->httpcode == 407) && !conn->bits.proxy_user_passwd)
+http.c:  struct HTTP *http = conn->proto.http;
+http.c:  conn->bits.forbidchunk= (http->sending == HTTPSEND_REQUEST)?TRUE:FALSE;
+http.c:      conn->fread =    http->backup.fread;
+http.c:      conn->fread_in = http->backup.fread_in;
+http.c:  struct HTTP *http = conn->proto.http;
+http.c:  curl_socket_t sockfd = conn->sock[FIRSTSOCKET];
+http.c:  if(conn->protocol & PROT_HTTPS) {
+http.c:    memcpy(conn->data->state.uploadbuffer, ptr, sendsize);
+http.c:    ptr = conn->data->state.uploadbuffer;
+http.c:    if(conn->data->set.verbose)
+http.c:      Curl_debug(conn->data, CURLINFO_HEADER_OUT, ptr, amount,
+http.c:                 conn->host.dispname);
+http.c:      http->backup.fread = conn->fread;
+http.c:      http->backup.fread_in = conn->fread_in;
+http.c:      conn->fread = (curl_read_callback)readmoredata;
+http.c:      conn->fread_in = (void *)conn;
+http.c:  struct SessionHandle *data=conn->data;
+http.c:  struct Curl_transfer_keeper *k = &conn->keep;
+http.c:  curl_socket_t tunnelsocket = conn->sock[sockindex];
+http.c:    if(conn->newurl) {
+http.c:      free(conn->newurl);
+http.c:      conn->newurl = NULL;
+http.c:                   conn->allocptr.proxyuserpwd?
+http.c:                   conn->allocptr.proxyuserpwd:"",
+http.c:                   data->set.useragent?conn->allocptr.uagent:""
+http.c:        Curl_tvdiff(Curl_tvnow(), conn->now)/1000; /* spent time */
+http.c:                           conn->host.dispname);
+http.c:  } while(conn->newurl);
+http.c:  Curl_safefree(conn->allocptr.proxyuserpwd);
+http.c:  conn->allocptr.proxyuserpwd = NULL;
+http.c:  data=conn->data;
+http.c:  if(conn->bits.tunnel_proxy) {
+http.c:                                         conn->host.name,
+http.c:                                         conn->remote_port);
+http.c:  if(conn->protocol & PROT_HTTPS) {
+http.c:    data->state.first_host = strdup(conn->host.name);
+http.c:  data=conn->data;
+http.c:  http=conn->proto.http;
+http.c:  conn->fread = data->set.fread; /* restore */
+http.c:  conn->fread_in = data->set.in; /* restore */
+http.c:    conn->bytecount = http->readbytecount + http->writebytecount;
+http.c:    conn->bytecount = http->readbytecount + http->writebytecount;
+http.c:  if(!conn->bits.retry &&
+http.c:       conn->headerbytecount -
+http.c:       conn->deductheadercount)) <= 0) {
+http.c:  struct SessionHandle *data=conn->data;
+http.c:  char *ppath = conn->path;
+http.c:  char *host = conn->host.name;
+http.c:  if(!conn->proto.http) {
+http.c:    conn->proto.http = http;
+http.c:    http = conn->proto.http;
+http.c:  conn->bits.close = FALSE;
+http.c:  if ( (conn->protocol&(PROT_HTTP|PROT_FTP)) &&
+http.c:    if(conn->bits.no_body)
+http.c:  if(checkheaders(data, "User-Agent:") && conn->allocptr.uagent) {
+http.c:    free(conn->allocptr.uagent);
+http.c:    conn->allocptr.uagent=NULL;
+http.c:    conn->bits.authneg = TRUE;
+http.c:    conn->bits.authneg = FALSE;
+http.c:  Curl_safefree(conn->allocptr.ref);
+http.c:    conn->allocptr.ref = aprintf("Referer: %s\015\012", data->change.referer);
+http.c:    conn->allocptr.ref = NULL;
+http.c:    Curl_safefree(conn->allocptr.accept_encoding);
+http.c:    conn->allocptr.accept_encoding =
+http.c:    if(!conn->allocptr.accept_encoding)
+http.c:  if(!conn->bits.upload_chunky && (httpreq != HTTPREQ_GET)) {
+http.c:      conn->bits.upload_chunky =
+http.c:  else if(conn->bits.upload_chunky) {
+http.c:      conn->bits.upload_chunky = FALSE; /* transfer-encoding was disabled,
+http.c:  Curl_safefree(conn->allocptr.host);
+http.c:             curl_strequal(data->state.first_host, conn->host.name))) {
+http.c:      Curl_safefree(conn->allocptr.cookiehost);
+http.c:      conn->allocptr.cookiehost = malloc(len+1);
+http.c:      if(!conn->allocptr.cookiehost)
+http.c:      memcpy(conn->allocptr.cookiehost, start, len);
+http.c:      conn->allocptr.cookiehost[len]=0;
+http.c:    conn->allocptr.host = NULL;
+http.c:    if(((conn->protocol&PROT_HTTPS) && (conn->remote_port == PORT_HTTPS)) ||
+http.c:       (!(conn->protocol&PROT_HTTPS) && (conn->remote_port == PORT_HTTP)) )
+http.c:      conn->allocptr.host = aprintf("Host: %s%s%s\r\n",
+http.c:                                    conn->bits.ipv6_ip?"[":"",
+http.c:                                    conn->bits.ipv6_ip?"]":"");
+http.c:      conn->allocptr.host = aprintf("Host: %s%s%s:%d\r\n",
+http.c:                                    conn->bits.ipv6_ip?"[":"",
+http.c:                                    conn->bits.ipv6_ip?"]":"",
+http.c:                                    conn->remote_port);
+http.c:    if(!conn->allocptr.host)
+http.c:  if (conn->bits.httpproxy && !conn->bits.tunnel_proxy)  {
+http.c:    if(conn->host.dispname != conn->host.name) {
+http.c:      char *ptr = strstr(url, conn->host.dispname);
+http.c:        size_t currlen = strlen(conn->host.dispname);
+http.c:        size_t newlen = strlen(conn->host.name);
+http.c:          memcpy(newurl + (ptr - url), conn->host.name, newlen);
+http.c:     conn->resume_from) {
+http.c:    if(conn->resume_from < 0 ) {
+http.c:       conn->resume_from = 0;
+http.c:    if(conn->resume_from) {
+http.c:        size_t readthisamountnow = (size_t)(conn->resume_from - passed);
+http.c:      } while(passed != conn->resume_from); /* loop until done */
+http.c:        data->set.infilesize -= conn->resume_from;
+http.c:  if(conn->bits.use_range) {
+http.c:      if(conn->allocptr.rangeline)
+http.c:        free(conn->allocptr.rangeline);
+http.c:      conn->allocptr.rangeline = aprintf("Range: bytes=%s\r\n", conn->range);
+http.c:      if(conn->resume_from) {
+http.c:          conn->resume_from + data->set.infilesize;
+http.c:        conn->allocptr.rangeline =
+http.c:                    conn->range, total_expected_size-1,
+http.c:        conn->allocptr.rangeline =
+http.c:                    conn->range, data->set.infilesize);
+http.c:                conn->allocptr.proxyuserpwd?
+http.c:                conn->allocptr.proxyuserpwd:"",
+http.c:                conn->allocptr.userpwd?conn->allocptr.userpwd:"",
+http.c:                (conn->bits.use_range && conn->allocptr.rangeline)?
+http.c:                conn->allocptr.rangeline:"",
+http.c:                (data->set.useragent && *data->set.useragent && conn->allocptr.uagent)?
+http.c:                conn->allocptr.uagent:"",
+http.c:                (conn->allocptr.host?conn->allocptr.host:""), /* Host: host */
+http.c:                (data->set.encoding && *data->set.encoding && conn->allocptr.accept_encoding)?
+http.c:                conn->allocptr.accept_encoding:"",
+http.c:                (data->change.referer && conn->allocptr.ref)?conn->allocptr.ref:"" /* Referer: <data> */,
+http.c:                                 conn->allocptr.cookiehost?
+http.c:                                 conn->allocptr.cookiehost:host, conn->path,
+http.c:                                 (bool)(conn->protocol&PROT_HTTPS?TRUE:FALSE));
+http.c:          if(conn->allocptr.host &&
+http.c:      if(!http->sendit || conn->bits.authneg) {
+http.c:      conn->fread = (curl_read_callback)Curl_FormReader;
+http.c:      conn->fread_in = &http->form;
+http.c:      if(!conn->bits.upload_chunky) {
+http.c:      if(conn->bits.authneg)
+http.c:      if((postsize != -1) && !conn->bits.upload_chunky) {
+http.c:      if(conn->bits.authneg)
+http.c:      if(!conn->bits.upload_chunky) {
+http.c:          if(!conn->bits.upload_chunky) {
+http.c:          conn->fread = (curl_read_callback)readmoredata;
+http.c:          conn->fread_in = (void *)conn;
+http_chunks.c:  struct Curl_chunker *chunk = &conn->proto.http->chunk;
+http_chunks.c:  struct Curl_chunker *ch = &conn->proto.http->chunk;
+http_chunks.c:  struct Curl_transfer_keeper *k = &conn->keep;
+http_chunks.c:      switch (conn->keep.content_encoding) {
+http_chunks.c:            result = Curl_client_write(conn->data, CLIENTWRITE_BODY, datap,
+http_chunks.c:          /* update conn->keep.str to point to the chunk data. */
+http_chunks.c:          conn->keep.str = datap;
+http_chunks.c:          result = Curl_unencode_deflate_write(conn->data, &conn->keep,
+http_chunks.c:          /* update conn->keep.str to point to the chunk data. */
+http_chunks.c:          conn->keep.str = datap;
+http_chunks.c:          result = Curl_unencode_gzip_write(conn->data, &conn->keep,
+http_chunks.c:          failf (conn->data,
+http_digest.c:  struct SessionHandle *data=conn->data;
+http_digest.c:  struct SessionHandle *data = conn->data;
+http_digest.c:    allocuserpwd = &conn->allocptr.proxyuserpwd;
+http_digest.c:    userp = conn->proxyuser;
+http_digest.c:    passwdp = conn->proxypasswd;
+http_digest.c:    allocuserpwd = &conn->allocptr.userpwd;
+http_digest.c:    userp = conn->user;
+http_digest.c:    passwdp = conn->passwd;
+http_negotiate.c:  struct negotiatedata *neg_ctx = &conn->data->state.negotiate;
+http_negotiate.c:  token.length = strlen(service) + 1 + strlen(conn->host.name) + 1;
+http_negotiate.c:  snprintf(name, sizeof(name), "%s@%s", service, conn->host.name);
+http_negotiate.c:  infof(conn->data, buf);
+http_negotiate.c:  struct negotiatedata *neg_ctx = &conn->data->state.negotiate;
+http_negotiate.c:    Curl_cleanup_negotiate(conn->data);
+http_negotiate.c:          infof(conn->data, "Parse SPNEGO Target Token failed\n");
+http_negotiate.c:          infof(conn->data, "Parse SPNEGO Target Token succeded\n");
+http_negotiate.c:    /* Curl_cleanup_negotiate(conn->data) ??? */
+http_negotiate.c:  /* conn->bits.close = FALSE; */
+http_negotiate.c:  struct negotiatedata *neg_ctx = &conn->data->state.negotiate;
+http_negotiate.c:      infof(conn->data, "Make SPNEGO Initial Token failed\n");
+http_negotiate.c:      infof(conn->data, "Make SPNEGO Initial Token succeded\n");
+http_negotiate.c:  conn->allocptr.userpwd =
+http_negotiate.c:  return (conn->allocptr.userpwd == NULL) ? CURLE_OUT_OF_MEMORY : CURLE_OK;
+http_ntlm.c:  ntlm = proxy?&conn->proxyntlm:&conn->ntlm;
+http_ntlm.c:  curlassert(conn->data);
+http_ntlm.c:    allocuserpwd = &conn->allocptr.proxyuserpwd;
+http_ntlm.c:    userp = conn->proxyuser;
+http_ntlm.c:    passwdp = conn->proxypasswd;
+http_ntlm.c:    ntlm = &conn->proxyntlm;
+http_ntlm.c:    authp = &conn->data->state.authproxy;
+http_ntlm.c:    allocuserpwd = &conn->allocptr.userpwd;
+http_ntlm.c:    userp = conn->user;
+http_ntlm.c:    passwdp = conn->passwd;
+http_ntlm.c:    ntlm = &conn->ntlm;
+http_ntlm.c:    authp = &conn->data->state.authhost;
+multi.c:          sockfd = conn->sock[FIRSTSOCKET];
+multi.c:          sockfd = conn->sock[SECONDARYSOCKET];
+multi.c:          if(easy->easy_conn->bits.do_more) {
+multi.c:          easy->easy_conn->bits.close = TRUE;
+multi.c:          if(CURL_SOCKET_BAD != easy->easy_conn->sock[SECONDARYSOCKET]) {
+multi.c:            sclose(easy->easy_conn->sock[SECONDARYSOCKET]);
+multi.c:            easy->easy_conn->sock[SECONDARYSOCKET]=-1;
+multi.c:          if(easy->easy_conn->newurl) {
+multi.c:            char *newurl = easy->easy_conn->newurl;
+multi.c:            easy->easy_conn->newurl = NULL;
+progress.c:  struct SessionHandle *data = conn->data;
+progress.c:  struct SessionHandle *data = conn->data;
+progress.c:      if(conn->resume_from)
+progress.c:                conn->resume_from);
+sendf.c:  struct SessionHandle *data = conn->data;
+sendf.c:                 conn->host.dispname);
+sendf.c:  int num = (sockfd == conn->sock[SECONDARYSOCKET]);
+sendf.c:  if (conn->ssl[num].use) {
+sendf.c:    int rc = SSL_write(conn->ssl[num].handle, mem, (int)len);
+sendf.c:      err = SSL_get_error(conn->ssl[num].handle, rc);
+sendf.c:        failf(conn->data, "SSL_write() returned SYSCALL, errno = %d\n",
+sendf.c:        failf(conn->data, "SSL_write() error: %s\n",
+sendf.c:      failf(conn->data, "SSL_write() return error %d\n", err);
+sendf.c:    if(conn->sec_complete) {
+sendf.c:        failf(conn->data, "Send failure: %s",
+sendf.c:  int num = (sockfd == conn->sock[SECONDARYSOCKET]);
+sendf.c:  if (conn->ssl[num].use) {
+sendf.c:    nread = (ssize_t)SSL_read(conn->ssl[num].handle, buf, (int)buffersize);
+sendf.c:      int err = SSL_get_error(conn->ssl[num].handle, (int)nread);
+sendf.c:          failf(conn->data, "SSL read: %s, errno %d",
+sendf.c:    if(conn->sec_complete)
+ssluse.c:  struct SessionHandle *data = conn->data;
+ssluse.c:        if(conn && conn->data && conn->data->state.engine) {
+ssluse.c:            ENGINE_load_private_key(conn->data->state.engine,key_file,
+ssluse.c:  if(conn->ssl[FIRSTSOCKET].use) {
+ssluse.c:      struct ssl_connect_data *connssl = &conn->ssl[i];
+ssluse.c:  struct SessionHandle *data = conn->data;
+ssluse.c:    if(curl_strequal(conn->host.name, check->name) &&
+ssluse.c:       (conn->remote_port == check->remote_port) &&
+ssluse.c:       Curl_ssl_config_matches(&conn->ssl_config, &check->ssl_config)) {
+ssluse.c:  struct SessionHandle *data=conn->data; /* the mother of all structs */
+ssluse.c:  clone_host = strdup(conn->host.name);
+ssluse.c:  store->remote_port = conn->remote_port; /* port number */
+ssluse.c:  Curl_clone_ssl_config(&conn->ssl_config, &store->ssl_config);
+ssluse.c:  struct SessionHandle *data = conn->data;
+ssluse.c:  struct SessionHandle *data = conn->data;
+ssluse.c:  if(conn->bits.ipv6_ip &&
+ssluse.c:     Curl_inet_pton(AF_INET6, conn->host.name, &addr)) {
+ssluse.c:    if(Curl_inet_pton(AF_INET, conn->host.name, &addr)) {
+ssluse.c:          if (cert_hostcheck(altptr, conn->host.name))
+ssluse.c:    infof(data, "\t subjectAltName: %s matched\n", conn->host.dispname);
+ssluse.c:    else if(!cert_hostcheck((const char *)peer_CN, conn->host.name)) {
+ssluse.c:              "target host name '%s'", peer_CN, conn->host.dispname);
+ssluse.c:              peer_CN, conn->host.dispname);
+ssluse.c:  if (!conn || !conn->data || !conn->data->set.fdebug ||
+ssluse.c:  data = conn->data;
+ssluse.c:  struct SessionHandle *data = conn->data;
+ssluse.c:  curl_socket_t sockfd = conn->sock[sockindex];
+ssluse.c:  struct ssl_connect_data *connssl = &conn->ssl[sockindex];
+ssluse.c:  if(!conn->bits.reuse) {
+ssluse.c:                conn->host.name, conn->port);
+strerror.c:  buf = conn->syserr_buf;
+strerror.c:  max = sizeof(conn->syserr_buf)-1;
+strerror.c:  buf = conn->syserr_buf;
+strerror.c:  max = sizeof(conn->syserr_buf)-1;
+telnet.c:  conn->proto.telnet = (void *)tn; /* make us known */
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:   (void)swrite(conn->sock[FIRSTSOCKET], (char *)buf, 3);
+telnet.c:   printoption(conn->data, "SENT", cmd, option);
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct SessionHandle *data = conn->data;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  if(conn->bits.user_passwd)
+telnet.c:    snprintf(option_arg, sizeof(option_arg), "USER,%s", conn->user);
+telnet.c:  struct SessionHandle *data = conn->data;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:      (void)swrite(conn->sock[FIRSTSOCKET], (char *)temp, len);
+telnet.c:      (void)swrite(conn->sock[FIRSTSOCKET], (char *)temp, len);
+telnet.c:      (void)swrite(conn->sock[FIRSTSOCKET], (char *)temp, len);
+telnet.c:  struct SessionHandle *data = conn->data;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  struct TELNET *tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:  free(conn->proto.telnet);
+telnet.c:  conn->proto.telnet = NULL;
+telnet.c:  struct SessionHandle *data = conn->data;
+telnet.c:  curl_socket_t sockfd = conn->sock[FIRSTSOCKET];
+telnet.c:  tn = (struct TELNET *)conn->proto.telnet;
+telnet.c:          Curl_write(conn, conn->sock[FIRSTSOCKET], outbuf,
+telnet.c:        Curl_write(conn, conn->sock[FIRSTSOCKET], outbuf,
+telnet.c:          Curl_write(conn, conn->sock[FIRSTSOCKET], outbuf,
+telnet.c:      if(Curl_tvdiff(now, conn->created)/1000 >= data->set.timeout) {
+transfer.c:  struct SessionHandle *data = conn->data;
+transfer.c:  if(conn->bits.upload_chunky) {
+transfer.c:    conn->upload_fromhere += 10; /* 32bit hex + CRLF */
+transfer.c:  nread = (int)conn->fread(conn->upload_fromhere, 1,
+transfer.c:                           buffersize, conn->fread_in);
+transfer.c:  if(!conn->bits.forbidchunk && conn->bits.upload_chunky) {
+transfer.c:    conn->upload_fromhere -= hexlen;
+transfer.c:    memcpy(conn->upload_fromhere, hexbuffer, hexlen);
+transfer.c:    memcpy(conn->upload_fromhere + nread, "\r\n", 2);
+transfer.c:      conn->keep.upload_done = TRUE;
+transfer.c:  struct SessionHandle *data = conn->data;
+transfer.c:  conn->bits.rewindaftersend = FALSE; /* we rewind now */
+transfer.c:  struct Curl_transfer_keeper *k = &conn->keep;
+transfer.c:  struct SessionHandle *data = conn->data;
+transfer.c:    fd_read = conn->sockfd;
+transfer.c:    fd_write = conn->writesockfd;
+transfer.c:        int readrc = Curl_read(conn, conn->sockfd, k->buf, buffersize, &nread);
+transfer.c:              conn->headerbytecount += headerlen;
+transfer.c:              conn->deductheadercount =
+transfer.c:                (100 == k->httpcode)?conn->headerbytecount:0;
+transfer.c:              if (conn->resume_from &&
+transfer.c:                if(conn->bits.no_body)
+transfer.c:                  if(conn->bits.chunk)
+transfer.c:                    conn->size=-1;
+transfer.c:                if(-1 != conn->size) {
+transfer.c:                  Curl_pgrsSetDownloadSize(data, conn->size);
+transfer.c:                  conn->maxdownload = conn->size;
+transfer.c:                if(0 == conn->maxdownload)
+transfer.c:                  if (conn->resume_from &&
+transfer.c:                  conn->bits.close = TRUE;
+transfer.c:                  conn->size=0;
+transfer.c:                  conn->maxdownload=0;
+transfer.c:                conn->size = contentlength;
+transfer.c:                conn->bits.close = TRUE;
+transfer.c:                    conn->bits.httpproxy &&
+transfer.c:              conn->bits.close = FALSE; /* don't close when done */
+transfer.c:                    conn->bits.httpproxy &&
+transfer.c:              conn->bits.close = TRUE; /* close when done */
+transfer.c:              conn->bits.close = FALSE; /* don't close when done */
+transfer.c:              conn->bits.close = TRUE; /* close when done */
+transfer.c:              conn->bits.chunk = TRUE; /* chunks coming our way */
+transfer.c:              if (conn->resume_from == k->offset)
+transfer.c:                              conn->allocptr.cookiehost?
+transfer.c:                              conn->allocptr.cookiehost:conn->host.name,
+transfer.c:                              conn->path);
+transfer.c:                  conn->newurl = strdup(start); /* clone string */
+transfer.c:                  if(!conn->newurl)
+transfer.c:                         k->p, k->hbuflen, conn->host.dispname);
+transfer.c:            conn->headerbytecount += k->hbuflen;
+transfer.c:            if(conn->protocol&PROT_HTTP) {
+transfer.c:              if (conn->newurl) {
+transfer.c:                if(conn->bits.close) {
+transfer.c:              if (conn->resume_from && !k->content_range &&
+transfer.c:              if(data->set.timecondition && !conn->range) {
+transfer.c:                         k->hbuflen, conn->host.dispname);
+transfer.c:                           conn->host.dispname);
+transfer.c:                         conn->host.dispname);
+transfer.c:          if(conn->bits.chunk) {
+transfer.c:          if((-1 != conn->maxdownload) &&
+transfer.c:             (k->bytecount + nread >= conn->maxdownload)) {
+transfer.c:            nread = (ssize_t) (conn->maxdownload - k->bytecount);
+transfer.c:          if(!conn->bits.chunk && (nread || k->badheader || is_empty_data)) {
+transfer.c:        if(0 == conn->upload_present) {
+transfer.c:          conn->upload_fromhere = k->uploadbuf;
+transfer.c:               (conn->proto.http->sending == HTTPSEND_BODY)) {
+transfer.c:            if(conn->bits.rewindaftersend) {
+transfer.c:          conn->upload_present = nread;
+transfer.c:              if (conn->upload_fromhere[i] == 0x0a) {
+transfer.c:                data->state.scratch[si] = conn->upload_fromhere[i];
+transfer.c:              conn->upload_fromhere = data->state.scratch;
+transfer.c:              conn->upload_present = nread;
+transfer.c:                            conn->writesockfd,     /* socket to send to */
+transfer.c:                            conn->upload_fromhere, /* buffer pointer */
+transfer.c:                            conn->upload_present,  /* buffer size */
+transfer.c:          Curl_debug(data, CURLINFO_DATA_OUT, conn->upload_fromhere,
+transfer.c:                     bytes_written, conn->host.dispname);
+transfer.c:        if(conn->upload_present != bytes_written) {
+transfer.c:          conn->upload_present -= bytes_written;
+transfer.c:          conn->upload_fromhere += bytes_written;
+transfer.c:          conn->upload_fromhere = k->uploadbuf;
+transfer.c:          conn->upload_present = 0; /* no more bytes left */
+transfer.c:    if(conn->bytecountp)
+transfer.c:      *conn->bytecountp = k->bytecount; /* read count */
+transfer.c:    if(conn->writebytecountp)
+transfer.c:      *conn->writebytecountp = k->writebytecount; /* write count */
+transfer.c:          k->bytecount, conn->size);
+transfer.c:    if(!(conn->bits.no_body) && (conn->size != -1) &&
+transfer.c:       (k->bytecount != conn->size) &&
+transfer.c:       !conn->newurl) {
+transfer.c:            conn->size - k->bytecount);
+transfer.c:    else if(conn->bits.chunk &&
+transfer.c:            (conn->proto.http->chunk.state != CHUNK_STOP)) {
+transfer.c:       * conn->proto.http->chunk.datasize != 0 which is true after reading
+transfer.c:  struct SessionHandle *data = conn->data;
+transfer.c:  struct Curl_transfer_keeper *k = &conn->keep;
+transfer.c:  data = conn->data; /* there's the root struct */
+transfer.c:  k->maxfd = (conn->sockfd>conn->writesockfd?
+transfer.c:              conn->sockfd:conn->writesockfd)+1;
+transfer.c:  if (!conn->bits.getheader) {
+transfer.c:    if(conn->size > 0)
+transfer.c:      Curl_pgrsSetDownloadSize(data, conn->size);
+transfer.c:  if(conn->bits.getheader || !conn->bits.no_body) {
+transfer.c:    if(conn->sockfd != CURL_SOCKET_BAD) {
+transfer.c:    if(conn->writesockfd != CURL_SOCKET_BAD) {
+transfer.c:          (conn->proto.http->sending == HTTPSEND_BODY)) {
+transfer.c:  if(conn->keep.keepon & KEEP_READ) {
+transfer.c:    FD_SET(conn->sockfd, read_fd_set);
+transfer.c:    *max_fd = conn->sockfd;
+transfer.c:    conn->keep.readfdp = read_fd_set; /* store the address of the set */
+transfer.c:  if(conn->keep.keepon & KEEP_WRITE) {
+transfer.c:    FD_SET(conn->writesockfd, write_fd_set);
+transfer.c:    if((int)conn->writesockfd > *max_fd)
+transfer.c:      *max_fd = conn->writesockfd;
+transfer.c:    conn->keep.writefdp = write_fd_set; /* store the address of the set */
+transfer.c:  struct Curl_transfer_keeper *k = &conn->keep;
+transfer.c:  if(!(conn->protocol & PROT_FILE))
+transfer.c:  if((conn->sockfd == CURL_SOCKET_BAD) &&
+transfer.c:     (conn->writesockfd == CURL_SOCKET_BAD))
+transfer.c:  if(!conn->bits.getheader && conn->bits.no_body)
+transfer.c:      fd_read = conn->sockfd;
+transfer.c:      fd_write = conn->writesockfd;
+transfer.c:        conn->sec_conn = NULL;
+transfer.c:          if((conn->keep.bytecount+conn->headerbytecount == 0) &&
+transfer.c:             conn->bits.reuse) {
+transfer.c:            newurl = strdup(conn->data->change.url);
+transfer.c:            conn->bits.close = TRUE; /* close this connection */
+transfer.c:            conn->bits.retry = TRUE; /* mark this as a connection we're about
+transfer.c:            newurl = conn->newurl?strdup(conn->newurl):NULL;
+transfer.c:          conn->bits.close = TRUE;
+transfer.c:          if(CURL_SOCKET_BAD != conn->sock[SECONDARYSOCKET]) {
+transfer.c:            sclose(conn->sock[SECONDARYSOCKET]);
+transfer.c:            conn->sock[SECONDARYSOCKET] = CURL_SOCKET_BAD;
+transfer.c:  conn->sockfd = sockindex==-1?
+transfer.c:    CURL_SOCKET_BAD:conn->sock[sockindex];
+transfer.c:  conn->size = size;
+transfer.c:  conn->bits.getheader = getheader;
+transfer.c:  conn->bytecountp = bytecountp;
+transfer.c:  conn->writesockfd = writesockindex==-1?
+transfer.c:    CURL_SOCKET_BAD:conn->sock[writesockindex];
+transfer.c:  conn->writebytecountp = writecountp;
+transfer.c:  struct SessionHandle *data = conn->data;
+transfer.c:  char *url = aprintf( "%s://%s/", conn->protostr, data->set.source_host);
+transfer.c:  if (strequal(conn->host.dispname, data->set.source_host))
+transfer.c:    sec_conn->sec_conn = NULL;  /* important if re-using existing connection
+transfer.c:    sec_conn->data = data;
+transfer.c:    conn->sec_conn = sec_conn;
+url.c:  data = conn->data;
+url.c:  if(conn->dns_entry)
+url.c:    Curl_resolv_unlock(data, conn->dns_entry); /* done with this */
+url.c:  if(conn->bits.rangestringalloc) {
+url.c:    free(conn->range);
+url.c:    conn->bits.rangestringalloc = FALSE;
+url.c:  if((conn->ntlm.state != NTLMSTATE_NONE) ||
+url.c:     (conn->proxyntlm.state != NTLMSTATE_NONE)) {
+url.c:  if(conn->curl_disconnect)
+url.c:    conn->curl_disconnect(conn);
+url.c:  if(-1 != conn->connectindex) {
+url.c:    infof(data, "Closing connection #%ld\n", conn->connectindex);
+url.c:    data->state.connects[conn->connectindex] = NULL;
+url.c:  Curl_safefree(conn->proto.generic);
+url.c:  Curl_safefree(conn->newurl);
+url.c:  Curl_safefree(conn->pathbuffer); /* the URL path buffer */
+url.c:  Curl_safefree(conn->host.rawalloc); /* host name buffer */
+url.c:  Curl_safefree(conn->proxy.rawalloc); /* proxy name buffer */
+url.c:  if(conn->host.encalloc)
+url.c:    idn_free(conn->host.encalloc); /* encoded host name buffer, must be freed
+url.c:  if(conn->proxy.encalloc)
+url.c:    idn_free(conn->proxy.encalloc); /* encoded proxy name buffer, must be
+url.c:  if(CURL_SOCKET_BAD != conn->sock[SECONDARYSOCKET])
+url.c:    sclose(conn->sock[SECONDARYSOCKET]);
+url.c:  if(CURL_SOCKET_BAD != conn->sock[FIRSTSOCKET])
+url.c:    sclose(conn->sock[FIRSTSOCKET]);
+url.c:  Curl_safefree(conn->user);
+url.c:  Curl_safefree(conn->passwd);
+url.c:  Curl_safefree(conn->proxyuser);
+url.c:  Curl_safefree(conn->proxypasswd);
+url.c:  Curl_safefree(conn->allocptr.proxyuserpwd);
+url.c:  Curl_safefree(conn->allocptr.uagent);
+url.c:  Curl_safefree(conn->allocptr.userpwd);
+url.c:  Curl_safefree(conn->allocptr.accept_encoding);
+url.c:  Curl_safefree(conn->allocptr.rangeline);
+url.c:  Curl_safefree(conn->allocptr.ref);
+url.c:  Curl_safefree(conn->allocptr.host);
+url.c:  Curl_safefree(conn->allocptr.cookiehost);
+url.c:  Curl_safefree(conn->async.hostname);
+url.c:  Curl_safefree(conn->async.os_specific);
+url.c:  Curl_free_ssl_config(&conn->ssl_config);
+url.c:      score = Curl_tvdiff(now, conn->now);
+url.c:      score = Curl_tvdiff(now, conn->created);
+url.c:    conn->connectindex = i; /* make the child know where the pointer to this
+url.c:  int sock = conn->sock[FIRSTSOCKET];
+url.c:    failf(conn->data, "Unable to send initial SOCKS5 request.");
+url.c:    failf(conn->data, "Unable to receive initial SOCKS5 response.");
+url.c:    failf(conn->data, "Received invalid version in initial SOCKS5 response.");
+url.c:      failf(conn->data, "Failed to send SOCKS5 sub-negotiation request.");
+url.c:      failf(conn->data, "Unable to receive SOCKS5 sub-negotiation response.");
+url.c:      failf(conn->data, "User was rejected by the SOCKS5 server (%d %d).",
+url.c:      failf(conn->data,
+url.c:        failf(conn->data,
+url.c:        failf(conn->data, "No authentication method was acceptable.");
+url.c:      failf(conn->data,
+url.c:    int rc = Curl_resolv(conn, conn->host.name, (int)conn->remote_port, &dns);
+url.c:      Curl_resolv_unlock(conn->data, dns); /* not used anymore from now on */
+url.c:      failf(conn->data, "Failed to resolve \"%s\" for SOCKS5 connect.",
+url.c:            conn->host.name);
+url.c:  *((unsigned short*)&socksreq[8]) = htons(conn->remote_port);
+url.c:      failf(conn->data, "Failed to send SOCKS5 connect request.");
+url.c:      failf(conn->data, "Failed to receive SOCKS5 connect request ack.");
+url.c:      failf(conn->data,
+url.c:        failf(conn->data,
+url.c:  struct SessionHandle *data = conn->data;
+url.c:  char *hostname = data->change.proxy?conn->proxy.name:conn->host.name;
+url.c:        hostname, conn->port);
+url.c:                           &conn->sock[FIRSTSOCKET],
+url.c:    conn->dns_entry = hostaddr;
+url.c:    conn->ip_addr = addr;
+url.c:    if (conn->data->set.proxytype == CURLPROXY_SOCKS5) {
+url.c:      return handleSock5Proxy(conn->proxyuser,
+url.c:                              conn->proxypasswd,
+url.c:    else if (conn->data->set.proxytype == CURLPROXY_HTTP) {
+url.c:      failf(conn->data, "unknown proxytype option given");
+url.c:  struct SessionHandle *data = conn->data;
+url.c:  Curl_printable_address(conn->ip_addr, addrbuf, sizeof(addrbuf));
+url.c:        conn->bits.httpproxy ? conn->proxy.dispname : conn->host.dispname,
+url.c:        addrbuf[0] ? addrbuf : "??", conn->port);
+url.c:  struct SessionHandle *data = conn->data;
+url.c:  if(conn->bits.tcpconnect)
+url.c:  if(conn->curl_connect) {
+url.c:    conn->now = Curl_tvnow();
+url.c:    result = conn->curl_connect(conn);
+url.c:    struct SessionHandle *data = conn->data;
+url.c:  conn->data = data;           /* remember our daddy */
+url.c:  conn->sock[FIRSTSOCKET] = CURL_SOCKET_BAD;     /* no file descriptor */
+url.c:  conn->sock[SECONDARYSOCKET] = CURL_SOCKET_BAD; /* no file descriptor */
+url.c:  conn->connectindex = -1;    /* no index */
+url.c:  conn->bits.httpproxy = (data->change.proxy && *data->change.proxy &&
+url.c:  conn->bits.close = TRUE;
+url.c:  conn->maxdownload = -1;  /* might have been used previously! */
+url.c:  conn->created = Curl_tvnow();
+url.c:  conn->bits.use_range = data->set.set_range?TRUE:FALSE; /* range status */
+url.c:  conn->range = data->set.set_range;              /* clone the range setting */
+url.c:  conn->resume_from = data->set.set_resume_from;   /* inherite resume_from */
+url.c:  conn->bits.user_passwd = data->set.userpwd?1:0;
+url.c:  conn->bits.proxy_user_passwd = data->set.proxyuserpwd?1:0;
+url.c:  conn->bits.no_body = data->set.opt_no_body;
+url.c:  conn->bits.tunnel_proxy = data->set.tunnel_thru_httpproxy;
+url.c:  conn->bits.ftp_use_epsv = data->set.ftp_use_epsv;
+url.c:  conn->bits.ftp_use_eprt = data->set.ftp_use_eprt;
+url.c:  conn->bits.ftp_use_lprt = data->set.ftp_use_lprt;
+url.c:  conn->pathbuffer=(char *)malloc(urllen);
+url.c:  if(NULL == conn->pathbuffer)
+url.c:  conn->path = conn->pathbuffer;
+url.c:  conn->host.rawalloc=(char *)malloc(urllen);
+url.c:  if(NULL == conn->host.rawalloc)
+url.c:  conn->host.name = conn->host.rawalloc;
+url.c:                  conn->protostr,
+url.c:                  conn->path)) && strequal(conn->protostr, "file")) {
+url.c:    if(conn->path[0] == '/' && conn->path[1] == '/') {
+url.c:      memmove(conn->path, conn->path + 2, strlen(conn->path + 2)+1);
+url.c:    if(conn->path[0] != '/') {
+url.c:      char *ptr=strchr(conn->path, '/');
+url.c:        memmove(conn->path, ptr, strlen(ptr)+1);
+url.c:    strcpy(conn->protostr, "file"); /* store protocol string lowercase */
+url.c:    strcpy(conn->path, "/");
+url.c:                   conn->protostr,
+url.c:                   conn->host.name, conn->path)) {
+url.c:                     conn->host.name, conn->path)) ) {
+url.c:      if(checkprefix("GOPHER", conn->host.name))
+url.c:        strcpy(conn->protostr, "gopher");
+url.c:      else if(checkprefix("HTTPS", conn->host.name))
+url.c:        strcpy(conn->protostr, "https");
+url.c:      else if(checkprefix("FTPS", conn->host.name))
+url.c:        strcpy(conn->protostr, "ftps");
+url.c:      else if(checkprefix("FTP", conn->host.name))
+url.c:        strcpy(conn->protostr, "ftp");
+url.c:      else if(checkprefix("TELNET", conn->host.name))
+url.c:        strcpy(conn->protostr, "telnet");
+url.c:      else if (checkprefix("DICT", conn->host.name))
+url.c:        strcpy(conn->protostr, "DICT");
+url.c:      else if (checkprefix("LDAP", conn->host.name))
+url.c:        strcpy(conn->protostr, "LDAP");
+url.c:        strcpy(conn->protostr, "http");
+url.c:      conn->protocol |= PROT_MISSING; /* not given in URL */
+url.c:  at = strchr(conn->host.name, '@');
+url.c:    tmp = strchr(conn->host.name, '?');
+url.c:    memmove(conn->path+len+1, conn->path, strlen(conn->path)+1);
+url.c:    conn->path[0]='/'; /* prepend the missing slash */
+url.c:    memcpy(conn->path+1, tmp, len); /* now copy the prefix part */
+url.c:  if(conn->path[0] == '?') {
+url.c:    memmove(&conn->path[1], conn->path, strlen(conn->path)+1);
+url.c:    conn->path[0] = '/';
+url.c:   *   conn->protostr is A
+url.c:   *   conn->host.name is B
+url.c:   *   conn->path is /C
+url.c:  if(conn->bits.proxy_user_passwd) {
+url.c:    conn->proxyuser = strdup(proxyuser);
+url.c:    if(!conn->proxyuser)
+url.c:    conn->proxypasswd = strdup(proxypasswd);
+url.c:    if(!conn->proxypasswd)
+url.c:        char *endptr = strchr(conn->host.name, ':');
+url.c:          namelen=endptr-conn->host.name;
+url.c:          namelen=strlen(conn->host.name);
+url.c:            conn->host.name + namelen - strlen(nope);
+url.c:        char *protop = conn->protostr;
+url.c:            Curl_safefree(conn->proxyuser);
+url.c:            conn->proxyuser = strdup(proxyuser);
+url.c:            if(!conn->proxyuser)
+url.c:              Curl_safefree(conn->proxypasswd);
+url.c:              conn->proxypasswd = strdup(proxypasswd);
+url.c:              if(!conn->proxypasswd)
+url.c:              conn->bits.proxy_user_passwd = TRUE; /* enable it */
+url.c:          conn->bits.httpproxy = TRUE;
+url.c:  if(conn->protocol&PROT_MISSING) {
+url.c:    reurl = aprintf("%s://%s", conn->protostr, data->change.url);
+url.c:    conn->protocol &= ~PROT_MISSING; /* switch that one off again */
+url.c:  if(conn->resume_from) {
+url.c:    if(!conn->bits.use_range) {
+url.c:      conn->range = aprintf("%" FORMAT_OFF_T "-", conn->resume_from);
+url.c:      if(!conn->range)
+url.c:      conn->bits.rangestringalloc = TRUE; /* mark as allocated */
+url.c:      conn->bits.use_range = 1; /* switch on range usage */
+url.c:  if (strequal(conn->protostr, "HTTP")) {
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = PORT_HTTP;
+url.c:    conn->protocol |= PROT_HTTP;
+url.c:    conn->curl_do = Curl_http;
+url.c:    conn->curl_do_more = NULL;
+url.c:    conn->curl_done = Curl_http_done;
+url.c:    conn->curl_connect = Curl_http_connect;
+url.c:  else if (strequal(conn->protostr, "HTTPS")) {
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = PORT_HTTPS;
+url.c:    conn->protocol |= PROT_HTTP|PROT_HTTPS|PROT_SSL;
+url.c:    conn->curl_do = Curl_http;
+url.c:    conn->curl_do_more = NULL;
+url.c:    conn->curl_done = Curl_http_done;
+url.c:    conn->curl_connect = Curl_http_connect;
+url.c:  else if (strequal(conn->protostr, "GOPHER")) {
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = PORT_GOPHER;
+url.c:    if (isdigit((int)conn->path[1])) {
+url.c:      conn->path = strchr(&conn->path[1], '/');
+url.c:      if (conn->path == NULL)
+url.c:        conn->path = conn->pathbuffer;
+url.c:    conn->protocol |= PROT_GOPHER;
+url.c:    conn->curl_do = Curl_http;
+url.c:    conn->curl_do_more = NULL;
+url.c:    conn->curl_done = Curl_http_done;
+url.c:  else if(strequal(conn->protostr, "FTP") ||
+url.c:          strequal(conn->protostr, "FTPS")) {
+url.c:    if(strequal(conn->protostr, "FTPS")) {
+url.c:      conn->protocol |= PROT_FTPS|PROT_SSL;
+url.c:      conn->ssl[SECONDARYSOCKET].use = TRUE; /* send data securely */
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = port;
+url.c:    conn->protocol |= PROT_FTP;
+url.c:      if(conn->protocol & PROT_FTPS) {
+url.c:      conn->curl_do = Curl_http;
+url.c:      conn->curl_done = Curl_http_done;
+url.c:      conn->curl_do = Curl_ftp;
+url.c:      conn->curl_do_more = Curl_ftp_nextconnect;
+url.c:      conn->curl_done = Curl_ftp_done;
+url.c:      conn->curl_connect = Curl_ftp_connect;
+url.c:      conn->curl_disconnect = Curl_ftp_disconnect;
+url.c:    conn->path++; /* don't include the initial slash */
+url.c:    type=strstr(conn->path, ";type=");
+url.c:      type=strstr(conn->host.rawalloc, ";type=");
+url.c:  else if(strequal(conn->protostr, "TELNET")) {
+url.c:    conn->protocol |= PROT_TELNET;
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = PORT_TELNET;
+url.c:    conn->curl_do = Curl_telnet;
+url.c:    conn->curl_done = Curl_telnet_done;
+url.c:  else if (strequal(conn->protostr, "DICT")) {
+url.c:    conn->protocol |= PROT_DICT;
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = PORT_DICT;
+url.c:    conn->curl_do = Curl_dict;
+url.c:    conn->curl_done = NULL; /* no DICT-specific done */
+url.c:  else if (strequal(conn->protostr, "LDAP")) {
+url.c:    conn->protocol |= PROT_LDAP;
+url.c:    conn->port = (data->set.use_port && data->state.allow_port)?
+url.c:    conn->remote_port = PORT_LDAP;
+url.c:    conn->curl_do = Curl_ldap;
+url.c:    conn->curl_done = NULL; /* no LDAP-specific done */
+url.c:  else if (strequal(conn->protostr, "FILE")) {
+url.c:    conn->protocol |= PROT_FILE;
+url.c:    conn->curl_do = Curl_file;
+url.c:    conn->curl_done = Curl_file_done;
+url.c:      conn->bits.tcpconnect = TRUE; /* we are "connected */
+url.c:    failf(data, "Unsupported protocol: %s", conn->protostr);
+url.c:      conn->port = atoi(prox_portno);
+url.c:      conn->port = data->set.proxyport;
+url.c:    conn->proxy.rawalloc = strdup(proxyptr);
+url.c:    conn->proxy.name = conn->proxy.rawalloc;
+url.c:    if(!conn->proxy.rawalloc)
+url.c:  if((conn->protocol&PROT_SSL) && conn->bits.httpproxy)
+url.c:    conn->bits.tunnel_proxy = TRUE;
+url.c:   *         conn->host.name
+url.c:   *          conn->bits.user_passwd  - non-zero if non-default passwords exist
+url.c:   *          conn->user              - non-zero length if defined
+url.c:   *          conn->passwd            -   ditto
+url.c:   *          conn->host.name          - remove user name and password
+url.c:   * been taken care of, so conn->host.name is at most
+url.c:  if (conn->protocol & (PROT_FTP|PROT_HTTP)) {
+url.c:    char *ptr=strchr(conn->host.name, '@');
+url.c:    char *userpass = conn->host.name;
+url.c:      conn->host.name = ++ptr;
+url.c:        conn->bits.user_passwd = 1; /* enable user+password */
+url.c:   * The conn->host.name is currently [user:passwd@]host[:port] where host
+url.c:  if((1 == sscanf(conn->host.name, "[%*39[0-9a-fA-F:.]%c", &endbracket)) &&
+url.c:    conn->bits.ipv6_ip = TRUE;
+url.c:    conn->host.name++; /* pass the starting bracket */
+url.c:    tmp = strchr(conn->host.name, ']');
+url.c:    tmp = strrchr(conn->host.name, ':');
+url.c:      conn->remote_port = (unsigned short)port;
+url.c:    if(Curl_parsenetrc(conn->host.name,
+url.c:            conn->host.name);
+url.c:      conn->bits.user_passwd = 1; /* enable user+password */
+url.c:  if ( (conn->protocol & PROT_FTP) &&
+url.c:       !conn->bits.user_passwd) {
+url.c:    conn->user = strdup(CURL_DEFAULT_USER);
+url.c:    conn->passwd = strdup(CURL_DEFAULT_PASSWORD);
+url.c:    /* This is the default password, so DON'T set conn->bits.user_passwd */
+url.c:    conn->user = strdup(user);
+url.c:    conn->passwd = strdup(passwd);
+url.c:  if(!conn->user || !conn->passwd)
+url.c:  if(!Curl_clone_ssl_config(&data->set.ssl, &conn->ssl_config))
+url.c:    if(old_conn->proxy.rawalloc)
+url.c:      free(old_conn->proxy.rawalloc);
+url.c:    Curl_free_ssl_config(&conn->ssl_config);
+url.c:    conn->bits.user_passwd = old_conn->bits.user_passwd;
+url.c:    if (conn->bits.user_passwd) {
+url.c:      Curl_safefree(conn->user);
+url.c:      Curl_safefree(conn->passwd);
+url.c:      conn->user = old_conn->user;
+url.c:      conn->passwd = old_conn->passwd;
+url.c:      old_conn->user = NULL;
+url.c:      old_conn->passwd = NULL;
+url.c:    conn->bits.proxy_user_passwd = old_conn->bits.proxy_user_passwd;
+url.c:    if (conn->bits.proxy_user_passwd) {
+url.c:      Curl_safefree(conn->proxyuser);
+url.c:      Curl_safefree(conn->proxypasswd);
+url.c:      conn->proxyuser = old_conn->proxyuser;
+url.c:      conn->proxypasswd = old_conn->proxypasswd;
+url.c:      old_conn->proxyuser = NULL;
+url.c:      old_conn->proxypasswd = NULL;
+url.c:    if (conn->bits.httpproxy) {
+url.c:      free(conn->host.rawalloc);
+url.c:      conn->host=old_conn->host;
+url.c:    conn->bits.no_body = old_conn->bits.no_body;
+url.c:    if (!conn->bits.httpproxy)
+url.c:      free(old_conn->host.rawalloc); /* free the newly allocated name buffer */
+url.c:    free(conn->pathbuffer); /* free the newly allocated path pointer */
+url.c:    conn->pathbuffer = old_conn->pathbuffer; /* use the old one */
+url.c:    conn->path = old_conn->path;
+url.c:    conn->bits.reuse = TRUE; /* yes, we're re-using here */
+url.c:    conn->bits.chunk = FALSE; /* always assume not chunked unless told
+url.c:    conn->maxdownload = -1;  /* might have been used previously! */
+url.c:    Curl_safefree(old_conn->user);
+url.c:    Curl_safefree(old_conn->passwd);
+url.c:    Curl_safefree(old_conn->proxyuser);
+url.c:    Curl_safefree(old_conn->proxypasswd);
+url.c:    if(old_conn->bits.rangestringalloc)
+url.c:      free(old_conn->range);
+url.c:    conn->resume_from = data->set.set_resume_from;
+url.c:    if (conn->resume_from) {
+url.c:      if (conn->bits.rangestringalloc == TRUE)
+url.c:        free(conn->range);
+url.c:      conn->range = aprintf("%" FORMAT_OFF_T "-", conn->resume_from);
+url.c:      if(!conn->range)
+url.c:      conn->bits.use_range = TRUE;        /* enable range download */
+url.c:      conn->bits.rangestringalloc = TRUE; /* mark range string allocated */
+url.c:      conn->range = strdup(data->set.set_range);
+url.c:      if(!conn->range)
+url.c:      conn->bits.rangestringalloc = TRUE; /* mark range string allocated */
+url.c:      conn->bits.use_range = TRUE;        /* enable range download */
+url.c:      conn->bits.use_range = FALSE; /* disable range download */
+url.c:          conn->connectindex,
+url.c:          conn->bits.httpproxy?conn->proxy.dispname:conn->host.dispname);
+url.c:  conn->fread = data->set.fread;
+url.c:  conn->fread_in = data->set.in;
+url.c:  conn->bits.upload_chunky =
+url.c:    ((conn->protocol&PROT_HTTP) &&
+url.c:    /* We can expect the conn->created time to be "now", as that was just
+url.c:  if(conn->bits.reuse) {
+url.c:    /* we'll need to clear conn->dns_entry later in Curl_disconnect() */
+url.c:    if (conn->bits.httpproxy)
+url.c:      fix_hostname(conn, &conn->host);
+url.c:    fix_hostname(conn, &conn->host);
+url.c:      conn->port =  conn->remote_port; /* it is the same port */
+url.c:      rc = Curl_resolv(conn, conn->host.name, (int)conn->port, &hostaddr);
+url.c:        failf(data, "Couldn't resolve host '%s'", conn->host.dispname);
+url.c:      fix_hostname(conn, &conn->proxy);
+url.c:      rc = Curl_resolv(conn, conn->proxy.name, (int)conn->port, &hostaddr);
+url.c:        failf(data, "Couldn't resolve proxy '%s'", conn->proxy.dispname);
+url.c:      unsigned long elapsed_ms = Curl_tvdiff(Curl_tvnow(), conn->created);
+url.c:  struct SessionHandle *data = conn->data;
+url.c:  if(conn->protocol & PROT_FILE)
+url.c:  if((conn->protocol&PROT_HTTP) ||
+url.c:      Curl_safefree(conn->allocptr.uagent);
+url.c:      conn->allocptr.uagent =
+url.c:      if(!conn->allocptr.uagent)
+url.c:  conn->bytecount = 0;
+url.c:  conn->headerbytecount = 0;
+url.c:  if(CURL_SOCKET_BAD == conn->sock[FIRSTSOCKET]) {
+url.c:        conn->bits.tcpconnect = TRUE;
+url.c:      conn->bits.tcpconnect = FALSE;
+url.c:    conn->bits.tcpconnect = TRUE;
+url.c:  conn->now = Curl_tvnow(); /* time this *after* the connect is done, we
+url.c:  CURLcode code = SetupConnection(conn, conn->async.dns);
+url.c:  struct SessionHandle *data=conn->data;
+url.c:  if(conn->bits.rangestringalloc) {
+url.c:    free(conn->range);
+url.c:    conn->bits.rangestringalloc = FALSE;
+url.c:  if(conn->newurl) {
+url.c:    free(conn->newurl);
+url.c:    conn->newurl = NULL;
+url.c:  if(conn->curl_done)
+url.c:    result = conn->curl_done(conn, status);
+url.c:     if conn->bits.close is TRUE, it means that the connection should be
+url.c:  if(data->set.reuse_forbid || conn->bits.close) {
+url.c:          conn->connectindex,
+url.c:          conn->bits.httpproxy?conn->proxy.dispname:conn->host.dispname);
+url.c:  struct SessionHandle *data=conn->data;
+url.c:  conn->bits.do_more = FALSE; /* by default there's no curl_do_more() to use */
+url.c:  if(conn->curl_do) {
+url.c:    result = conn->curl_do(conn);
+url.c:    if((CURLE_SEND_ERROR == result) && conn->bits.reuse) {
+url.c:      conn->bits.close = TRUE; /* enforce close of this connection */
+url.c:          result = conn->curl_do(conn);
+url.c:  if(conn->curl_do_more)
+url.c:    result = conn->curl_do_more(conn);
+urldata.h:  char *prevpath;   /* conn->path from the previous transfer */

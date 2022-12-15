@@ -1,0 +1,104 @@
+./include/linux/if_pppol2tp.h: * (pppol2tp.c).  All version information wrt this file is located in pppol2tp.c
+./include/linux/if_pppol2tp.h:struct pppol2tp_addr
+./README:* The PPP over L2TP plugin is included, which works with the pppol2tp
+./pppd/plugins/Makefile.linux:SUBDIRS := rp-pppoe pppoatm pppol2tp pppoe
+./pppd/plugins/pppol2tp/Makefile.linux:PLUGINS := pppol2tp.so openl2tp.so
+./pppd/plugins/pppol2tp/pppol2tp.c:/* pppol2tp.c - pppd plugin to implement PPPoL2TP protocol
+./pppd/plugins/pppol2tp/pppol2tp.c: *   for Linux using kernel pppol2tp support.
+./pppd/plugins/pppol2tp/pppol2tp.c: * Requires kernel pppol2tp driver which is integrated into the kernel
+./pppd/plugins/pppol2tp/pppol2tp.c:#include <linux/if_pppol2tp.h>
+./pppd/plugins/pppol2tp/pppol2tp.c:static int setdevname_pppol2tp(char **argv);
+./pppd/plugins/pppol2tp/pppol2tp.c:static int pppol2tp_fd = -1;
+./pppd/plugins/pppol2tp/pppol2tp.c:static char *pppol2tp_fd_str;
+./pppd/plugins/pppol2tp/pppol2tp.c:static bool pppol2tp_lns_mode = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:static bool pppol2tp_recv_seq = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:static bool pppol2tp_send_seq = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:static int pppol2tp_debug_mask = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:static int pppol2tp_reorder_timeout = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:static char pppol2tp_ifname[32] = { 0, };
+./pppd/plugins/pppol2tp/pppol2tp.c:int pppol2tp_tunnel_id = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:int pppol2tp_session_id = 0;
+./pppd/plugins/pppol2tp/pppol2tp.c:struct channel pppol2tp_channel;
+./pppd/plugins/pppol2tp/pppol2tp.c:void (*pppol2tp_send_accm_hook)(int tunnel_id, int session_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:void (*pppol2tp_ip_updown_hook)(int tunnel_id, int session_id, int up) = NULL;
+./pppd/plugins/pppol2tp/pppol2tp.c:static option_t pppol2tp_options[] = {
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp", o_special, &setdevname_pppol2tp,
+./pppd/plugins/pppol2tp/pppol2tp.c:          &pppol2tp_fd_str },
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_lns_mode", o_bool, &pppol2tp_lns_mode,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_send_seq", o_bool, &pppol2tp_send_seq,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_recv_seq", o_bool, &pppol2tp_recv_seq,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_reorderto", o_int, &pppol2tp_reorder_timeout,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_debug_mask", o_int, &pppol2tp_debug_mask,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_ifname", o_string, &pppol2tp_ifname,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_tunnel_id", o_int, &pppol2tp_tunnel_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:	{ "pppol2tp_session_id", o_int, &pppol2tp_session_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:static int setdevname_pppol2tp(char **argv)
+./pppd/plugins/pppol2tp/pppol2tp.c:		struct sockaddr pppol2tp;
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (!int_option(*argv, &pppol2tp_fd))
+./pppd/plugins/pppol2tp/pppol2tp.c:	if(getsockname(pppol2tp_fd, (struct sockaddr *)&s, &len) < 0) {
+./pppd/plugins/pppol2tp/pppol2tp.c:	if(s.pppol2tp.sa_family != AF_PPPOX) {
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (getsockopt(pppol2tp_fd, SOL_PPPOL2TP, PPPOL2TP_SO_DEBUG,
+./pppd/plugins/pppol2tp/pppol2tp.c:	the_channel = &pppol2tp_channel;
+./pppd/plugins/pppol2tp/pppol2tp.c:static int connect_pppol2tp(void)
+./pppd/plugins/pppol2tp/pppol2tp.c:	if(pppol2tp_fd == -1) {
+./pppd/plugins/pppol2tp/pppol2tp.c:	return pppol2tp_fd;
+./pppd/plugins/pppol2tp/pppol2tp.c:static void disconnect_pppol2tp(void)
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_fd >= 0) {
+./pppd/plugins/pppol2tp/pppol2tp.c:		close(pppol2tp_fd);
+./pppd/plugins/pppol2tp/pppol2tp.c:		pppol2tp_fd = -1;
+./pppd/plugins/pppol2tp/pppol2tp.c:static void send_config_pppol2tp(int mtu,
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_ifname[0]) {
+./pppd/plugins/pppol2tp/pppol2tp.c:			strlcpy(ifr.ifr_newname, pppol2tp_ifname,
+./pppd/plugins/pppol2tp/pppol2tp.c:			strlcpy(ifname, pppol2tp_ifname, 32);
+./pppd/plugins/pppol2tp/pppol2tp.c:			if (pppol2tp_debug_mask & PPPOL2TP_MSG_CONTROL) {
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_reorder_timeout > 0)
+./pppd/plugins/pppol2tp/pppol2tp.c:		sprintf(&reorderto[0], "%d ", pppol2tp_reorder_timeout);
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_tunnel_id > 0)
+./pppd/plugins/pppol2tp/pppol2tp.c:		sprintf(&tid[0], "%hu ", pppol2tp_tunnel_id);
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_session_id > 0)
+./pppd/plugins/pppol2tp/pppol2tp.c:		sprintf(&sid[0], "%hu ", pppol2tp_session_id);
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_recv_seq ? "recvseq " : "",
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_send_seq ? "sendseq " : "",
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_lns_mode ? "lnsmode " : "",
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_reorder_timeout ? "reorderto " : "", reorderto,
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_tunnel_id ? "tid " : "", tid,
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_session_id ? "sid " : "", sid,
+./pppd/plugins/pppol2tp/pppol2tp.c:	       pppol2tp_debug_mask);
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_recv_seq)
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (setsockopt(pppol2tp_fd, SOL_PPPOL2TP, PPPOL2TP_SO_RECVSEQ,
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_send_seq)
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (setsockopt(pppol2tp_fd, SOL_PPPOL2TP, PPPOL2TP_SO_SENDSEQ,
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_lns_mode)
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (setsockopt(pppol2tp_fd, SOL_PPPOL2TP, PPPOL2TP_SO_LNSMODE,
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_reorder_timeout)
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (setsockopt(pppol2tp_fd, SOL_PPPOL2TP, PPPOL2TP_SO_REORDERTO,
+./pppd/plugins/pppol2tp/pppol2tp.c:			       &pppol2tp_reorder_timeout,
+./pppd/plugins/pppol2tp/pppol2tp.c:			       sizeof(pppol2tp_reorder_timeout)) < 0)
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_debug_mask)
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (setsockopt(pppol2tp_fd, SOL_PPPOL2TP, PPPOL2TP_SO_DEBUG,
+./pppd/plugins/pppol2tp/pppol2tp.c:			       &pppol2tp_debug_mask, sizeof(pppol2tp_debug_mask)) < 0)
+./pppd/plugins/pppol2tp/pppol2tp.c:static void recv_config_pppol2tp(int mru,
+./pppd/plugins/pppol2tp/pppol2tp.c:	if ((ifunit >= 0) && ioctl(pppol2tp_fd, PPPIOCSMRU, (caddr_t) &mru) < 0)
+./pppd/plugins/pppol2tp/pppol2tp.c:static void pppol2tp_lcp_snoop(unsigned char *buf, int len, int incoming)
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (pppol2tp_debug_mask & PPPOL2TP_MSG_DEBUG) {
+./pppd/plugins/pppol2tp/pppol2tp.c:		if (pppol2tp_debug_mask & PPPOL2TP_MSG_DEBUG) {
+./pppd/plugins/pppol2tp/pppol2tp.c:				if (pppol2tp_debug_mask & PPPOL2TP_MSG_DATA) {
+./pppd/plugins/pppol2tp/pppol2tp.c:				if (pppol2tp_debug_mask & PPPOL2TP_MSG_DATA) {
+./pppd/plugins/pppol2tp/pppol2tp.c:				if (pppol2tp_debug_mask & PPPOL2TP_MSG_CONTROL) {
+./pppd/plugins/pppol2tp/pppol2tp.c:				if (pppol2tp_send_accm_hook != NULL) {
+./pppd/plugins/pppol2tp/pppol2tp.c:					(*pppol2tp_send_accm_hook)(pppol2tp_tunnel_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:								   pppol2tp_session_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:static void pppol2tp_lcp_snoop_recv(unsigned char *p, int len)
+./pppd/plugins/pppol2tp/pppol2tp.c:	pppol2tp_lcp_snoop(p, len, 1);
+./pppd/plugins/pppol2tp/pppol2tp.c:static void pppol2tp_lcp_snoop_send(unsigned char *p, int len)
+./pppd/plugins/pppol2tp/pppol2tp.c:	pppol2tp_lcp_snoop(p, len, 0);
+./pppd/plugins/pppol2tp/pppol2tp.c:static void pppol2tp_ip_up_hook(void)
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_ip_updown_hook != NULL) {
+./pppd/plugins/pppol2tp/pppol2tp.c:		(*pppol2tp_ip_updown_hook)(pppol2tp_tunnel_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:					   pppol2tp_session_id, 1);
+./pppd/plugins/pppol2tp/pppol2tp.c:static void pppol2tp_ip_down_hook(void)
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_ip_updown_hook != NULL) {
+./pppd/plugins/pppol2tp/pppol2tp.c:		(*pppol2tp_ip_updown_hook)(pppol2tp_tunnel_id,
+./pppd/plugins/pppol2tp/pppol2tp.c:					   pppol2tp_session_id, 0);
+./pppd/plugins/pppol2tp/pppol2tp.c:static void pppol2tp_check_options(void)
+./pppd/plugins/pppol2tp/pppol2tp.c:	if (pppol2tp_l

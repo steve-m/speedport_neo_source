@@ -1,0 +1,15 @@
+[{
+	"vartype":"value",
+	"varid":"device_name",
+	"varvalue":"Speedport GRMC"
+},
+{
+	"vartype":"status",
+	"varid":"loginstate",
+	"varvalue":"1"
+},
+{
+	"vartype":"status",
+	"varid":"login",
+	"varvalue":"success"
+}]

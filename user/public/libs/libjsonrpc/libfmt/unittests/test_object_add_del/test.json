@@ -1,0 +1,14 @@
+{
+	"group": {
+		"other":{
+			"dsc":"some dsc",
+			"enable":true,
+			"sensors":["i2c.PVG","fiejwoi",{"a":"b"}]
+		},
+		"default":{
+			"dsc":"some dsc",
+			"enable":true,
+			"sensors":["i3c.PVG","fiejwoi",{"a":"b"}]
+		}
+	}
+}

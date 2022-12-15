@@ -1,0 +1,16 @@
+CC         = $(CROSS_COMPILE)gcc
+STRIP      = $(CROSS_COMPILE)strip -s
+AR         = $(CROSS_COMPILE)ar
+RANLIB     = $(CROSS_COMPILE)ranlib
+LD         = $(CROSS_COMPILE)ld
+CFLAGS     = -Wall -Winline -fPIC -O2 -g3 -fno-builtin-memcmp
+
+JSMNSRC    = ../jsmn
+JSMNOBJ    = $(JSMNSRC)/jsmn.o
+JSMNLIB    = -L$(JSMNSRC) -ljsmn
+JSMNINC    = -I$(JSMNSRC)
+
+INCLUDES   = $(JSMNINC)
+LDFLAGS    = $(JSMNLIB) -lpthread
+
+include main.mk

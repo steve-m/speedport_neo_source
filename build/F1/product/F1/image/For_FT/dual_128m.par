@@ -1,0 +1,12 @@
+:cfe_rom_128m.bin                   &00000000
+:cferam.jffs2.128.img               &000c0000
+:cferam.jffs2.128.img               &00200000
+:protected.jffs2                    &003e0000
+:rootfs.jffs2                       &00520000
+:rootfs.jffs2                       &03720000
+:bootflag                           &06920000
+:bootflag                           &06A60000
+:xml_cfg.jffs2                      &06BA0000
+:app_dat.jffs2                      &06E20000
+%F1.pid			            &19fff
+$size				    &1c280

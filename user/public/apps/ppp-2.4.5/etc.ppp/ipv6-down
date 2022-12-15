@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# This script is called with the following parameters:
+# interface tty speed local-address remote-address ipparam
+#
+
+DEVICE=$1
+
+echo "PPPoE: IPv6 down" > /dev/console
+/bin/fc flush
+#killall ip6_autod
+/usr/sbin/rc rsdvd stop&
+#rm /tmp/prefix_full
+#mv /tmp/prefix_full /tmp/ipv6/prefix_full.deprecate
+#/usr/sbin/deprecate_ra&
+/usr/sbin/rc dhcp6c stop&
+/usr/sbin/rc wanip_service stop $WANID ipv6&
+#/usr/sbin/rc_app/rc_ipv6 restart

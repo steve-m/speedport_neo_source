@@ -1,0 +1,153 @@
+[{
+	"vartype":"value",
+	"varid":"device_name",
+	"varvalue":"Speedport GRMC"
+},
+{
+	"vartype":"option",
+	"varid":"lan_use_dhcp",
+	"varvalue":"1"
+},
+{
+	"vartype":"option",
+	"varid":"always_online",
+	"varvalue":"0"
+},
+{
+	"vartype":"template",
+	"varid":"addmdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"2"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_name",
+		"varvalue":"MediaRec"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_mac",
+		"varvalue":"00-50-DF-DA-5E-56"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_ipv6",
+		"varvalue":"0250:dfff:feda:5e56"
+	}]
+},
+{
+	"vartype":"template",
+	"varid":"addmdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"1"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_name",
+		"varvalue":"Mein Laptop"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_ipv6",
+		"varvalue":"0250:34ff:febb:1211"
+	}]
+},
+{
+	"vartype":"template",
+	"varid":"addmdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"3"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_name",
+		"varvalue":"Andreas"
+	},
+	{
+		"vartype":"value",
+		"varid":"mdevice_ipv6",
+		"varvalue":"0250:63ff:feac:af83"
+	}]
+},
+{
+	"vartype":"template",
+	"varid":"addotherdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"1"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_type",
+		"varvalue":"adhoc"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_connection",
+		"varvalue":"USB"
+	}]
+},
+{
+	"vartype":"template",
+	"varid":"addotherdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"2"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_type",
+		"varvalue":"adhoc"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_connection",
+		"varvalue":"USB"
+	}]
+},
+{
+	"vartype":"template",
+	"varid":"addotherdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"3"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_fs",
+		"varvalue":"FAT32"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_connection",
+		"varvalue":"USB"
+	}]
+},
+{
+	"vartype":"template",
+	"varid":"addotherdevice",
+	"varvalue":[{
+		"vartype":"value",
+		"varid":"id",
+		"varvalue":"4"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_fs",
+		"varvalue":"FAT32"
+	},
+	{
+		"vartype":"value",
+		"varid":"nas_device_connection",
+		"varvalue":"USB"
+	}]
+}]

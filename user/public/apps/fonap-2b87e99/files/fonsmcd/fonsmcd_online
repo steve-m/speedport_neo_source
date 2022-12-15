@@ -1,0 +1,2 @@
+#! /bin/sh
+/etc/fon/fon_hm start &
